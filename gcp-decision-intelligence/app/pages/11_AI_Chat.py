@@ -210,6 +210,25 @@ nav_items = [
     ("Help", "❓ Ajuda"),
 ]
 
+nav_cols = st.columns(len(nav_items))
+
+for col, (page_key, label) in zip(nav_cols, nav_items):
+    with col:
+        if st.button(
+            label,
+            key=f"chat_nav_{page_key}",
+            use_container_width=True,
+            type=(
+                "primary"
+                if st.session_state["chatbot_page"] == page_key
+                else "secondary"
+            ),
+        ):
+            st.session_state["chatbot_page"] = page_key
+            st.rerun()
+
+st.divider()
+
 
 # ==========================================================
 # MAIN PAGE CONTENT
