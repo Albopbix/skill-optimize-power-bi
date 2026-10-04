@@ -13,6 +13,9 @@ export GCS_BUCKET="${GCS_BUCKET:-${PROJECT_ID}-decision-intel}"
 export RUN_SA_NAME="${RUN_SA_NAME:-decision-intel-run}"
 export RUN_SA="${RUN_SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
 export IMAGE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${AR_REPO}/${SERVICE}"
+export GEMINI_ENABLED="${GEMINI_ENABLED:-true}"
+export GEMINI_MODEL="${GEMINI_MODEL:-gemini-3.5-flash}"
+export GEMINI_LOCATION="${GEMINI_LOCATION:-global}"
 export INSTANCE_CONNECTION_NAME="${PROJECT_ID}:${REGION}:${SQL_INSTANCE}"
 
 if [ -z "$PROJECT_ID" ]; then

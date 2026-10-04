@@ -13,3 +13,4 @@ scipy
 bcrypt
 psycopg[binary]
 google-cloud-storage
+google-genai

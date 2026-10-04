@@ -9,7 +9,8 @@ Adaptação do projeto [jashwanth-sariputi/AI-Driven-Decision-Intelligence](http
 Usuário ──► Cloud Run (Streamlit, container)
                │  ├─ Cloud SQL PostgreSQL ── usuários, histórico de uploads/modelos/predições
                │  ├─ Cloud Storage ───────── modelos .pkl treinados no AutoML (saved_models/)
-               │  └─ Secret Manager ──────── senha do banco (DB_PASS)
+               │  ├─ Secret Manager ──────── senha do banco (DB_PASS)
+               │  └─ Vertex AI (Gemini) ───── respostas do AI Business Copilot e do AI Chat
                └─ Artifact Registry / Cloud Build ── imagem e CI/CD
 Dados Olist ──► Cloud Storage (gs://…/data) ──► BigQuery (opcional)
 ```
@@ -22,6 +23,8 @@ Dados Olist ──► Cloud Storage (gs://…/data) ──► BigQuery (opcional
 | `src/storage/model_store.py` | Novo. Lista, envia e baixa modelos `.pkl` do GCS quando `GCS_BUCKET` está definido; senão, usa a pasta `saved_models/`. |
 | `src/model_export/model_exporter.py` | Depois de salvar o `.pkl`, envia ao bucket. |
 | `app/pages/7_Prediction.py` | Lista e carrega modelos via `model_store` (funciona com GCS). |
+| `src/llm/gemini_client.py` | Novo. Cliente Gemini (SDK `google-genai`, modo Vertex AI) que monta um perfil compacto do dataset e responde em linguagem natural. |
+| `src/business_copilot/copilot_engine.py`, `src/ai_chat/chat_engine.py` | `ask()` usa o Gemini quando `GEMINI_ENABLED=true`; se a chamada falhar, cai para o motor de regras original (`ask_rules()`). O AI Chat envia o histórico da conversa. |
 | `Dockerfile`, `.dockerignore`, `.streamlit/config.toml` | Container para o Cloud Run (porta `$PORT`, usuário sem root). |
 | `deploy/*.sh`, `cloudbuild.yaml` | Provisionamento, deploy e CI/CD. |
 | `data/` | CSVs **não** versionados (≈450 MB, acima do limite do GitHub). Ver “Dados”. |
@@ -63,6 +66,31 @@ Crie um gatilho no Cloud Build ligado a este repositório com
 `gcp-decision-intelligence`. Dê à service account do Cloud Build os papéis
 `roles/run.admin` e `roles/iam.serviceAccountUser` sobre `decision-intel-run`.
 
+## Copiloto com Gemini (Vertex AI)
+
+O **AI Business Copilot** e o **AI Chat** respondem com o Gemini quando
+`GEMINI_ENABLED=true` (padrão no deploy). O `setup_gcp.sh` habilita a API
+`aiplatform.googleapis.com` e dá `roles/aiplatform.user` à service account do Cloud Run.
+Se a chamada falhar (permissão, cota, rede), a tela mostra a resposta do motor de regras
+original e um aviso.
+
+| Variável | Padrão | Uso |
+|---|---|---|
+| `GEMINI_ENABLED` | `false` no código, `true` no deploy | Liga o Gemini |
+| `GEMINI_MODEL` | `gemini-3.5-flash` | Troque por `gemini-3.1-flash-lite` (mais barato) ou um modelo Pro |
+| `GOOGLE_CLOUD_LOCATION` | `global` | Endpoint do Vertex AI |
+| `GEMINI_SAMPLE_ROWS` | `5` | Linhas de amostra enviadas; `0` envia só esquema e estatísticas |
+| `GEMINI_LANGUAGE` | idioma da pergunta | Ex.: `Brazilian Portuguese` para forçar PT-BR |
+
+**O que é enviado ao modelo:** nomes e tipos das colunas, nulos, valores únicos,
+estatísticas (média, mín., máx., mediana), categorias mais frequentes, as 5 correlações
+mais fortes e, por padrão, as 5 primeiras linhas. O dataset completo **nunca** é enviado,
+então perguntas que exigem varrer todos os dados (ex.: “qual cliente comprou mais?”)
+recebem uma resposta dizendo que isso depende de uma análise do app. Se o dataset tiver
+dados pessoais, use `GEMINI_SAMPLE_ROWS=0`.
+
+Teste local: `gcloud auth application-default login` e defina as variáveis do `.env.example`.
+
 ## Dados
 
 Os CSVs do dataset Olist ficam fora do Git. Baixe-os do repositório original
@@ -85,6 +113,7 @@ Com os dados no BigQuery, dá para conectar o Power BI direto (conector Google B
 - **Acesso público:** o deploy usa `--allow-unauthenticated` e o login do próprio app.
   Para uso interno, troque por `--no-allow-unauthenticated` + IAP.
 - **Custo:** Cloud SQL `db-f1-micro` fica ligado 24h (é o principal custo fixo).
+  O Gemini é cobrado por token; cada pergunta envia o perfil do dataset (alguns milhares de tokens).
   O Cloud Run escala a zero (`--min-instances 0`).
 - **Licença:** o repositório original não tem arquivo de licença. Confirme com o autor
   antes de uso comercial ou publicação.

@@ -14,6 +14,7 @@ gcloud services enable \
   secretmanager.googleapis.com \
   storage.googleapis.com \
   bigquery.googleapis.com \
+  aiplatform.googleapis.com \
   --project "$PROJECT_ID"
 
 # Artifact Registry (imagens Docker)
@@ -52,6 +53,8 @@ gcloud iam service-accounts describe "$RUN_SA" --project "$PROJECT_ID" >/dev/nul
 
 gcloud projects add-iam-policy-binding "$PROJECT_ID" \
   --member "serviceAccount:$RUN_SA" --role roles/cloudsql.client --condition=None >/dev/null
+gcloud projects add-iam-policy-binding "$PROJECT_ID" \
+  --member "serviceAccount:$RUN_SA" --role roles/aiplatform.user --condition=None >/dev/null
 gcloud secrets add-iam-policy-binding "$DB_PASS_SECRET" \
   --member "serviceAccount:$RUN_SA" --role roles/secretmanager.secretAccessor --project "$PROJECT_ID" >/dev/null
 gcloud storage buckets add-iam-policy-binding "gs://$GCS_BUCKET" \

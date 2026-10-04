@@ -1,10 +1,19 @@
+import logging
+
 import pandas as pd
+
+from src.llm import gemini_client
+
+
+logger = logging.getLogger(__name__)
 
 
 class BusinessCopilot:
 
     def __init__(self, dataframe):
         self.df = dataframe
+        self.last_engine = None
+        self.last_error = None
 
     # =====================================================
     # EXECUTIVE SUMMARY
@@ -72,6 +81,26 @@ class BusinessCopilot:
     # =====================================================
 
     def ask(self, question):
+
+        self.last_error = None
+
+        if gemini_client.is_enabled():
+
+            try:
+                answer = gemini_client.ask(question, self.df)
+                self.last_engine = "gemini"
+                return answer
+
+            except Exception as error:
+                # Sem Vertex AI disponível, cai para o motor de regras.
+                logger.warning("Gemini failed, using rules: %s", error)
+                self.last_error = str(error)
+
+        self.last_engine = "rules"
+
+        return self.ask_rules(question)
+
+    def ask_rules(self, question):
 
         q = question.lower()
 

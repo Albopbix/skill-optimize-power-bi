@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 
 from src.ai_chat.chat_engine import ChatEngine
+from src.llm import gemini_client
 from src.ui.layout import page_header, ai_insight, page_footer
 
 
@@ -150,6 +151,9 @@ memory_mb = float(
 
 engine = ChatEngine()
 
+if gemini_client.is_enabled():
+    st.caption(f"🧠 Powered by Gemini (`{gemini_client.model_name()}`) on Vertex AI")
+
 
 # ==========================================================
 # REUSABLE CHAT FUNCTION
@@ -170,7 +174,11 @@ def ask_chatbot(question):
 
     try:
         with st.spinner("🤖 Analyzing your dataset..."):
-            answer = engine.ask(df, question)
+            answer = engine.ask(
+                df,
+                question,
+                history=st.session_state["chat_history"][:-1],
+            )
 
         if answer is None:
             answer = "The AI engine returned an empty response."
@@ -296,7 +304,11 @@ if current_page == "Overview":
 
             try:
                 with st.spinner("🤖 Analyzing your dataset..."):
-                    answer = engine.ask(df, prompt)
+                    answer = engine.ask(
+                        df,
+                        prompt,
+                        history=st.session_state["chat_history"][:-1],
+                    )
 
                 st.session_state["chat_history"].append(
                     (
@@ -417,7 +429,7 @@ elif current_page == "Chat":
 
             else:
                 with st.chat_message("assistant", avatar="🤖"):
-                    st.write(message)
+                    st.markdown(message)
 
 
 # ----------------------------------------------------------

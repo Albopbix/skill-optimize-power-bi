@@ -9,6 +9,7 @@ from src.ui.layout import (
 )
 
 from src.business_copilot.copilot_engine import BusinessCopilot
+from src.llm import gemini_client
 
 
 # =========================================================
@@ -768,6 +769,17 @@ if question:
 
                 st.info(
                     str(answer)
+                )
+
+            if copilot.last_engine == "gemini":
+                st.caption(
+                    f"🧠 Gemini (`{gemini_client.model_name()}`) on Vertex AI "
+                    "— based on the dataset profile; validate key numbers."
+                )
+
+            elif copilot.last_error:
+                st.caption(
+                    "⚠️ Gemini unavailable, showing rule-based answer."
                 )
 
         except Exception as e:
