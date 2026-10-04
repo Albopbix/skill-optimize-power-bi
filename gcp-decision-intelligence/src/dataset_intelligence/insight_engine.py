@@ -17,17 +17,17 @@ class InsightEngine:
 
         # Dataset Type
         insights.append(
-            f"Dataset Type Detected: {self.dataset_type}"
+            f"Tipo de dataset detectado: {self.dataset_type}"
         )
 
         # Compatibility
         if self.compatibility == "Compatible":
             insights.append(
-                "Dataset is compatible with the AI Decision Intelligence Platform."
+                "O dataset é compatível com a Plataforma de Inteligência de Decisão com IA."
             )
         else:
             insights.append(
-                "Dataset is not fully compatible. Some required business columns are missing."
+                "O dataset não é totalmente compatível. Faltam algumas colunas de negócio obrigatórias."
             )
 
         # Quality Score
@@ -35,60 +35,60 @@ class InsightEngine:
 
         if score >= 90:
             insights.append(
-                "Excellent data quality. Dataset is ready for Machine Learning."
+                "Qualidade dos dados excelente. O dataset está pronto para Machine Learning."
             )
 
         elif score >= 75:
             insights.append(
-                "Good data quality. Minor preprocessing is recommended."
+                "Boa qualidade dos dados. Recomenda-se um pré-processamento leve."
             )
 
         else:
             insights.append(
-                "Poor data quality. Significant cleaning is required."
+                "Qualidade dos dados baixa. É necessária uma limpeza significativa."
             )
 
         # Missing Values
         if self.quality_report["Missing Values"] > 0:
             insights.append(
-                f'The dataset contains {self.quality_report["Missing Values"]} missing values.'
+                f'O dataset contém {self.quality_report["Missing Values"]} valores ausentes.'
             )
 
         # Duplicate Rows
         if self.quality_report["Duplicate Rows"] == 0:
             insights.append(
-                "No duplicate records detected."
+                "Nenhum registro duplicado detectado."
             )
         else:
             insights.append(
-                f'{self.quality_report["Duplicate Rows"]} duplicate rows detected.'
+                f'{self.quality_report["Duplicate Rows"]} linhas duplicadas detectadas.'
             )
 
         # Business Recommendations
-        if self.dataset_type == "E-Commerce Dataset":
+        if self.dataset_type == "Dataset de E-commerce":
 
             insights.append(
-                "Recommended Business Use Cases:"
+                "Casos de uso de negócio recomendados:"
             )
 
             insights.append(
-                "• Customer Churn Prediction"
+                "• Predição de churn de clientes"
             )
 
             insights.append(
-                "• Customer Lifetime Value Prediction"
+                "• Predição de Lifetime Value (LTV) dos clientes"
             )
 
             insights.append(
-                "• Customer Segmentation"
+                "• Segmentação de clientes"
             )
 
             insights.append(
-                "• Product Recommendation"
+                "• Recomendação de produtos"
             )
 
             insights.append(
-                "• Sales Forecasting"
+                "• Previsão de vendas"
             )
 
         return insights

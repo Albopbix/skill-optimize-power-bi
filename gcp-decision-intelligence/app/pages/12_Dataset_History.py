@@ -11,7 +11,7 @@ from src.ui.layout import page_header, ai_insight, page_footer
 # ==========================================================
 
 st.set_page_config(
-    page_title="Dataset History",
+    page_title="Histórico de Datasets",
     page_icon="📂",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -57,9 +57,10 @@ st.markdown(
 # ==========================================================
 
 page_header(
-    "📂 Dataset History",
-    "Track uploaded datasets, inspect historical records, "
-    "analyze upload patterns, and export history."
+    "📂 Histórico de Datasets",
+    "Acompanhe os datasets enviados, consulte registros "
+    "históricos, analise padrões de envio e exporte o "
+    "histórico."
 )
 
 
@@ -72,7 +73,7 @@ try:
     history = database.get_uploads()
 
 except Exception as error:
-    st.error("Unable to load dataset history from the database.")
+    st.error("Não foi possível carregar o histórico de datasets do banco de dados.")
     st.code(str(error))
     history = None
 
@@ -82,18 +83,18 @@ except Exception as error:
 # ==========================================================
 
 if history is None:
-    st.warning("Dataset history could not be retrieved.")
+    st.warning("Não foi possível obter o histórico de datasets.")
 
 elif len(history) == 0:
     st.info(
-        "📂 No datasets have been uploaded yet. "
-        "Upload a dataset to begin building your history."
+        "📂 Nenhum dataset foi enviado ainda. Envie um "
+        "dataset para começar seu histórico."
     )
 
-    st.markdown("### 🚀 Get Started")
+    st.markdown("### 🚀 Primeiros Passos")
     st.write(
-        "After uploading a CSV or Excel dataset, its upload "
-        "information can appear here for tracking and review."
+        "Depois de enviar um dataset CSV ou Excel, as informações "
+        "do envio aparecem aqui para acompanhamento e revisão."
     )
 
 else:
@@ -106,38 +107,38 @@ else:
         history,
         columns=[
             "ID",
-            "Filename",
-            "Rows",
-            "Columns",
-            "Dataset Type",
-            "Upload Time",
+            "Arquivo",
+            "Linhas",
+            "Colunas",
+            "Tipo de Dataset",
+            "Data do Envio",
         ],
     )
 
-    history_df["Rows"] = pd.to_numeric(
-        history_df["Rows"], errors="coerce"
+    history_df["Linhas"] = pd.to_numeric(
+        history_df["Linhas"], errors="coerce"
     ).fillna(0)
 
-    history_df["Columns"] = pd.to_numeric(
-        history_df["Columns"], errors="coerce"
+    history_df["Colunas"] = pd.to_numeric(
+        history_df["Colunas"], errors="coerce"
     ).fillna(0)
 
-    history_df["Filename"] = (
-        history_df["Filename"].fillna("Unknown").astype(str)
+    history_df["Arquivo"] = (
+        history_df["Arquivo"].fillna("Desconhecido").astype(str)
     )
 
-    history_df["Dataset Type"] = (
-        history_df["Dataset Type"].fillna("Unknown").astype(str)
+    history_df["Tipo de Dataset"] = (
+        history_df["Tipo de Dataset"].fillna("Desconhecido").astype(str)
     )
 
-    history_df["Upload Time"] = (
-        history_df["Upload Time"].fillna("").astype(str)
+    history_df["Data do Envio"] = (
+        history_df["Data do Envio"].fillna("").astype(str)
     )
 
     # Keep the original display value and create a parsed date
     # for filtering and chronological sorting.
     history_df["_parsed_date"] = pd.to_datetime(
-        history_df["Upload Time"],
+        history_df["Data do Envio"],
         errors="coerce",
         utc=True,
     )
@@ -147,35 +148,35 @@ else:
     )
 
     history_df["_filename_lower"] = (
-        history_df["Filename"].str.lower()
+        history_df["Arquivo"].str.lower()
     )
 
     # ======================================================
     # SIDEBAR FILTERS
     # ======================================================
 
-    st.sidebar.header("🔎 History Filters")
+    st.sidebar.header("🔎 Filtros do Histórico")
 
     search = st.sidebar.text_input(
-        "Search filename",
-        placeholder="Enter a filename...",
+        "Buscar arquivo",
+        placeholder="Digite o nome de um arquivo...",
     )
 
     available_types = sorted(
-        history_df["Dataset Type"].unique().tolist()
+        history_df["Tipo de Dataset"].unique().tolist()
     )
 
     selected_types = st.sidebar.multiselect(
-        "Dataset type",
+        "Tipo de dataset",
         options=available_types,
         default=available_types,
     )
 
-    min_rows = int(history_df["Rows"].min())
-    max_rows = int(history_df["Rows"].max())
+    min_rows = int(history_df["Linhas"].min())
+    max_rows = int(history_df["Linhas"].max())
 
     row_range = st.sidebar.slider(
-        "Number of rows",
+        "Número de linhas",
         min_value=min_rows,
         max_value=max_rows,
         value=(min_rows, max_rows),
@@ -191,12 +192,12 @@ else:
         last_date = valid_dates.max().date()
 
         date_range = st.sidebar.date_input(
-            "Upload date range",
+            "Período de envio",
             value=(first_date, last_date),
         )
 
     if st.sidebar.button(
-        "🔄 Reset Filters",
+        "🔄 Limpar filtros",
         use_container_width=True,
     ):
         st.rerun()
@@ -217,11 +218,11 @@ else:
         ]
 
     filtered_df = filtered_df[
-        filtered_df["Dataset Type"].isin(selected_types)
+        filtered_df["Tipo de Dataset"].isin(selected_types)
     ]
 
     filtered_df = filtered_df[
-        filtered_df["Rows"].between(
+        filtered_df["Linhas"].between(
             row_range[0], row_range[1]
         )
     ]
@@ -251,38 +252,38 @@ else:
     # PAGE TITLE AND SUMMARY
     # ======================================================
 
-    st.subheader("📊 Upload Summary")
+    st.subheader("📊 Resumo dos Envios")
 
     total_datasets = len(history_df)
     filtered_datasets = len(filtered_df)
 
-    total_rows = int(filtered_df["Rows"].sum())
-    total_columns = int(filtered_df["Columns"].sum())
+    total_rows = int(filtered_df["Linhas"].sum())
+    total_columns = int(filtered_df["Colunas"].sum())
 
-    dataset_types_count = filtered_df["Dataset Type"].nunique()
+    dataset_types_count = filtered_df["Tipo de Dataset"].nunique()
 
     c1, c2, c3, c4 = st.columns(4)
 
     with c1:
         st.metric(
-            "📁 Total Uploads",
+            "📁 Total de Envios",
             f"{filtered_datasets:,}",
-            delta=f"{filtered_datasets - total_datasets:+,} vs all"
+            delta=f"{filtered_datasets - total_datasets:+,} vs total"
             if filtered_datasets != total_datasets else None,
         )
 
     with c2:
-        st.metric("📄 Combined Rows", f"{total_rows:,}")
+        st.metric("📄 Linhas Somadas", f"{total_rows:,}")
 
     with c3:
-        st.metric("📊 Combined Columns", f"{total_columns:,}")
+        st.metric("📊 Colunas Somadas", f"{total_columns:,}")
 
     with c4:
-        st.metric("🗂️ Dataset Types", dataset_types_count)
+        st.metric("🗂️ Tipos de Dataset", dataset_types_count)
 
     st.caption(
-        f"Showing {filtered_datasets:,} of "
-        f"{total_datasets:,} historical uploads."
+        f"Exibindo {filtered_datasets:,} de "
+        f"{total_datasets:,} envios históricos."
     )
 
     st.divider()
@@ -291,66 +292,67 @@ else:
     # HISTORY TABLE
     # ======================================================
 
-    st.subheader("📋 Upload Records")
+    st.subheader("📋 Registros de Envio")
 
     sort_by = st.selectbox(
-        "Sort records by",
+        "Ordenar registros por",
         [
-            "Newest upload",
-            "Oldest upload",
-            "Filename A–Z",
-            "Most rows",
-            "Most columns",
+            "Envio mais recente",
+            "Envio mais antigo",
+            "Arquivo A–Z",
+            "Mais linhas",
+            "Mais colunas",
         ],
     )
 
-    if sort_by == "Newest upload":
+    if sort_by == "Envio mais recente":
         filtered_df = filtered_df.sort_values(
             "_parsed_date",
             ascending=False,
             na_position="last",
         )
 
-    elif sort_by == "Oldest upload":
+    elif sort_by == "Envio mais antigo":
         filtered_df = filtered_df.sort_values(
             "_parsed_date",
             ascending=True,
             na_position="last",
         )
 
-    elif sort_by == "Filename A–Z":
+    elif sort_by == "Arquivo A–Z":
         filtered_df = filtered_df.sort_values(
-            "Filename",
+            "Arquivo",
             ascending=True,
         )
 
-    elif sort_by == "Most rows":
+    elif sort_by == "Mais linhas":
         filtered_df = filtered_df.sort_values(
-            "Rows",
+            "Linhas",
             ascending=False,
         )
 
-    elif sort_by == "Most columns":
+    elif sort_by == "Mais colunas":
         filtered_df = filtered_df.sort_values(
-            "Columns",
+            "Colunas",
             ascending=False,
         )
 
     display_df = filtered_df[
         [
             "ID",
-            "Filename",
-            "Rows",
-            "Columns",
-            "Dataset Type",
-            "Upload Time",
+            "Arquivo",
+            "Linhas",
+            "Colunas",
+            "Tipo de Dataset",
+            "Data do Envio",
         ]
     ].copy()
 
     if display_df.empty:
         st.warning(
-            "No upload records match the current filters. "
-            "Try changing your search or filter settings."
+            "Nenhum registro de envio corresponde aos "
+            "filtros atuais. Tente alterar a busca ou "
+            "os filtros."
         )
 
     else:
@@ -365,15 +367,15 @@ else:
     # ======================================================
 
     st.divider()
-    st.subheader("🔍 Inspect an Upload")
+    st.subheader("🔍 Inspecionar um Envio")
 
     if not filtered_df.empty:
 
         selected_index = st.selectbox(
-            "Choose an upload",
+            "Escolha um envio",
             options=filtered_df.index.tolist(),
             format_func=lambda idx: (
-                f"{filtered_df.loc[idx, 'Filename']} "
+                f"{filtered_df.loc[idx, 'Arquivo']} "
                 f"(ID: {filtered_df.loc[idx, 'ID']})"
             ),
         )
@@ -384,29 +386,29 @@ else:
 
         with d1:
             st.metric(
-                "Rows",
-                f"{int(selected_record['Rows']):,}",
+                "Linhas",
+                f"{int(selected_record['Linhas']):,}",
             )
 
         with d2:
             st.metric(
-                "Columns",
-                f"{int(selected_record['Columns']):,}",
+                "Colunas",
+                f"{int(selected_record['Colunas']):,}",
             )
 
         with d3:
             st.metric(
-                "Dataset Type",
-                str(selected_record["Dataset Type"]),
+                "Tipo de Dataset",
+                str(selected_record["Tipo de Dataset"]),
             )
 
-        st.write("**Filename:**", selected_record["Filename"])
-        st.write("**Upload ID:**", selected_record["ID"])
-        st.write("**Upload Time:**", selected_record["Upload Time"])
+        st.write("**Arquivo:**", selected_record["Arquivo"])
+        st.write("**ID do envio:**", selected_record["ID"])
+        st.write("**Data do envio:**", selected_record["Data do Envio"])
 
         st.caption(
-            "This view displays stored upload metadata. "
-            "It does not automatically reload the original dataset."
+            "Esta visão mostra os metadados de envio armazenados. "
+            "Ela não recarrega o dataset original automaticamente."
         )
 
     # ======================================================
@@ -414,28 +416,28 @@ else:
     # ======================================================
 
     st.divider()
-    st.subheader("📈 Dataset Type Distribution")
+    st.subheader("📈 Distribuição por Tipo de Dataset")
 
     if not filtered_df.empty:
 
         dataset_count = (
-            filtered_df["Dataset Type"]
+            filtered_df["Tipo de Dataset"]
             .value_counts()
-            .rename_axis("Dataset Type")
-            .reset_index(name="Count")
+            .rename_axis("Tipo de Dataset")
+            .reset_index(name="Contagem")
         )
 
         chart_col, summary_col = st.columns([2, 1])
 
         with chart_col:
             st.bar_chart(
-                dataset_count.set_index("Dataset Type"),
-                x_label="Dataset Type",
-                y_label="Number of Uploads",
+                dataset_count.set_index("Tipo de Dataset"),
+                x_label="Tipo de Dataset",
+                y_label="Número de Envios",
             )
 
         with summary_col:
-            st.markdown("**Upload breakdown**")
+            st.markdown("**Detalhamento dos envios**")
 
             st.dataframe(
                 dataset_count,
@@ -444,14 +446,14 @@ else:
             )
 
     else:
-        st.info("No data is available for the distribution chart.")
+        st.info("Não há dados disponíveis para o gráfico de distribuição.")
 
     # ======================================================
     # ROW COUNT DISTRIBUTION
     # ======================================================
 
     st.divider()
-    st.subheader("📊 Dataset Size Overview")
+    st.subheader("📊 Visão Geral do Tamanho dos Datasets")
 
     if not filtered_df.empty:
 
@@ -459,29 +461,29 @@ else:
 
         with size_col1:
             st.metric(
-                "Average Rows per Upload",
-                f"{filtered_df['Rows'].mean():,.1f}",
+                "Média de Linhas por Envio",
+                f"{filtered_df['Linhas'].mean():,.1f}",
             )
 
         with size_col2:
             st.metric(
-                "Largest Dataset",
-                f"{int(filtered_df['Rows'].max()):,} rows",
+                "Maior Dataset",
+                f"{int(filtered_df['Linhas'].max()):,} linhas",
             )
 
         size_distribution = filtered_df[
-            ["Filename", "Rows"]
+            ["Arquivo", "Linhas"]
         ].copy()
 
         size_distribution = size_distribution.sort_values(
-            "Rows",
+            "Linhas",
             ascending=False,
         ).head(15)
 
         st.bar_chart(
-            size_distribution.set_index("Filename"),
-            x_label="Filename",
-            y_label="Rows",
+            size_distribution.set_index("Arquivo"),
+            x_label="Arquivo",
+            y_label="Linhas",
         )
 
     # ======================================================
@@ -489,7 +491,7 @@ else:
     # ======================================================
 
     st.divider()
-    st.subheader("📥 Export History")
+    st.subheader("📥 Exportar Histórico")
 
     download_col1, download_col2 = st.columns(2)
 
@@ -498,16 +500,16 @@ else:
         export_filtered = filtered_df[
             [
                 "ID",
-                "Filename",
-                "Rows",
-                "Columns",
-                "Dataset Type",
-                "Upload Time",
+                "Arquivo",
+                "Linhas",
+                "Colunas",
+                "Tipo de Dataset",
+                "Data do Envio",
             ]
         ]
 
         st.download_button(
-            "📥 Download Filtered Records",
+            "📥 Baixar registros filtrados",
             data=export_filtered.to_csv(
                 index=False
             ).encode("utf-8"),
@@ -521,16 +523,16 @@ else:
         export_all = history_df[
             [
                 "ID",
-                "Filename",
-                "Rows",
-                "Columns",
-                "Dataset Type",
-                "Upload Time",
+                "Arquivo",
+                "Linhas",
+                "Colunas",
+                "Tipo de Dataset",
+                "Data do Envio",
             ]
         ]
 
         st.download_button(
-            "📦 Download All Records",
+            "📦 Baixar todos os registros",
             data=export_all.to_csv(
                 index=False
             ).encode("utf-8"),
@@ -547,10 +549,10 @@ else:
 st.divider()
 
 ai_insight(
-    "Dataset History provides a searchable record of uploaded "
-    "datasets. Filtering, size summaries, and downloadable records "
-    "help users track their data assets and maintain project "
-    "traceability."
+    "O Histórico de Datasets oferece um registro pesquisável dos "
+    "datasets enviados. Filtros, resumos de tamanho e registros "
+    "para download ajudam a acompanhar seus ativos de dados e "
+    "manter a rastreabilidade do projeto."
 )
 
 
@@ -560,11 +562,11 @@ ai_insight(
 
 st.divider()
 
-st.subheader("🧭 Page Navigation")
+st.subheader("🧭 Navegação")
 
 st.caption(
-    "Move between the previous page, Home, and the next page "
-    "in NexDecision AI."
+    "Navegue entre a página anterior, o Início e a próxima "
+    "página do NexDecision AI."
 )
 
 nav_prev, nav_home, nav_next = st.columns(3)
@@ -572,7 +574,7 @@ nav_prev, nav_home, nav_next = st.columns(3)
 with nav_prev:
 
     if st.button(
-        "⬅️ Previous: AI Chat",
+        "⬅️ Anterior: Chat com IA",
         use_container_width=True,
     ):
         st.switch_page("pages/11_AI_Chat.py")
@@ -580,7 +582,7 @@ with nav_prev:
 with nav_home:
 
     if st.button(
-        "🏠 Home",
+        "🏠 Início",
         use_container_width=True,
     ):
         st.switch_page("pages/0_Home.py")
@@ -588,7 +590,7 @@ with nav_home:
 with nav_next:
 
     if st.button(
-        "Next: Model History ➡️",
+        "Próximo: Histórico de Modelos ➡️",
         use_container_width=True,
     ):
         st.switch_page("pages/13_Model_History.py")

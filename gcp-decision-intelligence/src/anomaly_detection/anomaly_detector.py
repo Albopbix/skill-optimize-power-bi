@@ -23,13 +23,13 @@ class AnomalyDetector:
 
         result = df.copy()
 
-        result["Anomaly"] = prediction
+        result["Anomalia"] = prediction
 
-        result["Anomaly"] = result["Anomaly"].map({
+        result["Anomalia"] = result["Anomalia"].map({
 
             1: "Normal",
 
-            -1: "Anomaly"
+            -1: "Anomalia"
 
         })
 

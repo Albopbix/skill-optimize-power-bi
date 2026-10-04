@@ -41,9 +41,9 @@ class DatasetDetector:
         confidence = min(score * 20, 100)
 
         if score >= 3:
-            return "E-Commerce Dataset", confidence
+            return "Dataset de E-commerce", confidence
         else:
-            return "Unknown Dataset", confidence
+            return "Dataset Desconhecido", confidence
 
     def check_compatibility(self):
 
@@ -65,10 +65,10 @@ class DatasetDetector:
         if len(matched) == len(required_keywords):
             return (
                 "Compatible",
-                "Customer and order-related information detected."
+                "Informações de clientes e pedidos detectadas."
             )
 
         return (
             "Not Compatible",
-            "Required customer/order information is missing."
+            "Faltam as informações obrigatórias de clientes/pedidos."
         )

@@ -52,7 +52,7 @@ if "login_time" not in st.session_state:
 
 login_page = st.Page(
     "auth/LoginPage.py",
-    title="Sign In",
+    title="Entrar",
     icon="🔐",
     url_path="signin"
 )
@@ -64,31 +64,31 @@ login_page = st.Page(
 
 home_page = st.Page(
     "pages/0_Home.py",
-    title="Home",
+    title="Início",
     icon="🏠"
 )
 
 upload_page = st.Page(
     "pages/1_Upload_Dataset.py",
-    title="Upload Dataset",
+    title="Enviar Dataset",
     icon="📂"
 )
 
 dataset_page = st.Page(
     "pages/2_Dataset_Intelligence.py",
-    title="Dataset Intelligence",
+    title="Inteligência do Dataset",
     icon="🧠"
 )
 
 copilot_page = st.Page(
     "pages/3_AI_Business_Copilot.py",
-    title="AI Business Copilot",
+    title="Copiloto de Negócios IA",
     icon="🤖"
 )
 
 executive_page = st.Page(
     "pages/4_Executive_Dashboard.py",
-    title="Executive Dashboard",
+    title="Painel Executivo",
     icon="📊"
 )
 
@@ -100,14 +100,14 @@ automl_page = st.Page(
 
 forecasting_page = st.Page(
     "pages/6_Business_Forecasting.py",
-    title="Business Forecasting",
+    title="Previsão de Negócios",
     icon="📈"
 )
 
 # The merged Prediction Studio uses this single page.
 prediction_page = st.Page(
     "pages/7_Prediction.py",
-    title="Prediction Studio",
+    title="Estúdio de Predição",
     icon="🔮",
     url_path="prediction-studio"
 )
@@ -115,7 +115,7 @@ prediction_page = st.Page(
 
 interactive_page = st.Page(
     "pages/9_Interactive_Dashboard.py",
-    title="Interactive Dashboard",
+    title="Dashboard Interativo",
     icon="📊"
 )
 
@@ -123,37 +123,37 @@ interactive_page = st.Page(
 
 chat_page = st.Page(
     "pages/11_AI_Chat.py",
-    title="AI Chat",
+    title="Chat com IA",
     icon="💬"
 )
 
 dataset_history_page = st.Page(
     "pages/12_Dataset_History.py",
-    title="Dataset History",
+    title="Histórico de Datasets",
     icon="📚"
 )
 
 model_history_page = st.Page(
     "pages/13_Model_History.py",
-    title="Model History",
+    title="Histórico de Modelos",
     icon="🧪"
 )
 
 prediction_history_page = st.Page(
     "pages/14_Prediction_History.py",
-    title="Prediction History",
+    title="Histórico de Predições",
     icon="📜"
 )
 
 anomaly_page = st.Page(
     "pages/17_AI_Anomaly_Detection.py",
-    title="AI Anomaly Detection",
+    title="Detecção de Anomalias com IA",
     icon="🚨"
 )
 
 report_page = st.Page(
     "pages/18_Executive_Report.py",
-    title="Executive Report",
+    title="Relatório Executivo",
     icon="📄"
 )
 
@@ -233,7 +233,7 @@ with st.sidebar:
     )
 
     st.caption(
-        f"👤 Signed in as: {st.session_state.username}"
+        f"👤 Conectado como: {st.session_state.username}"
     )
 
     if st.session_state.user_email:
@@ -243,7 +243,7 @@ with st.sidebar:
 
     st.divider()
 
-    if st.button("🚪 Logout", width="stretch"):
+    if st.button("🚪 Sair", width="stretch"):
         logout()
         st.rerun()
 

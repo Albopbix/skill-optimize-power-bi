@@ -11,7 +11,7 @@ from src.ui.layout import page_header, ai_insight, page_footer
 # ==========================================================
 
 st.set_page_config(
-    page_title="Model History",
+    page_title="Histórico de Modelos",
     page_icon="🤖",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -53,9 +53,10 @@ st.markdown(
 # ==========================================================
 
 page_header(
-    "🤖 Model History & Leaderboard",
-    "Review trained machine-learning models, compare their "
-    "recorded scores, and explore model history."
+    "🤖 Histórico e Ranking de Modelos",
+    "Revise os modelos de machine learning treinados, "
+    "compare os scores registrados e explore o histórico "
+    "de modelos."
 )
 
 
@@ -68,7 +69,7 @@ try:
     models = database.get_models()
 
 except Exception as error:
-    st.error("Unable to load model history from the database.")
+    st.error("Não foi possível carregar o histórico de modelos do banco de dados.")
     st.code(str(error))
     models = None
 
@@ -78,22 +79,22 @@ except Exception as error:
 # ==========================================================
 
 if models is None:
-    st.warning("Model history could not be retrieved.")
+    st.warning("Não foi possível obter o histórico de modelos.")
 
 elif len(models) == 0:
 
-    st.info("🤖 No AI models have been trained yet.")
+    st.info("🤖 Nenhum modelo de IA foi treinado ainda.")
 
-    st.markdown("### 🚀 Get Started")
+    st.markdown("### 🚀 Primeiros Passos")
     st.write(
-        "Train a machine-learning model using the AutoML Engine. "
-        "Once training results are saved, they can appear here "
-        "for review and comparison."
+        "Treine um modelo de machine learning com o Motor de "
+        "AutoML. Depois que os resultados do treino forem salvos, "
+        "eles aparecem aqui para revisão e comparação."
     )
 
     ai_insight(
-        "Model History records model-training results to help "
-        "users review their experiments."
+        "O Histórico de Modelos registra os resultados de "
+        "treino para ajudar você a revisar seus experimentos."
     )
 
 else:
@@ -107,10 +108,10 @@ else:
         columns=[
             "ID",
             "Dataset",
-            "Model",
+            "Modelo",
             "Score",
-            "Problem Type",
-            "Created At",
+            "Tipo de Problema",
+            "Criado em",
         ],
     )
 
@@ -120,19 +121,19 @@ else:
     )
 
     model_df["Dataset"] = (
-        model_df["Dataset"].fillna("Unknown").astype(str)
+        model_df["Dataset"].fillna("Desconhecido").astype(str)
     )
 
-    model_df["Model"] = (
-        model_df["Model"].fillna("Unknown").astype(str)
+    model_df["Modelo"] = (
+        model_df["Modelo"].fillna("Desconhecido").astype(str)
     )
 
-    model_df["Problem Type"] = (
-        model_df["Problem Type"].fillna("Unknown").astype(str)
+    model_df["Tipo de Problema"] = (
+        model_df["Tipo de Problema"].fillna("Desconhecido").astype(str)
     )
 
-    model_df["Created At"] = (
-        model_df["Created At"].fillna("").astype(str)
+    model_df["Criado em"] = (
+        model_df["Criado em"].fillna("").astype(str)
     )
 
     model_df["ID"] = model_df["ID"].astype(str)
@@ -148,8 +149,9 @@ else:
     if model_df.empty:
 
         st.warning(
-            "No models with valid numeric scores were found. "
-            "Check the saved model records and their score values."
+            "Nenhum modelo com score numérico válido foi encontrado. "
+            "Verifique os registros de modelos salvos e seus "
+            "scores."
         )
 
     else:
@@ -158,11 +160,11 @@ else:
         # SIDEBAR FILTERS
         # ==================================================
 
-        st.sidebar.header("🔎 Model Filters")
+        st.sidebar.header("🔎 Filtros de Modelos")
 
         search = st.sidebar.text_input(
-            "Search model name",
-            placeholder="e.g. Random Forest",
+            "Buscar nome do modelo",
+            placeholder="ex.: Random Forest",
         )
 
         available_datasets = sorted(
@@ -176,21 +178,21 @@ else:
         )
 
         available_types = sorted(
-            model_df["Problem Type"].unique().tolist()
+            model_df["Tipo de Problema"].unique().tolist()
         )
 
         selected_types = st.sidebar.multiselect(
-            "Problem types",
+            "Tipos de problema",
             options=available_types,
             default=available_types,
         )
 
         available_models = sorted(
-            model_df["Model"].unique().tolist()
+            model_df["Modelo"].unique().tolist()
         )
 
         selected_models = st.sidebar.multiselect(
-            "Algorithms",
+            "Algoritmos",
             options=available_models,
             default=available_models,
         )
@@ -200,7 +202,7 @@ else:
 
         if min_score < max_score:
             score_range = st.sidebar.slider(
-                "Recorded score range",
+                "Faixa de score registrada",
                 min_value=min_score,
                 max_value=max_score,
                 value=(min_score, max_score),
@@ -208,11 +210,11 @@ else:
         else:
             score_range = (min_score, max_score)
             st.sidebar.caption(
-                f"All valid model scores are {min_score:.4f}."
+                f"Todos os scores válidos são {min_score:.4f}."
             )
 
         if st.sidebar.button(
-            "🔄 Reset filters",
+            "🔄 Limpar filtros",
             use_container_width=True,
         ):
             st.rerun()
@@ -225,7 +227,7 @@ else:
 
         if search.strip():
             filtered_df = filtered_df[
-                filtered_df["Model"].str.contains(
+                filtered_df["Modelo"].str.contains(
                     search.strip(),
                     case=False,
                     regex=False,
@@ -235,8 +237,8 @@ else:
 
         filtered_df = filtered_df[
             filtered_df["Dataset"].isin(selected_datasets)
-            & filtered_df["Problem Type"].isin(selected_types)
-            & filtered_df["Model"].isin(selected_models)
+            & filtered_df["Tipo de Problema"].isin(selected_types)
+            & filtered_df["Modelo"].isin(selected_models)
         ]
 
         filtered_df = filtered_df[
@@ -250,37 +252,37 @@ else:
         # SUMMARY METRICS
         # ==================================================
 
-        st.subheader("📊 Model Summary")
+        st.subheader("📊 Resumo dos Modelos")
 
         c1, c2, c3, c4 = st.columns(4)
 
         with c1:
             st.metric(
-                "Models Recorded",
+                "Modelos Registrados",
                 f"{len(filtered_df):,}",
             )
 
         with c2:
             st.metric(
-                "Distinct Algorithms",
-                filtered_df["Model"].nunique(),
+                "Algoritmos Distintos",
+                filtered_df["Modelo"].nunique(),
             )
 
         with c3:
             st.metric(
-                "Problem Types",
-                filtered_df["Problem Type"].nunique(),
+                "Tipos de Problema",
+                filtered_df["Tipo de Problema"].nunique(),
             )
 
         with c4:
             st.metric(
-                "Datasets Used",
+                "Datasets Usados",
                 filtered_df["Dataset"].nunique(),
             )
 
         st.caption(
-            f"Showing {len(filtered_df):,} of "
-            f"{len(model_df):,} model records with valid scores."
+            f"Exibindo {len(filtered_df):,} de {len(model_df):,} "
+            "registros de modelos com scores válidos."
         )
 
         st.divider()
@@ -289,42 +291,43 @@ else:
         # LEADERBOARD
         # ==================================================
 
-        st.subheader("🏆 Model Leaderboard")
+        st.subheader("🏆 Ranking de Modelos")
 
         if filtered_df.empty:
 
             st.warning(
-                "No models match your current filters. "
-                "Adjust the filters in the sidebar."
+                "Nenhum modelo corresponde aos filtros "
+                "atuais. Ajuste os filtros na barra "
+                "lateral."
             )
 
         else:
 
             sort_order = st.selectbox(
-                "Sort leaderboard",
+                "Ordenar ranking",
                 [
-                    "Highest score first",
-                    "Lowest score first",
-                    "Model name A–Z",
-                    "Dataset name A–Z",
+                    "Maior score primeiro",
+                    "Menor score primeiro",
+                    "Nome do modelo A–Z",
+                    "Nome do dataset A–Z",
                 ],
             )
 
-            if sort_order == "Highest score first":
+            if sort_order == "Maior score primeiro":
                 leaderboard = filtered_df.sort_values(
                     "Score",
                     ascending=False,
                 )
 
-            elif sort_order == "Lowest score first":
+            elif sort_order == "Menor score primeiro":
                 leaderboard = filtered_df.sort_values(
                     "Score",
                     ascending=True,
                 )
 
-            elif sort_order == "Model name A–Z":
+            elif sort_order == "Nome do modelo A–Z":
                 leaderboard = filtered_df.sort_values(
-                    "Model",
+                    "Modelo",
                     ascending=True,
                 )
 
@@ -345,7 +348,7 @@ else:
             # ==============================================
 
             st.divider()
-            st.subheader("🥇 Highest Recorded Score")
+            st.subheader("🥇 Maior Score Registrado")
 
             best_model = filtered_df.loc[
                 filtered_df["Score"].idxmax()
@@ -355,8 +358,8 @@ else:
 
             with b1:
                 st.metric(
-                    "Model",
-                    str(best_model["Model"]),
+                    "Modelo",
+                    str(best_model["Modelo"]),
                 )
 
             with b2:
@@ -373,14 +376,14 @@ else:
 
             with b4:
                 st.metric(
-                    "Problem Type",
-                    str(best_model["Problem Type"]),
+                    "Tipo de Problema",
+                    str(best_model["Tipo de Problema"]),
                 )
 
             st.caption(
-                "This identifies the highest recorded numeric score. "
-                "Scores are comparable only when their metric, "
-                "evaluation method, and problem context are compatible."
+                "Este é o maior score numérico registrado. Scores "
+                "só são comparáveis quando a métrica, o método de "
+                "avaliação e o contexto do problema são compatíveis."
             )
 
             # ==============================================
@@ -388,14 +391,14 @@ else:
             # ==============================================
 
             st.divider()
-            st.subheader("📈 Recorded Model Scores")
+            st.subheader("📈 Scores Registrados dos Modelos")
 
             chart_data = filtered_df[
-                ["Model", "Dataset", "Score"]
+                ["Modelo", "Dataset", "Score"]
             ].copy()
 
-            chart_data["Label"] = (
-                chart_data["Model"]
+            chart_data["Rótulo"] = (
+                chart_data["Modelo"]
                 + " — "
                 + chart_data["Dataset"]
             )
@@ -406,9 +409,9 @@ else:
             )
 
             st.bar_chart(
-                chart_data.set_index("Label")["Score"],
-                x_label="Model — Dataset",
-                y_label="Recorded Score",
+                chart_data.set_index("Rótulo")["Score"],
+                x_label="Modelo — Dataset",
+                y_label="Score registrado",
             )
 
             # ==============================================
@@ -416,24 +419,24 @@ else:
             # ==============================================
 
             st.divider()
-            st.subheader("📊 Average Score by Algorithm")
+            st.subheader("📊 Score Médio por Algoritmo")
 
             algorithm_summary = (
-                filtered_df.groupby("Model")["Score"]
+                filtered_df.groupby("Modelo")["Score"]
                 .agg(["mean", "count", "min", "max"])
                 .reset_index()
             )
 
             algorithm_summary.columns = [
-                "Model",
-                "Average Score",
-                "Number of Records",
-                "Minimum Score",
-                "Maximum Score",
+                "Modelo",
+                "Score Médio",
+                "Nº de Registros",
+                "Score Mínimo",
+                "Score Máximo",
             ]
 
             algorithm_summary = algorithm_summary.sort_values(
-                "Average Score",
+                "Score Médio",
                 ascending=False,
             )
 
@@ -444,11 +447,11 @@ else:
             )
 
             st.bar_chart(
-                algorithm_summary.set_index("Model")[
-                    "Average Score"
+                algorithm_summary.set_index("Modelo")[
+                    "Score Médio"
                 ],
-                x_label="Algorithm",
-                y_label="Average Recorded Score",
+                x_label="Algoritmo",
+                y_label="Score médio registrado",
             )
 
             # ==============================================
@@ -456,20 +459,20 @@ else:
             # ==============================================
 
             st.divider()
-            st.subheader("📉 Score Distribution")
+            st.subheader("📉 Distribuição dos Scores")
 
             st.write(
-                "Review the spread of recorded model scores. "
-                "This is descriptive and does not establish "
-                "that the models used the same evaluation metric."
+                "Veja a dispersão dos scores registrados. Esta "
+                "visão é descritiva e não garante que os modelos "
+                "usaram a mesma métrica de avaliação."
             )
 
             st.line_chart(
                 filtered_df.sort_values("Score")[
                     ["Score"]
                 ].reset_index(drop=True),
-                x_label="Model record (sorted)",
-                y_label="Recorded Score",
+                x_label="Registro de modelo (ordenado)",
+                y_label="Score registrado",
             )
 
             # ==============================================
@@ -477,16 +480,18 @@ else:
             # ==============================================
 
             st.divider()
-            st.subheader("🔍 Inspect a Model Record")
+            st.subheader("🔍 Inspecionar um Registro de Modelo")
 
             selected_id = st.selectbox(
-                "Choose a model record",
+                "Escolha um registro de modelo",
                 options=filtered_df["ID"].tolist(),
                 format_func=lambda record_id: (
-                    f"{filtered_df.loc[
-                        filtered_df['ID'] == record_id, 'Model'
-                    ].iloc[0]} "
-                    f"(ID: {record_id})"
+                    str(
+                        filtered_df.loc[
+                            filtered_df["ID"] == record_id, "Modelo"
+                        ].iloc[0]
+                    )
+                    + f" (ID: {record_id})"
                 ),
             )
 
@@ -497,24 +502,24 @@ else:
             d1, d2 = st.columns(2)
 
             with d1:
-                st.markdown("**Model information**")
-                st.write("Record ID:", selected_record["ID"])
-                st.write("Algorithm:", selected_record["Model"])
+                st.markdown("**Informações do modelo**")
+                st.write("ID do registro:", selected_record["ID"])
+                st.write("Algoritmo:", selected_record["Modelo"])
                 st.write("Dataset:", selected_record["Dataset"])
 
             with d2:
-                st.markdown("**Evaluation information**")
+                st.markdown("**Informações da avaliação**")
                 st.write(
-                    "Problem Type:",
-                    selected_record["Problem Type"],
+                    "Tipo de problema:",
+                    selected_record["Tipo de Problema"],
                 )
                 st.write(
-                    "Recorded Score:",
+                    "Score registrado:",
                     f"{selected_record['Score']:.4f}",
                 )
                 st.write(
-                    "Created At:",
-                    selected_record["Created At"],
+                    "Criado em:",
+                    selected_record["Criado em"],
                 )
 
             # ==============================================
@@ -522,7 +527,7 @@ else:
             # ==============================================
 
             st.divider()
-            st.subheader("📥 Export Model History")
+            st.subheader("📥 Exportar Histórico de Modelos")
 
             export_data = leaderboard.copy()
 
@@ -530,7 +535,7 @@ else:
 
             with export_col1:
                 st.download_button(
-                    "📥 Download Filtered Models",
+                    "📥 Baixar modelos filtrados",
                     data=export_data.to_csv(
                         index=False
                     ).encode("utf-8"),
@@ -541,7 +546,7 @@ else:
 
             with export_col2:
                 st.download_button(
-                    "📦 Download All Valid Model Records",
+                    "📦 Baixar todos os registros válidos",
                     data=model_df.to_csv(
                         index=False
                     ).encode("utf-8"),
@@ -558,10 +563,11 @@ else:
 st.divider()
 
 ai_insight(
-    "Model History helps users explore previously trained "
-    "machine-learning models, compare stored evaluation scores, "
-    "and review experiment records. Confirm that models use "
-    "compatible evaluation metrics before comparing their scores."
+    "O Histórico de Modelos ajuda a explorar modelos de machine "
+    "learning treinados anteriormente, comparar os scores de "
+    "avaliação armazenados e revisar os registros de experimentos. "
+    "Confirme que os modelos usam métricas compatíveis antes "
+    "de comparar os scores."
 )
 
 
@@ -571,27 +577,27 @@ ai_insight(
 
 st.divider()
 
-st.subheader("🧭 Page Navigation")
+st.subheader("🧭 Navegação")
 
 nav_prev, nav_home, nav_next = st.columns(3)
 
 with nav_prev:
     if st.button(
-        "⬅️ Previous: Dataset History",
+        "⬅️ Anterior: Histórico de Datasets",
         use_container_width=True,
     ):
         st.switch_page("pages/12_Dataset_History.py")
 
 with nav_home:
     if st.button(
-        "🏠 Home",
+        "🏠 Início",
         use_container_width=True,
     ):
         st.switch_page("pages/0_Home.py")
 
 with nav_next:
     if st.button(
-        "Next: Prediction History ➡️",
+        "Próximo: Histórico de Predições ➡️",
         use_container_width=True,
     ):
         st.switch_page("pages/14_Prediction_History.py")

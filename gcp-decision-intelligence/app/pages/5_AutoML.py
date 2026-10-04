@@ -20,7 +20,7 @@ from src.model_export.model_exporter import ModelExporter
 # ==========================================================
 
 st.set_page_config(
-    page_title="AI AutoML Engine",
+    page_title="Motor de AutoML com IA",
     page_icon="🤖",
     layout="wide"
 )
@@ -129,20 +129,20 @@ st.markdown(
 # ==========================================================
 
 page_header(
-    "🤖 AI AutoML Engine",
-    "Automatically train, compare and recommend the best Machine Learning model."
+    "🤖 Motor de AutoML com IA",
+    "Treine, compare e recomende automaticamente o melhor modelo de Machine Learning."
 )
 
 st.markdown(
     """
     <div class="automl-hero">
         <div class="automl-title">
-            🧠 Automated Machine Learning Decision Center
+            🧠 Central de Decisão de Machine Learning Automatizado
         </div>
         <div class="automl-subtitle">
-            Prepare your dataset, identify the prediction target,
-            compare machine learning algorithms and export the
-            strongest performing model.
+            Prepare seu dataset, identifique o alvo da predição,
+            compare algoritmos de machine learning e exporte o
+            modelo de melhor desempenho.
         </div>
     </div>
     """,
@@ -157,7 +157,7 @@ st.markdown(
 if "dataset" not in st.session_state:
 
     st.warning(
-        "⚠️ Please upload a dataset first."
+        "⚠️ Envie um dataset primeiro."
     )
 
     st.stop()
@@ -167,21 +167,21 @@ df = st.session_state["dataset"]
 
 filename = st.session_state.get(
     "filename",
-    "Uploaded Dataset"
+    "Dataset enviado"
 )
 
 
 if df is None or df.empty:
 
     st.error(
-        "The uploaded dataset is empty."
+        "O dataset enviado está vazio."
     )
 
     st.stop()
 
 
 st.success(
-    f"✅ Dataset loaded: **{filename}**"
+    f"✅ Dataset carregado: **{filename}**"
 )
 
 
@@ -214,7 +214,7 @@ categorical_count = len(
 # ==========================================================
 
 st.markdown(
-    '<div class="section-label">📊 Dataset Readiness</div>',
+    '<div class="section-label">📊 Prontidão do Dataset</div>',
     unsafe_allow_html=True
 )
 
@@ -222,31 +222,31 @@ c1, c2, c3, c4, c5 = st.columns(5)
 
 with c1:
     st.metric(
-        "Rows",
+        "Linhas",
         f"{rows:,}"
     )
 
 with c2:
     st.metric(
-        "Columns",
+        "Colunas",
         columns
     )
 
 with c3:
     st.metric(
-        "Missing",
+        "Ausentes",
         f"{missing:,}"
     )
 
 with c4:
     st.metric(
-        "Numeric",
+        "Numéricas",
         numeric_count
     )
 
 with c5:
     st.metric(
-        "Categorical",
+        "Categóricas",
         categorical_count
     )
 
@@ -280,7 +280,7 @@ candidate_columns = [
 if len(candidate_columns) == 0:
 
     st.error(
-        "No suitable target column was detected."
+        "Nenhuma coluna-alvo adequada foi detectada."
     )
 
     st.stop()
@@ -291,14 +291,14 @@ if len(candidate_columns) == 0:
 # ==========================================================
 
 st.markdown(
-    '<div class="section-label">🎯 Prediction Configuration</div>',
+    '<div class="section-label">🎯 Configuração da Predição</div>',
     unsafe_allow_html=True
 )
 
 target = st.selectbox(
-    "Prediction Target",
+    "Alvo da Predição",
     candidate_columns,
-    help="Select the column that the AutoML engine should predict."
+    help="Selecione a coluna que o motor de AutoML deve prever."
 )
 
 
@@ -327,15 +327,15 @@ if pd.api.types.is_numeric_dtype(
 
     if target_unique <= 10:
 
-        suggested_problem = "Classification"
+        suggested_problem = "Classificação"
 
     else:
 
-        suggested_problem = "Regression"
+        suggested_problem = "Regressão"
 
 else:
 
-    suggested_problem = "Classification"
+    suggested_problem = "Classificação"
 
 
 p1, p2, p3, p4 = st.columns(4)
@@ -343,28 +343,28 @@ p1, p2, p3, p4 = st.columns(4)
 with p1:
 
     st.metric(
-        "Target",
+        "Alvo",
         target
     )
 
 with p2:
 
     st.metric(
-        "Unique Values",
+        "Valores Únicos",
         f"{target_unique:,}"
     )
 
 with p3:
 
     st.metric(
-        "Missing Target",
+        "Alvo Ausente",
         f"{target_missing:,}"
     )
 
 with p4:
 
     st.metric(
-        "Suggested Type",
+        "Tipo Sugerido",
         suggested_problem
     )
 
@@ -377,15 +377,15 @@ if rows > MAX_TRAINING_ROWS:
 
     st.info(
         f"""
-        ⚡ **Large dataset detected**
+        ⚡ **Dataset grande detectado**
 
-        The uploaded dataset contains **{rows:,} rows**.
+        O dataset enviado tem **{rows:,} linhas**.
 
-        AutoML will use a maximum of
-        **{MAX_TRAINING_ROWS:,} rows** for training
-        to keep model comparison responsive.
+        O AutoML usará no máximo
+        **{MAX_TRAINING_ROWS:,} linhas** no treino
+        para manter a comparação de modelos ágil.
 
-        Your original dataset will not be modified.
+        Seu dataset original não será alterado.
         """
     )
 
@@ -450,7 +450,7 @@ def prepare_training_data(
     if target_column not in data.columns:
 
         raise ValueError(
-            "Target column was removed during preprocessing."
+            "A coluna-alvo foi removida durante o pré-processamento."
         )
 
     # ------------------------------------------------------
@@ -557,7 +557,7 @@ def prepare_training_data(
     if X.shape[1] == 0:
 
         raise ValueError(
-            "No usable feature columns remain after preprocessing."
+            "Não restaram colunas de variáveis utilizáveis após o pré-processamento."
         )
 
     X_train, X_test, y_train, y_test = (
@@ -595,12 +595,12 @@ if "automl_result" not in st.session_state:
 # ==========================================================
 
 st.markdown(
-    '<div class="section-label">🚀 Model Training</div>',
+    '<div class="section-label">🚀 Treino dos Modelos</div>',
     unsafe_allow_html=True
 )
 
 train_button = st.button(
-    "🚀 Train & Compare AI Models",
+    "🚀 Treinar e Comparar Modelos de IA",
     type="primary",
     width="stretch"
 )
@@ -617,7 +617,7 @@ if train_button:
     try:
 
         with st.spinner(
-            "⚙️ Preparing training data..."
+            "⚙️ Preparando os dados de treino..."
         ):
 
             (
@@ -643,7 +643,7 @@ if train_button:
         )
 
         status.info(
-            "🔄 Preparing AI training pipeline..."
+            "🔄 Preparando o pipeline de treino de IA..."
         )
 
 
@@ -658,12 +658,12 @@ if train_button:
         )
 
         status.info(
-            "🤖 Comparing machine learning algorithms..."
+            "🤖 Comparando algoritmos de machine learning..."
         )
 
 
         with loading(
-            "Training and evaluating models..."
+            "Treinando e avaliando modelos..."
         ):
 
             results = automl.compare_models(
@@ -679,14 +679,14 @@ if train_button:
         )
 
         status.info(
-            "📊 Evaluating model performance..."
+            "📊 Avaliando o desempenho dos modelos..."
         )
 
 
         if not results:
 
             raise ValueError(
-                "AutoML did not return any model results."
+                "O AutoML não retornou resultados de modelos."
             )
 
 
@@ -700,7 +700,7 @@ if train_button:
         )
 
         status.info(
-            "🏆 Selecting best-performing model..."
+            "🏆 Selecionando o modelo de melhor desempenho..."
         )
 
 
@@ -830,18 +830,18 @@ if train_button:
         )
 
         status.success(
-            "✅ AutoML completed successfully!"
+            "✅ AutoML concluído com sucesso!"
         )
 
         st.toast(
-            "🎉 Model training completed!"
+            "🎉 Treino dos modelos concluído!"
         )
 
 
     except Exception as e:
 
         st.error(
-            f"❌ AutoML training failed: {e}"
+            f"❌ Falha no treino do AutoML: {e}"
         )
 
 
@@ -857,18 +857,19 @@ result = st.session_state.get(
 if result is None:
 
     st.info(
-        "👆 Select a prediction target and click "
-        "**Train & Compare AI Models** to start AutoML."
+        "👆 Selecione um alvo de predição e clique "
+        "em **Treinar e Comparar Modelos de IA** para "
+        "iniciar o AutoML."
     )
 
     st.markdown(
         """
         <div class="performance-note">
-            ⚡ <b>Performance optimization:</b>
-            preprocessing is cached and models are trained
-            only after you explicitly click the training button.
-            Streamlit UI reruns will not automatically retrain
-            your models.
+            ⚡ <b>Otimização de desempenho:</b>
+            o pré-processamento fica em cache e os modelos são treinados
+            somente depois que você clica no botão de treino.
+            As reexecuções da interface do Streamlit não
+            retreinam seus modelos automaticamente.
         </div>
         """,
         unsafe_allow_html=True
@@ -908,7 +909,7 @@ else:
     # ======================================================
 
     st.success(
-        f"🏆 Best model selected: **{best_model}**"
+        f"🏆 Melhor modelo selecionado: **{best_model}**"
     )
 
 
@@ -917,7 +918,7 @@ else:
     # ======================================================
 
     st.markdown(
-        '<div class="section-label">🏆 AI Model Decision</div>',
+        '<div class="section-label">🏆 Decisão de Modelo da IA</div>',
         unsafe_allow_html=True
     )
 
@@ -929,7 +930,7 @@ else:
             f"""
             <div class="decision-card">
                 <div class="decision-title">
-                    🥇 Best Model
+                    🥇 Melhor Modelo
                 </div>
                 <div class="decision-value">
                     {best_model}
@@ -946,7 +947,7 @@ else:
             f"""
             <div class="decision-card">
                 <div class="decision-title">
-                    🎯 Problem Type
+                    🎯 Tipo de Problema
                 </div>
                 <div class="decision-value">
                     {problem_type.title()}
@@ -967,7 +968,7 @@ else:
             f"""
             <div class="decision-card">
                 <div class="decision-title">
-                    📈 Model Score
+                    📈 Score do Modelo
                 </div>
                 <div class="decision-value">
                     {score_display}
@@ -984,7 +985,7 @@ else:
             f"""
             <div class="decision-card">
                 <div class="decision-title">
-                    ⏱ Training Time
+                    ⏱ Tempo de Treino
                 </div>
                 <div class="decision-value">
                     {training_time:.1f}s
@@ -1000,7 +1001,7 @@ else:
     # ======================================================
 
     st.markdown(
-        '<div class="section-label">⚙️ Training Configuration</div>',
+        '<div class="section-label">⚙️ Configuração do Treino</div>',
         unsafe_allow_html=True
     )
 
@@ -1009,28 +1010,28 @@ else:
     with t1:
 
         st.metric(
-            "Target",
+            "Alvo",
             target_used
         )
 
     with t2:
 
         st.metric(
-            "Training Rows",
+            "Linhas de Treino",
             f"{training_rows:,}"
         )
 
     with t3:
 
         st.metric(
-            "Models Compared",
+            "Modelos Comparados",
             len(results)
         )
 
     with t4:
 
         st.metric(
-            "Features Used",
+            "Variáveis Usadas",
             len(result["feature_names"])
         )
 
@@ -1038,20 +1039,20 @@ else:
     if sampled:
 
         st.info(
-            f"⚡ Training used a maximum of "
-            f"{MAX_TRAINING_ROWS:,} sampled rows "
-            f"because the original dataset was larger."
+            f"⚡ O treino usou no máximo {MAX_TRAINING_ROWS:,} "
+            "linhas amostradas porque o dataset "
+            "original era maior."
         )
 
 
     if constant_columns:
 
         with st.expander(
-            "🔍 Preprocessing Details"
+            "🔍 Detalhes do Pré-processamento"
         ):
 
             st.write(
-                "Constant columns removed:"
+                "Colunas constantes removidas:"
             )
 
             st.write(
@@ -1064,13 +1065,13 @@ else:
     # ======================================================
 
     st.markdown(
-        '<div class="section-label">📊 Model Comparison</div>',
+        '<div class="section-label">📊 Comparação de Modelos</div>',
         unsafe_allow_html=True
     )
 
     results_df = pd.DataFrame(
         {
-            "Model": list(
+            "Modelo": list(
                 results.keys()
             ),
 
@@ -1091,7 +1092,7 @@ else:
 
     results_df.insert(
         0,
-        "Rank",
+        "Posição",
         range(
             1,
             len(results_df) + 1
@@ -1112,7 +1113,7 @@ else:
 
     st.bar_chart(
         results_df.set_index(
-            "Model"
+            "Modelo"
         )["Score"]
     )
 
@@ -1124,15 +1125,15 @@ else:
     if problem_type == "classification":
 
         st.caption(
-            "Classification score is displayed using the "
-            "metric returned by the AutoML engine."
+            "O score de classificação é exibido com "
+            "a métrica retornada pelo motor de AutoML."
         )
 
     else:
 
         st.caption(
-            "Regression score is displayed using the "
-            "metric returned by the AutoML engine."
+            "O score de regressão é exibido com "
+            "a métrica retornada pelo motor de AutoML."
         )
 
 
@@ -1144,7 +1145,7 @@ else:
     # ======================================================
 
     st.markdown(
-        '<div class="section-label">📌 Feature Importance</div>',
+        '<div class="section-label">📌 Importância das Variáveis</div>',
         unsafe_allow_html=True
     )
 
@@ -1153,12 +1154,12 @@ else:
 
         imp_df = pd.DataFrame(
             {
-                "Feature":
+                "Variável":
                     list(
                         importance.keys()
                     ),
 
-                "Importance":
+                "Importância":
                     list(
                         importance.values()
                     )
@@ -1167,7 +1168,7 @@ else:
 
 
         imp_df = imp_df.sort_values(
-            "Importance",
+            "Importância",
             ascending=False
         )
 
@@ -1186,16 +1187,16 @@ else:
 
         st.bar_chart(
             top_features.set_index(
-                "Feature"
-            )["Importance"]
+                "Variável"
+            )["Importância"]
         )
 
 
     else:
 
         st.info(
-            "Feature importance is not available "
-            "for the selected model."
+            "A importância das variáveis não "
+            "está disponível para o modelo selecionado."
         )
 
 
@@ -1204,7 +1205,7 @@ else:
     # ======================================================
 
     st.markdown(
-        '<div class="section-label">🤖 AI Model Recommendations</div>',
+        '<div class="section-label">🤖 Recomendações de Modelo da IA</div>',
         unsafe_allow_html=True
     )
 
@@ -1222,7 +1223,7 @@ else:
     else:
 
         st.info(
-            "No additional recommendations were generated."
+            "Nenhuma recomendação adicional foi gerada."
         )
 
 
@@ -1231,19 +1232,19 @@ else:
     # ======================================================
 
     st.markdown(
-        '<div class="section-label">💾 Model Export</div>',
+        '<div class="section-label">💾 Exportação do Modelo</div>',
         unsafe_allow_html=True
     )
 
 
     st.success(
-        "✅ Best model exported successfully."
+        "✅ Melhor modelo exportado com sucesso."
     )
     st.balloons()
 
 
     st.caption(
-        f"Saved model path: {filepath}"
+        f"Caminho do modelo salvo: {filepath}"
     )
 
 
@@ -1252,10 +1253,11 @@ else:
     # ======================================================
 
     ai_insight(
-        "The AutoML engine compared multiple machine learning "
-        "algorithms and selected the highest-performing model. "
-        "Before deployment, review model performance, feature "
-        "importance and business relevance."
+        "O motor de AutoML comparou vários algoritmos de machine "
+        "learning e selecionou o modelo de melhor desempenho. "
+        "Antes de colocar em produção, revise o desempenho, "
+        "a importância das variáveis e a relevância para o "
+        "negócio."
     )
 
 
@@ -1271,7 +1273,7 @@ nav_left, nav_right = st.columns(2)
 with nav_left:
 
     if st.button(
-        "← Previous: ",
+        "← Anterior: Copiloto",
         width="stretch"
     ):
 
@@ -1283,7 +1285,7 @@ with nav_left:
 with nav_right:
 
     if st.button(
-        "Next: →",
+        "Próximo: Previsões →",
         width="stretch"
     ):
 

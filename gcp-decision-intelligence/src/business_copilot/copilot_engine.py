@@ -55,16 +55,16 @@ class BusinessCopilot:
         recommendations = []
 
         if self.df.isnull().sum().sum() > 0:
-            recommendations.append("Clean missing values.")
+            recommendations.append("Trate os valores ausentes.")
 
         if self.df.duplicated().sum() > 0:
-            recommendations.append("Remove duplicate rows.")
+            recommendations.append("Remova as linhas duplicadas.")
 
-        recommendations.append("Train AutoML model.")
-        recommendations.append("Run Explainable AI.")
-        recommendations.append("Run Business Forecast.")
-        recommendations.append("Run Anomaly Detection.")
-        recommendations.append("Generate Executive Report.")
+        recommendations.append("Treine um modelo no AutoML.")
+        recommendations.append("Execute a IA explicável.")
+        recommendations.append("Execute a previsão de negócios.")
+        recommendations.append("Execute a detecção de anomalias.")
+        recommendations.append("Gere o relatório executivo.")
 
         return recommendations
 
@@ -104,85 +104,92 @@ class BusinessCopilot:
 
         q = question.lower()
 
-        if "row" in q:
-            return f"The dataset contains {len(self.df):,} rows."
+        def has(*words):
+            return any(word in q for word in words)
 
-        elif "column" in q:
-            return f"The dataset contains {len(self.df.columns)} columns."
+        def numeric_or_message():
+            numeric = self.df.select_dtypes(include="number")
+            return numeric, "Não há colunas numéricas disponíveis."
 
-        elif "missing" in q:
-            return f"There are {self.df.isnull().sum().sum()} missing values."
+        if has("missing", "ausente", "faltante", "nulo", "vazio"):
+            return f"Total de valores ausentes: {self.df.isnull().sum().sum():,}."
 
-        elif "duplicate" in q:
-            return f"There are {self.df.duplicated().sum()} duplicate rows."
+        elif has("duplicate", "duplicad"):
+            return f"Total de linhas duplicadas: {self.df.duplicated().sum():,}."
 
-        elif "shape" in q:
+        elif has("row", "linha", "registro"):
+            return f"O dataset contém {len(self.df):,} linhas."
+
+        elif has("column", "coluna", "variáve", "variave"):
+            return f"O dataset contém {len(self.df.columns)} colunas."
+
+        elif has("shape", "formato", "dimens"):
             return self.df.shape
 
-        elif "head" in q:
+        elif has("head", "primeir", "início", "inicio"):
             return self.df.head()
 
-        elif "tail" in q:
+        elif has("tail", "últim", "ultim", "final"):
             return self.df.tail()
 
-        elif "summary" in q:
+        elif has("summary", "resum", "describe", "descrev"):
             return self.df.describe(include="all")
 
-        elif "correlation" in q:
+        elif has("correlation", "correla"):
 
-            numeric = self.df.select_dtypes(include="number")
+            numeric, message = numeric_or_message()
 
             if numeric.empty:
-                return "No numeric columns available."
+                return message
 
             return numeric.corr()
 
-        elif "mean" in q or "average" in q:
+        elif has("mean", "average", "média", "media"):
 
-            numeric = self.df.select_dtypes(include="number")
+            numeric, message = numeric_or_message()
 
             if numeric.empty:
-                return "No numeric columns available."
+                return message
 
             return numeric.mean()
 
-        elif "highest" in q or "maximum" in q:
+        elif has("highest", "maximum", "maior", "máxim", "maxim"):
 
-            numeric = self.df.select_dtypes(include="number")
+            numeric, message = numeric_or_message()
 
             if numeric.empty:
-                return "No numeric columns available."
+                return message
 
             return numeric.max()
 
-        elif "lowest" in q or "minimum" in q:
+        elif has("lowest", "minimum", "menor", "mínim", "minim"):
 
-            numeric = self.df.select_dtypes(include="number")
+            numeric, message = numeric_or_message()
 
             if numeric.empty:
-                return "No numeric columns available."
+                return message
 
             return numeric.min()
 
-        elif "health" in q:
-            return f"Business Health Score: {self.business_score()}/100"
+        elif has("health", "saúde", "saude"):
+            return f"Score de Saúde do Negócio: {self.business_score()}/100"
 
-        elif "recommend" in q:
+        elif has("recommend", "recomend"):
             return self.recommendations()
 
         else:
 
             return (
-                "I can answer questions about:\n\n"
-                "• Rows\n"
-                "• Columns\n"
-                "• Missing values\n"
-                "• Duplicate rows\n"
-                "• Dataset summary\n"
-                "• Correlation\n"
-                "• Mean values\n"
-                "• Highest values\n"
-                "• Lowest values\n"
-                "• Business Health\n"
-                "• AI Recommendations"
+                "Posso responder perguntas sobre:\n\n"
+                "• Linhas\n"
+                "• Colunas\n"
+                "• Valores ausentes\n"
+                "• Linhas duplicadas\n"
+                "• Resumo do dataset\n"
+                "• Correlação\n"
+                "• Médias\n"
+                "• Maiores valores\n"
+                "• Menores valores\n"
+                "• Saúde do negócio\n"
+                "• Recomendações da IA"
             )

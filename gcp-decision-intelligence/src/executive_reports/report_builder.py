@@ -45,14 +45,14 @@ class ExecutiveReportBuilder:
 
         story.append(
             Paragraph(
-                "AI-Driven Decision Intelligence Platform",
+                "Plataforma de Inteligência de Decisão com IA",
                 self.title_style
             )
         )
 
         story.append(
             Paragraph(
-                "Executive Business Report",
+                "Relatório Executivo de Negócios",
                 self.heading
             )
         )
@@ -65,23 +65,23 @@ class ExecutiveReportBuilder:
 
         story.append(
             Paragraph(
-                "Executive Summary",
+                "Resumo Executivo",
                 self.heading
             )
         )
 
         summary = f"""
-        This report summarizes the AI analysis performed on the uploaded dataset.
+        Este relatório resume a análise de IA realizada sobre o dataset enviado.
 
-        Total Records : {dataset_summary["Rows"]}
+        Total de registros : {dataset_summary["Rows"]}
 
-        Total Columns : {dataset_summary["Columns"]}
+        Total de colunas : {dataset_summary["Columns"]}
 
-        Missing Values : {dataset_summary["Missing"]}
+        Valores ausentes : {dataset_summary["Missing"]}
 
-        Duplicate Rows : {dataset_summary["Duplicates"]}
+        Linhas duplicadas : {dataset_summary["Duplicates"]}
 
-        Business Health Score : {health_score}/100
+        Score de saúde do negócio : {health_score}/100
         """
 
         story.append(
@@ -99,22 +99,22 @@ class ExecutiveReportBuilder:
 
         story.append(
             Paragraph(
-                "Dataset Statistics",
+                "Estatísticas do Dataset",
                 self.heading
             )
         )
 
         table_data = [
 
-            ["Metric", "Value"],
+            ["Métrica", "Valor"],
 
-            ["Rows", dataset_summary["Rows"]],
+            ["Linhas", dataset_summary["Rows"]],
 
-            ["Columns", dataset_summary["Columns"]],
+            ["Colunas", dataset_summary["Columns"]],
 
-            ["Missing Values", dataset_summary["Missing"]],
+            ["Valores ausentes", dataset_summary["Missing"]],
 
-            ["Duplicate Rows", dataset_summary["Duplicates"]]
+            ["Linhas duplicadas", dataset_summary["Duplicates"]]
 
         ]
 
@@ -148,7 +148,7 @@ class ExecutiveReportBuilder:
 
         story.append(
             Paragraph(
-                "Business Health Score",
+                "Score de Saúde do Negócio",
                 self.heading
             )
         )
@@ -168,7 +168,7 @@ class ExecutiveReportBuilder:
 
         story.append(
             Paragraph(
-                "AutoML Results",
+                "Resultados do AutoML",
                 self.heading
             )
         )
@@ -188,7 +188,7 @@ class ExecutiveReportBuilder:
 
         story.append(
             Paragraph(
-                "AI Recommendations",
+                "Recomendações da IA",
                 self.heading
             )
         )
@@ -210,7 +210,7 @@ class ExecutiveReportBuilder:
 
         story.append(
             Paragraph(
-                "AI Anomaly Detection",
+                "Detecção de Anomalias com IA",
                 self.heading
             )
         )
@@ -230,19 +230,19 @@ class ExecutiveReportBuilder:
 
         story.append(
             Paragraph(
-                "Executive Conclusion",
+                "Conclusão Executiva",
                 self.heading
             )
         )
 
         conclusion = """
-        The AI-Driven Decision Intelligence Platform successfully analyzed the dataset.
+        A Plataforma de Inteligência de Decisão com IA analisou o dataset com sucesso.
 
-        The dataset is suitable for business analytics and machine learning.
+        O dataset é adequado para analytics de negócio e machine learning.
 
-        Decision-makers should use the AI recommendations, AutoML models,
-        anomaly detection, forecasting, and explainable AI modules
-        for better business decisions.
+        Os tomadores de decisão devem usar as recomendações da IA, os modelos do AutoML,
+        a detecção de anomalias, as previsões e os módulos de IA explicável
+        para tomar melhores decisões de negócio.
         """
 
         story.append(

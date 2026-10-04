@@ -38,42 +38,50 @@ class ChatEngine:
 
         q = question.lower()
 
-        if "rows" in q:
+        def has(*words):
+            return any(word in q for word in words)
 
-            return f"The dataset contains {len(df)} rows."
-
-        elif "columns" in q:
-
-            return f"The dataset contains {len(df.columns)} columns."
-
-        elif "missing" in q:
+        if has("missing", "ausente", "faltante", "nulo"):
 
             return str(df.isnull().sum())
 
-        elif "describe" in q:
+        elif has("rows", "linhas", "registros"):
+
+            return f"O dataset contém {len(df):,} linhas."
+
+        elif has("columns", "colunas"):
+
+            return f"O dataset contém {len(df.columns)} colunas."
+
+        elif has("describe", "summar", "resum", "descrev"):
 
             return str(df.describe(include="all"))
 
-        elif "head" in q:
+        elif has("head", "primeir"):
 
             return str(df.head())
 
-        elif "tail" in q:
+        elif has("tail", "últim", "ultim"):
 
             return str(df.tail())
 
-        elif "average" in q:
+        elif has("average", "mean", "média", "media"):
 
             return str(df.mean(numeric_only=True))
 
-        elif "maximum" in q:
+        elif has("maximum", "máxim", "maxim", "maior"):
 
             return str(df.max(numeric_only=True))
 
-        elif "minimum" in q:
+        elif has("minimum", "mínim", "minim", "menor"):
 
             return str(df.min(numeric_only=True))
 
         else:
 
-            return "I don't understand the question yet."
+            return (
+                "Ainda não entendi a pergunta. Com o Gemini desligado, "
+                "consigo responder sobre linhas, colunas, valores ausentes, "
+                "resumo estatístico, primeiras/últimas linhas, médias, "
+                "máximos e mínimos."
+            )

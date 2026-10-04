@@ -48,7 +48,7 @@ class Predictor:
 
         if missing:
             raise ValueError(
-                "The uploaded dataset does not match the selected model."
+                "O dataset enviado não corresponde ao modelo selecionado."
             )
 
         dataframe = dataframe[self.feature_names].copy()

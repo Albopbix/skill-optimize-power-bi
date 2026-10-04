@@ -25,6 +25,8 @@ Dados Olist ──► Cloud Storage (gs://…/data) ──► BigQuery (opcional
 | `app/pages/7_Prediction.py` | Lista e carrega modelos via `model_store` (funciona com GCS). |
 | `src/llm/gemini_client.py` | Novo. Cliente Gemini (SDK `google-genai`, modo Vertex AI) que monta um perfil compacto do dataset e responde em linguagem natural. |
 | `src/business_copilot/copilot_engine.py`, `src/ai_chat/chat_engine.py` | `ask()` usa o Gemini quando `GEMINI_ENABLED=true`; se a chamada falhar, cai para o motor de regras original (`ask_rules()`). O AI Chat envia o histórico da conversa. |
+| `app/`, `src/` (textos) | Interface traduzida para português (páginas, login, menus, mensagens, PDF do relatório executivo). Os motores de regras do Copiloto e do Chat também entendem perguntas em português. |
+| `app/pages/13_Model_History.py` | Corrigida uma f-string que só compilava no Python 3.12+ (a imagem usa 3.11). |
 | `Dockerfile`, `.dockerignore`, `.streamlit/config.toml` | Container para o Cloud Run (porta `$PORT`, usuário sem root). |
 | `deploy/*.sh`, `cloudbuild.yaml` | Provisionamento, deploy e CI/CD. |
 | `data/` | CSVs **não** versionados (≈450 MB, acima do limite do GitHub). Ver “Dados”. |

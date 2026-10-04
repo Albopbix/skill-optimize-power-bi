@@ -1,7 +1,7 @@
 import streamlit as st
 
 
-def loading(message="Processing..."):
+def loading(message="Processando..."):
     return st.spinner(message)
 
 

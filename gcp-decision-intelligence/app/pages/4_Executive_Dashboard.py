@@ -14,7 +14,7 @@ from src.database.database import Database
 # ==========================================================
 
 st.set_page_config(
-    page_title="Executive Dashboard",
+    page_title="Painel Executivo",
     page_icon="📊",
     layout="wide"
 )
@@ -122,18 +122,18 @@ st.markdown(
 # ==========================================================
 
 page_header(
-    "📊 Executive Dashboard",
-    "Executive Business KPIs, AI Insights & Decision Intelligence"
+    "📊 Painel Executivo",
+    "KPIs Executivos do Negócio, Insights de IA e Inteligência de Decisão"
 )
 
 st.markdown(
     """
     <div class="dashboard-hero">
-        <div class="dashboard-title">🚀 Executive Decision Center</div>
+        <div class="dashboard-title">🚀 Central Executiva de Decisão</div>
         <div class="dashboard-subtitle">
-            A performance-optimized business intelligence layer for
-            monitoring data health, AI activity, business patterns,
-            and executive actions.
+            Uma camada de business intelligence otimizada para
+            monitorar a saúde dos dados, a atividade de IA, os padrões
+            do negócio e as ações executivas.
         </div>
     </div>
     """,
@@ -146,8 +146,8 @@ st.markdown(
 # ==========================================================
 
 if "dataset" not in st.session_state:
-    st.warning("📂 Please upload a dataset first.")
-    st.info("Go to **Upload Dataset** and upload your business dataset.")
+    st.warning("📂 Envie um dataset primeiro.")
+    st.info("Vá em **Enviar Dataset** e envie o dataset do seu negócio.")
     st.stop()
 
 
@@ -155,12 +155,12 @@ df = st.session_state["dataset"]
 
 filename = st.session_state.get(
     "filename",
-    "Uploaded Dataset"
+    "Dataset enviado"
 )
 
 
 if df is None or df.empty:
-    st.error("The uploaded dataset is empty.")
+    st.error("O dataset enviado está vazio.")
     st.stop()
 
 
@@ -258,13 +258,13 @@ score = calculate_health_score(
 
 
 if score >= 90:
-    grade = "🟢 Excellent"
+    grade = "🟢 Excelente"
 elif score >= 75:
-    grade = "🟡 Good"
+    grade = "🟡 Bom"
 elif score >= 60:
-    grade = "🟠 Average"
+    grade = "🟠 Regular"
 else:
-    grade = "🔴 Needs Attention"
+    grade = "🔴 Requer atenção"
 
 
 # ==========================================================
@@ -326,7 +326,7 @@ except Exception:
 # ==========================================================
 
 st.markdown(
-    '<div class="section-label">📌 Executive Status</div>',
+    '<div class="section-label">📌 Status Executivo</div>',
     unsafe_allow_html=True
 )
 
@@ -334,31 +334,31 @@ c1, c2, c3, c4, c5 = st.columns(5)
 
 with c1:
     kpi_card(
-        "Business Health",
+        "Saúde do Negócio",
         f"{score}/100"
     )
 
 with c2:
     kpi_card(
-        "Records",
+        "Registros",
         f"{rows:,}"
     )
 
 with c3:
     kpi_card(
-        "Features",
+        "Variáveis",
         columns
     )
 
 with c4:
     kpi_card(
-        "AI Models",
+        "Modelos de IA",
         len(models)
     )
 
 with c5:
     kpi_card(
-        "Predictions",
+        "Predições",
         len(predictions)
     )
 
@@ -371,7 +371,7 @@ st.divider()
 # ==========================================================
 
 st.markdown(
-    '<div class="section-label">🏥 Business & Data Health</div>',
+    '<div class="section-label">🏥 Saúde do Negócio e dos Dados</div>',
     unsafe_allow_html=True
 )
 
@@ -386,7 +386,7 @@ with health_left:
     )
 
     st.metric(
-        "Overall Business Data Health",
+        "Saúde Geral dos Dados do Negócio",
         f"{score}/100"
     )
 
@@ -398,17 +398,17 @@ with health_left:
 with health_right:
 
     st.metric(
-        "Health Grade",
+        "Nota de Saúde",
         grade
     )
 
     st.metric(
-        "Missing Values",
+        "Valores Ausentes",
         f"{missing:,}"
     )
 
     st.metric(
-        "Duplicate Rows",
+        "Linhas Duplicadas",
         f"{duplicates:,}"
     )
 
@@ -420,29 +420,31 @@ with health_right:
 if score >= 90:
 
     decision_status = (
-        "Dataset is in strong condition for "
-        "analytics, modelling and forecasting."
+        "O dataset está em ótimas condições "
+        "para analytics, modelagem e previsões."
     )
 
-    decision_type = "🟢 Ready for AI"
+    decision_type = "🟢 Pronto para IA"
 
 elif score >= 75:
 
     decision_status = (
-        "Dataset is usable, but some preprocessing "
-        "should be completed before critical decisions."
+        "O dataset é utilizável, mas é recomendável "
+        "concluir o pré-processamento antes de decisões "
+        "críticas."
     )
 
-    decision_type = "🟡 Review Before AI"
+    decision_type = "🟡 Revisar antes da IA"
 
 else:
 
     decision_status = (
-        "Data quality issues should be addressed "
-        "before relying on predictive results."
+        "Os problemas de qualidade dos dados "
+        "devem ser resolvidos antes de confiar "
+        "nos resultados preditivos."
     )
 
-    decision_type = "🔴 Data Cleanup Required"
+    decision_type = "🔴 Limpeza de dados necessária"
 
 
 st.info(
@@ -455,7 +457,7 @@ st.info(
 # ==========================================================
 
 st.markdown(
-    '<div class="section-label">🎯 Executive Snapshot</div>',
+    '<div class="section-label">🎯 Retrato Executivo</div>',
     unsafe_allow_html=True
 )
 
@@ -466,11 +468,11 @@ with s1:
     st.markdown(
         """
         <div class="action-card">
-            <div class="action-title">📊 Data Foundation</div>
+            <div class="action-title">📊 Base de Dados</div>
             <div class="action-text">
-                Your dataset currently contains the core
-                information available for business analytics,
-                modelling and decision support.
+                Seu dataset contém atualmente as informações
+                essenciais disponíveis para analytics de negócio,
+                modelagem e apoio à decisão.
             </div>
         </div>
         """,
@@ -481,18 +483,18 @@ with s1:
 with s2:
 
     model_status = (
-        f"{len(models)} trained model(s)"
+        f"{len(models)} modelo(s) treinado(s)"
         if len(models) > 0
-        else "No trained models yet"
+        else "Nenhum modelo treinado ainda"
     )
 
     st.markdown(
         f"""
         <div class="action-card">
-            <div class="action-title">🤖 AI Activity</div>
+            <div class="action-title">🤖 Atividade de IA</div>
             <div class="action-text">
-                {model_status}. Prediction activity:
-                {len(predictions)} recorded prediction run(s).
+                {model_status}. Atividade de predição:
+                {len(predictions)} execução(ões) de predição registrada(s).
             </div>
         </div>
         """,
@@ -505,10 +507,10 @@ with s3:
     st.markdown(
         f"""
         <div class="action-card">
-            <div class="action-title">🔎 Intelligence Coverage</div>
+            <div class="action-title">🔎 Cobertura da Inteligência</div>
             <div class="action-text">
-                {len(numeric_cols)} numeric features and
-                {len(cat_cols)} categorical features detected.
+                {len(numeric_cols)} variáveis numéricas e
+                {len(cat_cols)} variáveis categóricas detectadas.
             </div>
         </div>
         """,
@@ -524,7 +526,7 @@ st.divider()
 # ==========================================================
 
 st.markdown(
-    '<div class="section-label">🧠 AI Executive Action Center</div>',
+    '<div class="section-label">🧠 Central de Ações Executivas da IA</div>',
     unsafe_allow_html=True
 )
 
@@ -533,26 +535,26 @@ actions = []
 if missing > 0:
     actions.append(
         (
-            "⚠️ Resolve Missing Data",
-            f"{missing:,} missing values detected.",
-            "Data Quality"
+            "⚠️ Tratar dados ausentes",
+            f"{missing:,} valores ausentes detectados.",
+            "Qualidade dos Dados"
         )
     )
 
 if duplicates > 0:
     actions.append(
         (
-            "🔁 Review Duplicate Records",
-            f"{duplicates:,} duplicate rows detected.",
-            "Data Quality"
+            "🔁 Revisar registros duplicados",
+            f"{duplicates:,} linhas duplicadas detectadas.",
+            "Qualidade dos Dados"
         )
     )
 
 if len(numeric_cols) >= 2:
     actions.append(
         (
-            "📈 Explore Predictive Patterns",
-            "Multiple numerical features are available for modelling.",
+            "📈 Explorar padrões preditivos",
+            "Há várias variáveis numéricas disponíveis para modelagem.",
             "Machine Learning"
         )
     )
@@ -560,8 +562,8 @@ if len(numeric_cols) >= 2:
 if len(cat_cols) > 0:
     actions.append(
         (
-            "🎯 Analyze Business Segments",
-            "Categorical dimensions can support segmentation analysis.",
+            "🎯 Analisar segmentos do negócio",
+            "As dimensões categóricas permitem análises de segmentação.",
             "Business Intelligence"
         )
     )
@@ -569,18 +571,18 @@ if len(cat_cols) > 0:
 if len(models) == 0:
     actions.append(
         (
-            "🤖 Train Your First Model",
-            "No trained model is currently recorded.",
-            "AI"
+            "🤖 Treinar seu primeiro modelo",
+            "Nenhum modelo treinado registrado no momento.",
+            "IA"
         )
     )
 
 if len(predictions) == 0:
     actions.append(
         (
-            "🔮 Generate Predictions",
-            "No prediction run is currently recorded.",
-            "Prediction"
+            "🔮 Gerar predições",
+            "Nenhuma execução de predição registrada no momento.",
+            "Predição"
         )
     )
 
@@ -588,7 +590,7 @@ if len(predictions) == 0:
 if not actions:
 
     st.success(
-        "✅ No immediate executive action has been detected."
+        "✅ Nenhuma ação executiva imediata foi detectada."
     )
 
 else:
@@ -611,7 +613,7 @@ else:
                         {description}
                     </div>
                     <br>
-                    <small><b>Area:</b> {category}</small>
+                    <small><b>Área:</b> {category}</small>
                 </div>
                 """,
                 unsafe_allow_html=True
@@ -626,7 +628,7 @@ st.divider()
 # ==========================================================
 
 st.markdown(
-    '<div class="section-label">🤖 AI Activity</div>',
+    '<div class="section-label">🤖 Atividade de IA</div>',
     unsafe_allow_html=True
 )
 
@@ -635,7 +637,7 @@ activity_left, activity_right = st.columns(2)
 
 with activity_left:
 
-    st.subheader("Latest Model")
+    st.subheader("Último Modelo")
 
     if len(models) > 0:
 
@@ -649,7 +651,7 @@ with activity_left:
 
         except Exception:
 
-            model_name = "Recorded Model"
+            model_name = "Modelo registrado"
             performance = "-"
             problem_type = "-"
 
@@ -657,38 +659,38 @@ with activity_left:
 
         with m1:
             st.metric(
-                "Model",
+                "Modelo",
                 model_name
             )
 
         with m2:
             try:
                 st.metric(
-                    "Performance",
+                    "Desempenho",
                     f"{float(performance):.2f}"
                 )
             except Exception:
                 st.metric(
-                    "Performance",
+                    "Desempenho",
                     performance
                 )
 
         with m3:
             st.metric(
-                "Problem",
+                "Problema",
                 problem_type
             )
 
     else:
 
         st.info(
-            "No trained model has been recorded yet."
+            "Nenhum modelo treinado foi registrado ainda."
         )
 
 
 with activity_right:
 
-    st.subheader("Latest Prediction")
+    st.subheader("Última Predição")
 
     if len(predictions) > 0:
 
@@ -702,7 +704,7 @@ with activity_right:
 
         except Exception:
 
-            prediction_model = "Prediction"
+            prediction_model = "Predição"
             prediction_dataset = filename
             prediction_rows = "-"
 
@@ -710,13 +712,13 @@ with activity_right:
 
         with p1:
             st.metric(
-                "Model",
+                "Modelo",
                 prediction_model
             )
 
         with p2:
             st.metric(
-                "Rows",
+                "Linhas",
                 prediction_rows
             )
 
@@ -729,7 +731,7 @@ with activity_right:
     else:
 
         st.info(
-            "No prediction activity has been recorded yet."
+            "Nenhuma atividade de predição foi registrada ainda."
         )
 
 
@@ -741,18 +743,18 @@ st.divider()
 # ==========================================================
 
 st.markdown(
-    '<div class="section-label">⚡ Visualization Performance</div>',
+    '<div class="section-label">⚡ Desempenho das Visualizações</div>',
     unsafe_allow_html=True
 )
 
 st.markdown(
     f"""
     <div class="performance-note">
-        <b>Performance mode enabled.</b>
-        KPI calculations use the complete dataset.
-        Visualizations automatically use at most
-        <b>{MAX_CHART_ROWS:,} rows</b> when the dataset is larger,
-        reducing browser rendering and Plotly processing time.
+        <b>Modo de desempenho ativado.</b>
+        Os cálculos de KPI usam o dataset completo.
+        As visualizações usam automaticamente no máximo
+        <b>{MAX_CHART_ROWS:,} linhas</b> quando o dataset é maior,
+        reduzindo o tempo de renderização no navegador e no Plotly.
     </div>
     """,
     unsafe_allow_html=True
@@ -787,29 +789,30 @@ chart_df = prepare_chart_data(
 # ==========================================================
 
 st.markdown(
-    '<div class="section-label">📊 Visualization Intelligence Center</div>',
+    '<div class="section-label">📊 Central de Inteligência de Visualização</div>',
     unsafe_allow_html=True
 )
 
 st.caption(
-    "Charts are generated only when you select them. "
-    "This prevents unnecessary Plotly rendering during every page load."
+    "Os gráficos são gerados apenas quando você os seleciona. Isso "
+    "evita renderizações desnecessárias do Plotly a cada carregamento "
+    "da página."
 )
 
 
 visualization_options = [
-    "📈 Distribution Analysis",
-    "🔥 Correlation Analysis",
-    "🥧 Category Distribution",
-    "📊 Category vs Numeric",
-    "📦 Outlier Analysis",
-    "📈 Trend Analysis",
-    "🌍 Geographic Analysis"
+    "📈 Análise de Distribuição",
+    "🔥 Análise de Correlação",
+    "🥧 Distribuição por Categoria",
+    "📊 Categoria vs Numérico",
+    "📦 Análise de Outliers",
+    "📈 Análise de Tendência",
+    "🌍 Análise Geográfica"
 ]
 
 
 selected_visualization = st.selectbox(
-    "Select analysis",
+    "Selecione a análise",
     visualization_options,
     key="executive_visualization"
 )
@@ -819,18 +822,18 @@ selected_visualization = st.selectbox(
 # DISTRIBUTION
 # ==========================================================
 
-if selected_visualization == "📈 Distribution Analysis":
+if selected_visualization == "📈 Análise de Distribuição":
 
     if len(numeric_cols) == 0:
 
         st.info(
-            "No numeric columns are available for distribution analysis."
+            "Não há colunas numéricas disponíveis para a análise de distribuição."
         )
 
     else:
 
         column = st.selectbox(
-            "Numeric Column",
+            "Coluna numérica",
             numeric_cols,
             key="executive_histogram_column"
         )
@@ -841,7 +844,7 @@ if selected_visualization == "📈 Distribution Analysis":
             plot_df,
             x=column,
             nbins=30,
-            title=f"Distribution of {column}"
+            title=f"Distribuição de {column}"
         )
 
         fig.update_layout(
@@ -860,12 +863,12 @@ if selected_visualization == "📈 Distribution Analysis":
 # CORRELATION
 # ==========================================================
 
-elif selected_visualization == "🔥 Correlation Analysis":
+elif selected_visualization == "🔥 Análise de Correlação":
 
     if len(numeric_cols) < 2:
 
         st.info(
-            "At least two numeric columns are required."
+            "São necessárias pelo menos duas colunas numéricas."
         )
 
     else:
@@ -883,7 +886,7 @@ elif selected_visualization == "🔥 Correlation Analysis":
             text_auto=True,
             aspect="auto",
             color_continuous_scale="RdBu",
-            title="Feature Correlation Matrix"
+            title="Matriz de Correlação das Variáveis"
         )
 
         fig.update_layout(
@@ -900,8 +903,8 @@ elif selected_visualization == "🔥 Correlation Analysis":
         if len(numeric_cols) > MAX_CORRELATION_COLUMNS:
 
             st.caption(
-                f"Showing the first {MAX_CORRELATION_COLUMNS} "
-                f"numeric features for performance."
+                f"Exibindo as primeiras {MAX_CORRELATION_COLUMNS} "
+                "variáveis numéricas por desempenho."
             )
 
 
@@ -909,18 +912,18 @@ elif selected_visualization == "🔥 Correlation Analysis":
 # PIE
 # ==========================================================
 
-elif selected_visualization == "🥧 Category Distribution":
+elif selected_visualization == "🥧 Distribuição por Categoria":
 
     if len(cat_cols) == 0:
 
         st.info(
-            "No categorical columns are available."
+            "Não há colunas categóricas disponíveis."
         )
 
     else:
 
         category = st.selectbox(
-            "Category",
+            "Categoria",
             cat_cols,
             key="executive_pie_category"
         )
@@ -934,15 +937,15 @@ elif selected_visualization == "🥧 Category Distribution":
 
         counts.columns = [
             category,
-            "Count"
+            "Contagem"
         ]
 
         fig = px.pie(
             counts,
             names=category,
-            values="Count",
+            values="Contagem",
             hole=0.45,
-            title=f"{category} Distribution"
+            title=f"Distribuição de {category}"
         )
 
         fig.update_layout(
@@ -961,12 +964,12 @@ elif selected_visualization == "🥧 Category Distribution":
 # CATEGORY VS NUMERIC
 # ==========================================================
 
-elif selected_visualization == "📊 Category vs Numeric":
+elif selected_visualization == "📊 Categoria vs Numérico":
 
     if len(cat_cols) == 0 or len(numeric_cols) == 0:
 
         st.info(
-            "At least one categorical and one numeric column are required."
+            "São necessárias pelo menos uma coluna categórica e uma numérica."
         )
 
     else:
@@ -976,7 +979,7 @@ elif selected_visualization == "📊 Category vs Numeric":
         with c1:
 
             category = st.selectbox(
-                "Category",
+                "Categoria",
                 cat_cols,
                 key="executive_bar_category"
             )
@@ -984,7 +987,7 @@ elif selected_visualization == "📊 Category vs Numeric":
         with c2:
 
             numeric = st.selectbox(
-                "Numeric",
+                "Numérica",
                 numeric_cols,
                 key="executive_bar_numeric"
             )
@@ -1004,7 +1007,7 @@ elif selected_visualization == "📊 Category vs Numeric":
             grouped,
             x=category,
             y=numeric,
-            title=f"Average {numeric} by {category}"
+            title=f"Média de {numeric} por {category}"
         )
 
         fig.update_layout(
@@ -1023,12 +1026,12 @@ elif selected_visualization == "📊 Category vs Numeric":
 # OUTLIER
 # ==========================================================
 
-elif selected_visualization == "📦 Outlier Analysis":
+elif selected_visualization == "📦 Análise de Outliers":
 
     if len(cat_cols) == 0 or len(numeric_cols) == 0:
 
         st.info(
-            "At least one categorical and one numeric column are required."
+            "São necessárias pelo menos uma coluna categórica e uma numérica."
         )
 
     else:
@@ -1038,7 +1041,7 @@ elif selected_visualization == "📦 Outlier Analysis":
         with c1:
 
             category = st.selectbox(
-                "Category",
+                "Categoria",
                 cat_cols,
                 key="executive_box_category"
             )
@@ -1046,7 +1049,7 @@ elif selected_visualization == "📦 Outlier Analysis":
         with c2:
 
             numeric = st.selectbox(
-                "Numeric",
+                "Numérica",
                 numeric_cols,
                 key="executive_box_numeric"
             )
@@ -1073,7 +1076,7 @@ elif selected_visualization == "📦 Outlier Analysis":
             plot_df,
             x=category,
             y=numeric,
-            title=f"Outlier Analysis — {numeric}"
+            title=f"Análise de Outliers — {numeric}"
         )
 
         fig.update_layout(
@@ -1092,12 +1095,12 @@ elif selected_visualization == "📦 Outlier Analysis":
 # TREND
 # ==========================================================
 
-elif selected_visualization == "📈 Trend Analysis":
+elif selected_visualization == "📈 Análise de Tendência":
 
     if len(numeric_cols) < 2:
 
         st.info(
-            "At least two numeric columns are required."
+            "São necessárias pelo menos duas colunas numéricas."
         )
 
     else:
@@ -1107,7 +1110,7 @@ elif selected_visualization == "📈 Trend Analysis":
         with c1:
 
             x_column = st.selectbox(
-                "X Axis",
+                "Eixo X",
                 numeric_cols,
                 key="executive_line_x"
             )
@@ -1115,7 +1118,7 @@ elif selected_visualization == "📈 Trend Analysis":
         with c2:
 
             y_column = st.selectbox(
-                "Y Axis",
+                "Eixo Y",
                 numeric_cols,
                 key="executive_line_y"
             )
@@ -1123,7 +1126,7 @@ elif selected_visualization == "📈 Trend Analysis":
         if x_column == y_column:
 
             st.warning(
-                "Select two different numeric columns."
+                "Selecione duas colunas numéricas diferentes."
             )
 
         else:
@@ -1159,7 +1162,7 @@ elif selected_visualization == "📈 Trend Analysis":
 # GEOGRAPHIC
 # ==========================================================
 
-elif selected_visualization == "🌍 Geographic Analysis":
+elif selected_visualization == "🌍 Análise Geográfica":
 
     location_columns = []
 
@@ -1184,13 +1187,13 @@ elif selected_visualization == "🌍 Geographic Analysis":
     if len(location_columns) == 0:
 
         st.info(
-            "No obvious geographic column was detected."
+            "Nenhuma coluna geográfica óbvia foi detectada."
         )
 
     else:
 
         location = st.selectbox(
-            "Location",
+            "Localização",
             location_columns,
             key="executive_geo_location"
         )
@@ -1204,14 +1207,14 @@ elif selected_visualization == "🌍 Geographic Analysis":
 
         geo.columns = [
             location,
-            "Count"
+            "Contagem"
         ]
 
         fig = px.bar(
             geo,
             x=location,
-            y="Count",
-            title="Top Business Locations"
+            y="Contagem",
+            title="Principais Localizações do Negócio"
         )
 
         fig.update_layout(
@@ -1233,7 +1236,7 @@ elif selected_visualization == "🌍 Geographic Analysis":
 st.divider()
 
 st.markdown(
-    '<div class="section-label">🤖 AI Visualization Recommendations</div>',
+    '<div class="section-label">🤖 Recomendações de Visualização da IA</div>',
     unsafe_allow_html=True
 )
 
@@ -1253,7 +1256,7 @@ if recommendations:
 
                 title = recommendation.get(
                     "title",
-                    "Recommended Analysis"
+                    "Análise Recomendada"
                 )
 
                 description = recommendation.get(
@@ -1280,7 +1283,7 @@ if recommendations:
 else:
 
     st.caption(
-        "No additional visualization recommendations were generated."
+        "Nenhuma recomendação de visualização adicional foi gerada."
     )
 
 
@@ -1291,7 +1294,7 @@ else:
 st.divider()
 
 with st.expander(
-    "📋 View Dataset Preview"
+    "📋 Ver prévia do dataset"
 ):
 
     st.dataframe(
@@ -1306,29 +1309,31 @@ with st.expander(
 # ==========================================================
 
 st.markdown(
-    '<div class="section-label">💼 Executive Action Center</div>',
+    '<div class="section-label">💼 Central de Ações Executivas</div>',
     unsafe_allow_html=True
 )
 
 if score >= 90:
 
     st.success(
-        "✅ Data quality is strong. The next focus can be "
-        "predictive modelling, forecasting and KPI monitoring."
+        "✅ A qualidade dos dados é alta. O próximo foco pode "
+        "ser modelagem preditiva, previsões e monitoramento "
+        "de KPIs."
     )
 
 elif score >= 75:
 
     st.info(
-        "🟡 Data is usable, but quality improvements should "
-        "be completed before high-impact AI decisions."
+        "🟡 Os dados são utilizáveis, mas melhorias de "
+        "qualidade devem ser concluídas antes de decisões "
+        "de IA de alto impacto."
     )
 
 else:
 
     st.error(
-        "🔴 Data quality should be improved before relying "
-        "on predictive or automated decisions."
+        "🔴 A qualidade dos dados deve ser melhorada antes "
+        "de confiar em decisões preditivas ou automatizadas."
     )
 
 
@@ -1337,9 +1342,10 @@ else:
 # ==========================================================
 
 ai_insight(
-    "Executives should monitor data health, business KPIs, "
-    "AI model activity, prediction activity, business patterns "
-    "and emerging risks before making high-impact decisions."
+    "Executivos devem monitorar a saúde dos dados, os KPIs "
+    "do negócio, a atividade dos modelos de IA e das predições, "
+    "os padrões do negócio e os riscos emergentes antes de "
+    "tomar decisões de alto impacto."
 )
 
 
@@ -1354,7 +1360,7 @@ nav_left, nav_right = st.columns(2)
 with nav_left:
 
     if st.button(
-        "← Previous: AI Business Copilot",
+        "← Anterior: Copiloto de Negócios IA",
         width="stretch"
     ):
 
@@ -1366,7 +1372,7 @@ with nav_left:
 with nav_right:
 
     if st.button(
-        "Next: Interactive Dashboard →",
+        "Próximo: Dashboard Interativo →",
         width="stretch"
     ):
 

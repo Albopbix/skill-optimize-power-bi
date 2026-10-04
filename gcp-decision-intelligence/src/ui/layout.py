@@ -14,7 +14,7 @@ def ai_insight(message):
 
     st.markdown("---")
 
-    st.subheader("🤖 AI Insight")
+    st.subheader("🤖 Insight da IA")
 
     st.info(message)
 
@@ -24,5 +24,5 @@ def page_footer():
     st.markdown("---")
 
     st.caption(
-        "AI-Driven Decision Intelligence Platform | Version 2.0 | © 2026 Jashwanth S"
+        "Plataforma de Inteligência de Decisão com IA | Versão 2.0 | © 2026 Jashwanth S"
     )

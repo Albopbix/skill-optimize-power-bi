@@ -13,20 +13,21 @@ from src.executive_reports.report_builder import ExecutiveReportBuilder
 # ------------------------------------------------
 
 st.set_page_config(
-    page_title="Executive Report | NexDecision AI",
+    page_title="Relatório Executivo | NexDecision AI",
     page_icon="📄",
     layout="wide"
 )
 
 page_header(
-    "📄 Executive Report Generator",
-    "Create management-ready reports from dataset quality metrics "
-    "and your existing AI analysis workflow."
+    "📄 Gerador de Relatório Executivo",
+    "Crie relatórios prontos para a gestão a partir das métricas "
+    "de qualidade do dataset e do seu fluxo de análise com IA."
 )
 
 st.caption(
-    "Review data quality, understand potential risks, and export "
-    "a PDF report for business stakeholders."
+    "Revise a qualidade dos dados, entenda os riscos potenciais "
+    "e exporte um relatório em PDF para as partes interessadas "
+    "do negócio."
 )
 
 st.markdown("---")
@@ -62,11 +63,11 @@ st.markdown(
 
 if "dataset" not in st.session_state:
     st.warning(
-        "No dataset is loaded. Upload a dataset before generating "
-        "an executive report."
+        "Nenhum dataset carregado. Envie um dataset antes de "
+        "gerar um relatório executivo."
     )
 
-    if st.button("🏠 Go to Home"):
+    if st.button("🏠 Ir para o Início"):
         st.switch_page("pages/0_Home.py")
 
     st.stop()
@@ -75,8 +76,8 @@ df = st.session_state["dataset"]
 
 if not isinstance(df, pd.DataFrame) or df.empty:
     st.error(
-        "The current dataset is empty or invalid. "
-        "Upload a non-empty dataset and try again."
+        "O dataset atual está vazio ou é inválido. "
+        "Envie um dataset com dados e tente novamente."
     )
     st.stop()
 
@@ -132,42 +133,42 @@ health -= min(duplicate_percentage * 0.5, 30)
 health = max(0, min(100, round(health)))
 
 if health >= 90:
-    grade = "Excellent"
+    grade = "Excelente"
 elif health >= 75:
-    grade = "Good"
+    grade = "Bom"
 elif health >= 60:
-    grade = "Needs Attention"
+    grade = "Requer atenção"
 else:
-    grade = "Poor"
+    grade = "Fraco"
 
 
 # ------------------------------------------------
 # EXECUTIVE SUMMARY
 # ------------------------------------------------
 
-st.subheader("📊 Executive Overview")
+st.subheader("📊 Visão Geral Executiva")
 
 c1, c2, c3, c4 = st.columns(4)
 
 with c1:
-    st.metric("📄 Total Records", f"{rows:,}")
+    st.metric("📄 Total de Registros", f"{rows:,}")
 
 with c2:
-    st.metric("📊 Total Features", f"{columns:,}")
+    st.metric("📊 Total de Variáveis", f"{columns:,}")
 
 with c3:
     st.metric(
-        "⚠️ Missing Values",
+        "⚠️ Valores Ausentes",
         f"{missing:,}",
-        delta=f"{missing_percentage}% of cells",
+        delta=f"{missing_percentage}% das células",
         delta_color="inverse"
     )
 
 with c4:
     st.metric(
-        "🔁 Duplicate Rows",
+        "🔁 Linhas Duplicadas",
         f"{duplicates:,}",
-        delta=f"{duplicate_percentage}% of rows",
+        delta=f"{duplicate_percentage}% das linhas",
         delta_color="inverse"
     )
 
@@ -177,37 +178,38 @@ score_col, grade_col, numeric_col, category_col = st.columns(4)
 
 with score_col:
     st.metric(
-        "Dataset Quality Score",
+        "Score de Qualidade do Dataset",
         f"{health}/100"
     )
 
 with grade_col:
     st.metric(
-        "Quality Category",
+        "Categoria de Qualidade",
         grade
     )
 
 with numeric_col:
     st.metric(
-        "Numeric Features",
+        "Variáveis Numéricas",
         len(numeric_columns)
     )
 
 with category_col:
     st.metric(
-        "Categorical Features",
+        "Variáveis Categóricas",
         len(categorical_columns)
     )
 
 st.progress(
     health / 100,
-    text=f"Heuristic dataset quality score: {health}/100"
+    text=f"Score heurístico de qualidade do dataset: {health}/100"
 )
 
 st.caption(
-    "The score is a simple internal heuristic based on missing-cell "
-    "and duplicate-row percentages. It is not a validated measure of "
-    "overall business health, model readiness, or business performance."
+    "O score é uma heurística interna simples baseada nos percentuais "
+    "de células ausentes e linhas duplicadas. Não é uma medida validada "
+    "da saúde geral do negócio, da prontidão do modelo ou do desempenho "
+    "do negócio."
 )
 
 st.markdown("---")
@@ -217,26 +219,26 @@ st.markdown("---")
 # DATA QUALITY VISUALIZATION
 # ------------------------------------------------
 
-st.subheader("🔬 Dataset Quality Analysis")
+st.subheader("🔬 Análise de Qualidade do Dataset")
 
 quality_left, quality_right = st.columns(2)
 
 with quality_left:
 
-    st.markdown("#### Missing vs Available Cells")
+    st.markdown("#### Células Ausentes vs Disponíveis")
 
     total_cells = rows * columns
     available_cells = max(0, total_cells - missing)
 
     quality_chart_df = pd.DataFrame({
-        "Cell Status": ["Available", "Missing"],
-        "Cells": [available_cells, missing]
+        "Situação da Célula": ["Disponíveis", "Ausentes"],
+        "Células": [available_cells, missing]
     })
 
     quality_fig = px.pie(
         quality_chart_df,
-        names="Cell Status",
-        values="Cells",
+        names="Situação da Célula",
+        values="Células",
         hole=0.5
     )
 
@@ -251,7 +253,7 @@ with quality_left:
 
 with quality_right:
 
-    st.markdown("#### Missing Values by Feature")
+    st.markdown("#### Valores Ausentes por Variável")
 
     missing_by_column = (
         df.isnull()
@@ -262,30 +264,30 @@ with quality_right:
 
     missing_df = (
         missing_by_column
-        .rename_axis("Feature")
-        .reset_index(name="Missing Values")
+        .rename_axis("Variável")
+        .reset_index(name="Valores Ausentes")
     )
 
     missing_df = missing_df[
-        missing_df["Missing Values"] > 0
+        missing_df["Valores Ausentes"] > 0
     ]
 
     if not missing_df.empty:
 
         missing_fig = px.bar(
             missing_df.sort_values(
-                "Missing Values",
+                "Valores Ausentes",
                 ascending=True
             ),
-            x="Missing Values",
-            y="Feature",
+            x="Valores Ausentes",
+            y="Variável",
             orientation="h",
-            text="Missing Values"
+            text="Valores Ausentes"
         )
 
         missing_fig.update_layout(
-            xaxis_title="Number of Missing Values",
-            yaxis_title="Feature",
+            xaxis_title="Número de Valores Ausentes",
+            yaxis_title="Variável",
             margin=dict(l=10, r=10, t=20, b=10)
         )
 
@@ -296,7 +298,7 @@ with quality_right:
 
     else:
         st.success(
-            "No missing values were found in the current dataset."
+            "Nenhum valor ausente foi encontrado no dataset atual."
         )
 
 st.markdown("---")
@@ -306,33 +308,35 @@ st.markdown("---")
 # AUTOMATED QUALITY FINDINGS
 # ------------------------------------------------
 
-st.subheader("🧠 Key Findings")
+st.subheader("🧠 Principais Descobertas")
 
 findings = []
 
 if missing == 0:
     findings.append(
-        "No missing cells were found in the current dataset."
+        "Nenhuma célula ausente foi encontrada no dataset atual."
     )
 else:
     findings.append(
-        f"{missing:,} missing cells were detected "
-        f"({missing_percentage}% of all cells)."
+        f"Foram detectadas {missing:,} células "
+        f"ausentes ({missing_percentage}% de "
+        "todas as células)."
     )
 
 if duplicates == 0:
     findings.append(
-        "No fully duplicated rows were found."
+        "Nenhuma linha totalmente duplicada foi encontrada."
     )
 else:
     findings.append(
-        f"{duplicates:,} fully duplicated rows were found "
-        f"({duplicate_percentage}% of all records)."
+        f"Foram encontradas {duplicates:,} linhas totalmente "
+        f"duplicadas ({duplicate_percentage}% de todos "
+        "os registros)."
     )
 
 findings.append(
-    f"The dataset contains {len(numeric_columns)} numeric "
-    f"and {len(categorical_columns)} categorical features."
+    f"O dataset contém {len(numeric_columns)} variáveis "
+    f"numéricas e {len(categorical_columns)} categóricas."
 )
 
 for finding in findings:
@@ -345,25 +349,26 @@ st.markdown("---")
 # AUTO ML SUMMARY
 # ------------------------------------------------
 
-st.subheader("🤖 AutoML Summary")
+st.subheader("🤖 Resumo do AutoML")
 
 automl_result = (
-    "AutoML execution status and model performance were not retrieved "
-    "by this report page. Open the AutoML page to inspect the actual "
-    "models evaluated, metrics, and selected model."
+    "O status de execução do AutoML e o desempenho dos modelos não "
+    "foram obtidos por esta página de relatório. Abra a página AutoML "
+    "para ver os modelos avaliados, as métricas e o modelo selecionado."
 )
 
 st.info(automl_result)
 
 if st.button(
-    "🧪 Open AutoML",
+    "🧪 Abrir AutoML",
     use_container_width=False
 ):
     st.switch_page("pages/5_AutoML.py")
 
 st.caption(
-    "This report does not claim that a best model was found unless "
-    "the actual AutoML results are connected to the report builder."
+    "Este relatório não afirma que um melhor modelo foi encontrado, "
+    "a menos que os resultados reais do AutoML estejam conectados "
+    "ao gerador de relatórios."
 )
 
 st.markdown("---")
@@ -373,12 +378,12 @@ st.markdown("---")
 # ANOMALY SUMMARY
 # ------------------------------------------------
 
-st.subheader("🚨 Anomaly Detection Summary")
+st.subheader("🚨 Resumo da Detecção de Anomalias")
 
 anomaly_summary = (
-    "Anomaly detection results have not been connected directly to "
-    "this report page. Visit AI Anomaly Detection to run the detector "
-    "and review flagged records."
+    "Os resultados da detecção de anomalias não estão conectados "
+    "diretamente a esta página de relatório. Acesse Detecção de Anomalias "
+    "com IA para executar o detector e revisar os registros sinalizados."
 )
 
 anomaly_result = st.session_state.get(
@@ -387,18 +392,18 @@ anomaly_result = st.session_state.get(
 
 if isinstance(anomaly_result, pd.DataFrame) and (
     not anomaly_result.empty
-    and "Anomaly" in anomaly_result.columns
+    and "Anomalia" in anomaly_result.columns
 ):
 
     labels = (
-        anomaly_result["Anomaly"]
+        anomaly_result["Anomalia"]
         .astype(str)
         .str.strip()
         .str.title()
     )
 
     anomaly_count = int(
-        (labels == "Anomaly").sum()
+        (labels == "Anomalia").sum()
     )
 
     anomaly_rate = round(
@@ -407,11 +412,11 @@ if isinstance(anomaly_result, pd.DataFrame) and (
     )
 
     anomaly_summary = (
-        f"The most recently stored anomaly detection result contains "
-        f"{len(anomaly_result):,} analysed records, with "
-        f"{anomaly_count:,} labelled as anomalies "
-        f"({anomaly_rate}%). These are detector labels, not confirmed "
-        f"fraud or errors."
+        "O resultado de detecção de anomalias armazenado mais recente "
+        f"contém {len(anomaly_result):,} registros analisados, dos "
+        f"quais {anomaly_count:,} foram rotulados como anomalias "
+        f"({anomaly_rate}%). São rótulos do detector, não fraudes "
+        "ou erros confirmados."
     )
 
     st.info(anomaly_summary)
@@ -420,7 +425,7 @@ else:
     st.info(anomaly_summary)
 
 if st.button(
-    "🚨 Open AI Anomaly Detection",
+    "🚨 Abrir Detecção de Anomalias com IA",
     use_container_width=False
 ):
     st.switch_page("pages/17_AI_Anomaly_Detection.py")
@@ -432,37 +437,38 @@ st.markdown("---")
 # RECOMMENDATIONS
 # ------------------------------------------------
 
-st.subheader("💡 Recommended Next Steps")
+st.subheader("💡 Próximos Passos Recomendados")
 
 recommendations = []
 
 if missing > 0:
     recommendations.append(
-        "Inspect missing values by feature and choose suitable "
-        "imputation or exclusion rules before modelling."
+        "Inspecione os valores ausentes por variável e escolha "
+        "regras adequadas de imputação ou exclusão antes de "
+        "modelar."
     )
 
 if duplicates > 0:
     recommendations.append(
-        "Review duplicate records and remove them only when they "
-        "represent unintended duplication."
+        "Revise os registros duplicados e remova-os apenas quando "
+        "representarem duplicação indesejada."
     )
 
 if numeric_columns:
     recommendations.append(
-        "Review numeric feature distributions and potential outliers."
+        "Revise as distribuições das variáveis numéricas e possíveis outliers."
     )
 
 if categorical_columns:
     recommendations.append(
-        "Check category consistency, spelling differences, and "
-        "high-cardinality fields."
+        "Verifique a consistência das categorias, diferenças "
+        "de grafia e campos de alta cardinalidade."
     )
 
 recommendations.extend([
-    "Validate data types, ranges, and business rules.",
-    "Compare candidate models using appropriate validation metrics.",
-    "Track model performance and data quality as new data arrives."
+    "Valide tipos de dados, faixas de valores e regras de negócio.",
+    "Compare os modelos candidatos com métricas de validação adequadas.",
+    "Acompanhe o desempenho dos modelos e a qualidade dos dados conforme novos dados chegam."
 ])
 
 for number, recommendation in enumerate(
@@ -478,25 +484,25 @@ st.markdown("---")
 # REPORT CONFIGURATION
 # ------------------------------------------------
 
-st.subheader("⚙️ Configure Your Report")
+st.subheader("⚙️ Configure seu Relatório")
 
 report_title = st.text_input(
-    "Report title",
-    value="NexDecision AI - Executive Data Report"
+    "Título do relatório",
+    value="NexDecision AI - Relatório Executivo de Dados"
 )
 
 prepared_for = st.text_input(
-    "Prepared for / department",
-    placeholder="e.g. Management, Analytics Team"
+    "Preparado para / departamento",
+    placeholder="ex.: Diretoria, Time de Analytics"
 )
 
 include_recommendations = st.checkbox(
-    "Include recommendations",
+    "Incluir recomendações",
     value=True
 )
 
 include_anomaly_summary = st.checkbox(
-    "Include anomaly summary",
+    "Incluir resumo de anomalias",
     value=True
 )
 
@@ -509,11 +515,11 @@ final_recommendations = (
 final_anomaly_summary = (
     anomaly_summary
     if include_anomaly_summary
-    else "Anomaly summary excluded by the report configuration."
+    else "Resumo de anomalias excluído pela configuração do relatório."
 )
 
 report_filename = st.text_input(
-    "PDF filename",
+    "Nome do arquivo PDF",
     value="Executive_Report.pdf"
 ).strip()
 
@@ -524,10 +530,9 @@ if not report_filename.lower().endswith(".pdf"):
     report_filename += ".pdf"
 
 st.caption(
-    "The existing PDF builder determines the report's layout and "
-    "content. Additional fields above are shown in the interface, "
-    "but are passed to the builder only if its existing interface "
-    "supports them."
+    "O gerador de PDF existente define o layout e o conteúdo "
+    "do relatório. Os campos adicionais acima aparecem na interface, "
+    "mas só são enviados ao gerador se a interface dele os suportar."
 )
 
 st.markdown("---")
@@ -537,15 +542,15 @@ st.markdown("---")
 # GENERATE PDF REPORT
 # ------------------------------------------------
 
-st.subheader("📄 Generate Executive PDF")
+st.subheader("📄 Gerar PDF Executivo")
 
 st.write(
-    "Generate a downloadable PDF using your existing "
-    "ExecutiveReportBuilder."
+    "Gere um PDF para download com o ExecutiveReportBuilder "
+    "existente."
 )
 
 if st.button(
-    "📄 Generate Executive Report",
+    "📄 Gerar Relatório Executivo",
     type="primary",
     use_container_width=True
 ):
@@ -554,7 +559,7 @@ if st.button(
 
         builder = ExecutiveReportBuilder()
 
-        with st.spinner("Generating executive report..."):
+        with st.spinner("Gerando o relatório executivo..."):
 
             filename = builder.generate(
                 filename=report_filename,
@@ -567,13 +572,13 @@ if st.button(
 
         if not filename:
             st.error(
-                "The report builder did not return a file path."
+                "O gerador de relatórios não retornou um caminho de arquivo."
             )
 
         elif not os.path.isfile(filename):
             st.error(
-                "The report builder returned a path, but the file "
-                "could not be found."
+                "O gerador de relatórios retornou um caminho, "
+                "mas o arquivo não foi encontrado."
             )
 
         else:
@@ -587,19 +592,19 @@ if st.button(
             )
 
             st.success(
-                "Executive report generated successfully."
+                "Relatório executivo gerado com sucesso."
             )
 
     except Exception as error:
 
         st.error(
-            f"Report generation failed: {error}"
+            f"Falha ao gerar o relatório: {error}"
         )
 
 if "executive_report_pdf" in st.session_state:
 
     st.download_button(
-        "⬇️ Download Executive Report PDF",
+        "⬇️ Baixar PDF do Relatório Executivo",
         data=st.session_state["executive_report_pdf"],
         file_name=st.session_state.get(
             "executive_report_filename",
@@ -617,10 +622,11 @@ if "executive_report_pdf" in st.session_state:
 st.markdown("---")
 
 ai_insight(
-    "An executive report helps stakeholders review dataset quality, "
-    "potential risks, and recommended next steps. Model performance "
-    "and anomaly findings should be reported only when supported by "
-    "actual analysis results."
+    "Um relatório executivo ajuda as partes interessadas a revisar "
+    "a qualidade dos dados, os riscos potenciais e os próximos "
+    "passos recomendados. O desempenho dos modelos e as anomalias "
+    "só devem ser reportados quando houver resultados reais de "
+    "análise."
 )
 
 
@@ -630,20 +636,20 @@ ai_insight(
 
 st.markdown("---")
 
-st.subheader("🧭 Continue Exploring NexDecision AI")
+st.subheader("🧭 Continue Explorando o NexDecision AI")
 
 prev_col, home_col, next_col = st.columns(3)
 
 with prev_col:
     if st.button(
-        "⬅️ AI Anomaly Detection",
+        "⬅️ Detecção de Anomalias com IA",
         use_container_width=True
     ):
         st.switch_page("pages/17_AI_Anomaly_Detection.py")
 
 with home_col:
     if st.button(
-        "🏠 Home",
+        "🏠 Início",
         use_container_width=True
     ):
         st.switch_page("pages/0_Home.py")

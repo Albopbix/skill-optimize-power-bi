@@ -18,7 +18,7 @@ from src.storage import model_store
 # PAGE CONFIGURATION
 # =========================================================
 st.set_page_config(
-    page_title="Prediction Studio | Nex Decision AI",
+    page_title="Estúdio de Predição | Nex Decision AI",
     page_icon="🔮",
     layout="wide",
 )
@@ -62,9 +62,10 @@ def section_heading(title, subtitle=None):
 # HEADER
 # =========================================================
 page_header(
-    "🔮 Prediction Studio",
-    "Run saved machine-learning models, inspect input quality, understand "
-    "prediction behaviour, and export reproducible results.",
+    "🔮 Estúdio de Predição",
+    "Execute modelos de machine learning salvos, verifique a qualidade "
+    "da entrada, entenda o comportamento das predições e exporte resultados "
+    "reproduzíveis.",
 )
 
 # =========================================================
@@ -74,47 +75,48 @@ try:
     models = model_store.list_models()
 except Exception as exc:
     st.error(
-        "Could not list saved models. Check the model storage "
-        "configuration (GCS_BUCKET / permissions)."
+        "Não foi possível listar os modelos salvos. Verifique "
+        "a configuração de armazenamento de modelos (GCS_BUCKET "
+        "/ permissões)."
     )
-    with st.expander("Technical details"):
+    with st.expander("Detalhes técnicos"):
         st.code(str(exc))
     page_footer()
     st.stop()
 
 if not models:
-    st.warning("No saved .pkl models were found.")
-    st.info("Open AutoML, train a model, and save/export it first.")
+    st.warning("Nenhum modelo .pkl salvo foi encontrado.")
+    st.info("Abra o AutoML, treine um modelo e salve/exporte-o primeiro.")
     page_footer()
     st.stop()
 
 # =========================================================
 # CONFIGURATION
 # =========================================================
-section_heading("1. Configure a prediction run")
+section_heading("1. Configurar uma execução de predição")
 
 config_left, config_right = st.columns([1, 1])
 
 with config_left:
     selected_model = st.selectbox(
-        "Saved model",
+        "Modelo salvo",
         options=models,
         key="page7_selected_model",
     )
 
 with config_right:
     uploaded_file = st.file_uploader(
-        "Input dataset (CSV)",
+        "Dataset de entrada (CSV)",
         type=["csv"],
-        help="The CSV should contain the feature columns used during training.",
+        help="O CSV deve conter as colunas de variáveis usadas no treino.",
         key="page7_uploaded_csv",
     )
 
 if uploaded_file is None:
-    st.info("Choose a saved model and upload a CSV to begin.")
+    st.info("Escolha um modelo salvo e envie um CSV para começar.")
     ai_insight(
-        "For reliable predictions, use the same feature definitions and units "
-        "that were used when the model was trained."
+        "Para predições confiáveis, use as mesmas definições de variáveis "
+        "e unidades usadas no treino do modelo."
     )
     page_footer()
     st.stop()
@@ -126,24 +128,24 @@ try:
     raw_bytes = uploaded_file.getvalue()
     df = pd.read_csv(BytesIO(raw_bytes))
 except Exception as exc:
-    st.error(f"Could not read this CSV file: {exc}")
+    st.error(f"Não foi possível ler este arquivo CSV: {exc}")
     page_footer()
     st.stop()
 
 if df.empty:
-    st.warning("The uploaded CSV has no data rows.")
+    st.warning("O CSV enviado não tem linhas de dados.")
     page_footer()
     st.stop()
 
 if len(df.columns) == 0:
-    st.warning("The uploaded CSV has no columns.")
+    st.warning("O CSV enviado não tem colunas.")
     page_footer()
     st.stop()
 
 if df.columns.duplicated().any():
     duplicates = df.columns[df.columns.duplicated()].astype(str).tolist()
-    st.error("Duplicate column names were found: " + ", ".join(duplicates))
-    st.info("Rename duplicate columns in the CSV and upload it again.")
+    st.error("Foram encontrados nomes de colunas duplicados: " + ", ".join(duplicates))
+    st.info("Renomeie as colunas duplicadas no CSV e envie novamente.")
     page_footer()
     st.stop()
 
@@ -163,7 +165,7 @@ if previous_metadata and previous_metadata.get("input_signature") != input_signa
 # =========================================================
 # INPUT HEALTH
 # =========================================================
-section_heading("2. Input data health")
+section_heading("2. Saúde dos dados de entrada")
 
 row_count, column_count = df.shape
 missing_cells = int(df.isna().sum().sum())
@@ -175,59 +177,59 @@ constant_columns = [
 memory_mb = df.memory_usage(deep=True).sum() / (1024 * 1024)
 
 h1, h2, h3, h4, h5 = st.columns(5)
-h1.metric("Rows", f"{row_count:,}")
-h2.metric("Columns", f"{column_count:,}")
-h3.metric("Missing cells", f"{missing_cells:,}")
-h4.metric("Duplicate rows", f"{duplicate_rows:,}")
-h5.metric("Approx. memory", f"{memory_mb:.2f} MB")
+h1.metric("Linhas", f"{row_count:,}")
+h2.metric("Colunas", f"{column_count:,}")
+h3.metric("Células ausentes", f"{missing_cells:,}")
+h4.metric("Linhas duplicadas", f"{duplicate_rows:,}")
+h5.metric("Memória aprox.", f"{memory_mb:.2f} MB")
 
-with st.expander("Open detailed data-quality report"):
+with st.expander("Abrir relatório detalhado de qualidade dos dados"):
     missing_tab, types_tab, risk_tab = st.tabs(
-        ["Missing values", "Column profile", "Potential risks"]
+        ["Valores ausentes", "Perfil das colunas", "Riscos potenciais"]
     )
 
     with missing_tab:
         missing_report = pd.DataFrame({
-            "Column": df.columns.astype(str),
-            "Missing count": df.isna().sum().values,
-            "Missing %": (df.isna().mean().values * 100).round(2),
+            "Coluna": df.columns.astype(str),
+            "Qtd. ausentes": df.isna().sum().values,
+            "% ausentes": (df.isna().mean().values * 100).round(2),
         })
-        missing_report = missing_report[missing_report["Missing count"] > 0]
+        missing_report = missing_report[missing_report["Qtd. ausentes"] > 0]
         if missing_report.empty:
-            st.success("No missing values detected.")
+            st.success("Nenhum valor ausente detectado.")
         else:
             st.dataframe(missing_report, width="stretch", hide_index=True)
 
     with types_tab:
         profile = pd.DataFrame({
-            "Column": df.columns.astype(str),
-            "Data type": df.dtypes.astype(str).values,
-            "Distinct values": [df[col].nunique(dropna=True) for col in df.columns],
-            "Missing count": df.isna().sum().values,
+            "Coluna": df.columns.astype(str),
+            "Tipo de dado": df.dtypes.astype(str).values,
+            "Valores distintos": [df[col].nunique(dropna=True) for col in df.columns],
+            "Qtd. ausentes": df.isna().sum().values,
         })
         st.dataframe(profile, width="stretch", hide_index=True)
 
     with risk_tab:
         if duplicate_rows:
-            st.warning(f"{duplicate_rows:,} duplicate rows are present.")
+            st.warning(f"Há {duplicate_rows:,} linhas duplicadas.")
         else:
-            st.success("No duplicate rows detected.")
+            st.success("Nenhuma linha duplicada detectada.")
         if constant_columns:
-            st.warning("Constant columns: " + ", ".join(constant_columns))
+            st.warning("Colunas constantes: " + ", ".join(constant_columns))
         else:
-            st.success("No constant columns detected.")
+            st.success("Nenhuma coluna constante detectada.")
         if missing_cells:
             st.warning(
-                "Missing values are not automatically filled or removed. "
-                "The model's preprocessing pipeline must be able to handle them."
+                "Valores ausentes não são preenchidos nem removidos automaticamente. "
+                "O pipeline de pré-processamento do modelo precisa saber tratá-los."
             )
 
 # =========================================================
 # DATA PREVIEW
 # =========================================================
-with st.expander("Preview uploaded dataset", expanded=True):
+with st.expander("Prévia do dataset enviado", expanded=True):
     preview_count = st.slider(
-        "Rows to preview",
+        "Linhas na prévia",
         min_value=1,
         max_value=min(100, row_count),
         value=min(10, row_count),
@@ -238,17 +240,17 @@ with st.expander("Preview uploaded dataset", expanded=True):
 # =========================================================
 # LOAD MODEL AND VALIDATE FEATURES
 # =========================================================
-section_heading("3. Model compatibility")
+section_heading("3. Compatibilidade do modelo")
 
 try:
     model_path = model_store.get_model_path(selected_model)
     predictor = Predictor(model_path)
 except Exception as exc:
     st.error(
-        "The selected model could not be loaded. The file may be corrupted "
-        "or incompatible with the current project."
+        "Não foi possível carregar o modelo selecionado. O arquivo pode "
+        "estar corrompido ou ser incompatível com o projeto atual."
     )
-    with st.expander("Technical details"):
+    with st.expander("Detalhes técnicos"):
         st.code(str(exc))
     page_footer()
     st.stop()
@@ -258,38 +260,38 @@ feature_left, feature_right = st.columns(2)
 
 with feature_left:
     if missing_features:
-        st.error(f"Missing required features ({len(missing_features)})")
+        st.error(f"Variáveis obrigatórias ausentes ({len(missing_features)})")
         st.write(missing_features)
     else:
-        st.success("All required model features are present.")
+        st.success("Todas as variáveis exigidas pelo modelo estão presentes.")
 
 with feature_right:
     if extra_features:
-        st.info(f"{len(extra_features)} extra column(s) will be ignored.")
+        st.info(f"{len(extra_features)} coluna(s) extra(s) será(ão) ignorada(s).")
         st.write(extra_features)
     else:
-        st.success("No extra columns to ignore.")
+        st.success("Nenhuma coluna extra para ignorar.")
 
-with st.expander("Required model features"):
+with st.expander("Variáveis exigidas pelo modelo"):
     st.write(list(predictor.feature_names))
     st.caption(
-        "Feature names must match the trained model. The input is reordered "
-        "to match the model's training feature order."
+        "Os nomes das variáveis precisam corresponder ao modelo treinado. "
+        "A entrada é reordenada para seguir a ordem das variáveis do treino."
     )
 
 # =========================================================
 # RUN PREDICTIONS
 # =========================================================
-section_heading("4. Generate predictions")
+section_heading("4. Gerar predições")
 
 if missing_cells:
     st.warning(
-        "This dataset contains missing values. Prediction may fail if the "
-        "saved model pipeline does not handle them."
+        "Este dataset tem valores ausentes. A predição pode falhar se "
+        "o pipeline do modelo salvo não souber tratá-los."
     )
 
 if st.button(
-    "🚀 Generate predictions",
+    "🚀 Gerar predições",
     type="primary",
     width="stretch",
     disabled=bool(missing_features),
@@ -298,16 +300,16 @@ if st.button(
     try:
         prediction_input = df[predictor.feature_names].copy()
 
-        with st.spinner("Running model predictions..."):
+        with st.spinner("Executando as predições do modelo..."):
             predictions = predictor.predict(prediction_input)
 
         if len(predictions) != len(df):
             raise ValueError(
-                "The number of predictions does not match the number of input rows."
+                "O número de predições não corresponde ao número de linhas de entrada."
             )
 
         result = prediction_input.copy()
-        result["Prediction"] = predictions
+        result["Predição"] = predictions
 
         # If available, attach class probabilities/confidence for classifiers.
         # This is optional; some estimators do not support predict_proba.
@@ -319,22 +321,22 @@ if st.button(
                 classes = getattr(model_object, "classes_", None)
                 if probabilities is not None and len(probabilities) == len(result):
                     max_probability = probabilities.max(axis=1)
-                    result["Prediction Confidence (%)"] = (
+                    result["Confiança da Predição (%)"] = (
                         max_probability * 100
                     ).round(2)
                     if classes is not None and probabilities.shape[1] <= 20:
                         for index, class_name in enumerate(classes):
-                            result[f"Probability - {class_name} (%)"] = (
+                            result[f"Probabilidade - {class_name} (%)"] = (
                                 probabilities[:, index] * 100
                             ).round(2)
                     probability_note = (
-                        "Probability columns were added using the model's "
-                        "predict_proba method. They are model scores, not guarantees."
+                        "As colunas de probabilidade foram adicionadas com o método "
+                        "predict_proba do modelo. São scores do modelo, não garantias."
                     )
         except Exception as probability_exc:
             probability_note = (
-                "Prediction succeeded, but optional probability scores were "
-                f"unavailable: {probability_exc}"
+                "A predição foi concluída, mas os scores de probabilidade "
+                f"opcionais não estavam disponíveis: {probability_exc}"
             )
 
         metadata = {
@@ -344,17 +346,17 @@ if st.button(
             "rows": len(result),
             "columns": len(prediction_input.columns),
             "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "problem_type": getattr(predictor, "problem_type", "Unknown"),
+            "problem_type": getattr(predictor, "problem_type", "Desconhecido"),
             "probability_note": probability_note,
         }
         st.session_state[RESULTS_KEY] = result
         st.session_state[META_KEY] = metadata
-        st.success("Prediction run completed.")
+        st.success("Execução de predição concluída.")
         st.rerun()
 
     except Exception as exc:
-        st.error("Prediction could not be completed.")
-        with st.expander("Technical error details"):
+        st.error("Não foi possível concluir a predição.")
+        with st.expander("Detalhes técnicos do erro"):
             st.code(str(exc))
 
 # =========================================================
@@ -365,42 +367,42 @@ metadata = st.session_state.get(META_KEY)
 
 if stored_result is not None and metadata is not None:
     if metadata.get("input_signature") != input_signature:
-        st.info("The previous result belongs to a different input. Generate a new run.")
+        st.info("O resultado anterior pertence a outra entrada. Gere uma nova execução.")
     else:
         result = stored_result.copy()
-        prediction_series = result["Prediction"]
+        prediction_series = result["Predição"]
         numeric_predictions = pd.to_numeric(prediction_series, errors="coerce")
         is_numeric = prediction_is_numeric(prediction_series)
 
         st.divider()
-        section_heading("5. Prediction overview")
+        section_heading("5. Visão geral das predições")
 
         if is_numeric:
             valid_values = numeric_predictions.dropna()
             a, b, c, d = st.columns(4)
-            a.metric("Predicted records", f"{len(result):,}")
-            b.metric("Mean prediction", format_number(valid_values.mean()) if not valid_values.empty else "N/A")
-            c.metric("Minimum", format_number(valid_values.min()) if not valid_values.empty else "N/A")
-            d.metric("Maximum", format_number(valid_values.max()) if not valid_values.empty else "N/A")
+            a.metric("Registros previstos", f"{len(result):,}")
+            b.metric("Predição média", format_number(valid_values.mean()) if not valid_values.empty else "N/A")
+            c.metric("Mínimo", format_number(valid_values.min()) if not valid_values.empty else "N/A")
+            d.metric("Máximo", format_number(valid_values.max()) if not valid_values.empty else "N/A")
 
             if not valid_values.empty:
                 spread = valid_values.max() - valid_values.min()
                 st.caption(
-                    f"Range: {format_number(spread)} · "
-                    f"Standard deviation: {format_number(valid_values.std())}"
+                    f"Amplitude: {format_number(spread)} · Desvio padrão: "
+                    f"{format_number(valid_values.std())}"
                 )
         else:
             class_counts = prediction_series.astype(str).value_counts()
             a, b, c = st.columns(3)
-            a.metric("Predicted records", f"{len(result):,}")
-            b.metric("Distinct predicted classes", f"{len(class_counts):,}")
+            a.metric("Registros previstos", f"{len(result):,}")
+            b.metric("Classes previstas distintas", f"{len(class_counts):,}")
             c.metric(
-                "Most frequent class",
+                "Classe mais frequente",
                 str(class_counts.index[0])[:40] if not class_counts.empty else "N/A",
             )
             st.dataframe(
-                class_counts.rename_axis("Predicted class")
-                .reset_index(name="Records"),
+                class_counts.rename_axis("Classe prevista")
+                .reset_index(name="Registros"),
                 width="stretch",
                 hide_index=True,
             )
@@ -409,69 +411,69 @@ if stored_result is not None and metadata is not None:
             st.caption(metadata["probability_note"])
 
         # Optional actual-vs-predicted evaluation, if user supplies actual target values.
-        with st.expander("Optional: compare predictions with actual values"):
+        with st.expander("Opcional: comparar predições com valores reais"):
             actual_col = st.selectbox(
-                "Choose a column containing the true target values",
-                options=["(Not provided)"] + list(df.columns),
+                "Escolha uma coluna com os valores reais do alvo",
+                options=["(Não informado)"] + list(df.columns),
                 key="page7_actual_target_col",
             )
-            if actual_col != "(Not provided)":
+            if actual_col != "(Não informado)":
                 actual = df[actual_col].reset_index(drop=True)
-                predicted = result["Prediction"].reset_index(drop=True)
-                compare = pd.DataFrame({"Actual": actual, "Predicted": predicted})
+                predicted = result["Predição"].reset_index(drop=True)
+                compare = pd.DataFrame({"Real": actual, "Previsto": predicted})
                 if prediction_is_numeric(actual) and prediction_is_numeric(predicted):
-                    compare["Actual"] = pd.to_numeric(compare["Actual"], errors="coerce")
-                    compare["Predicted"] = pd.to_numeric(compare["Predicted"], errors="coerce")
+                    compare["Real"] = pd.to_numeric(compare["Real"], errors="coerce")
+                    compare["Previsto"] = pd.to_numeric(compare["Previsto"], errors="coerce")
                     compare = compare.dropna()
                     if not compare.empty:
-                        mae = (compare["Actual"] - compare["Predicted"]).abs().mean()
-                        rmse = (((compare["Actual"] - compare["Predicted"]) ** 2).mean()) ** 0.5
+                        mae = (compare["Real"] - compare["Previsto"]).abs().mean()
+                        rmse = (((compare["Real"] - compare["Previsto"]) ** 2).mean()) ** 0.5
                         m1, m2, m3 = st.columns(3)
-                        m1.metric("Rows compared", f"{len(compare):,}")
+                        m1.metric("Linhas comparadas", f"{len(compare):,}")
                         m2.metric("MAE", format_number(mae))
                         m3.metric("RMSE", format_number(rmse))
-                        st.caption("These metrics are meaningful only if the selected column is the true target for these same rows.")
+                        st.caption("Estas métricas só fazem sentido se a coluna selecionada for o alvo real dessas mesmas linhas.")
                 else:
-                    compare["Correct?"] = compare["Actual"].astype(str) == compare["Predicted"].astype(str)
+                    compare["Acertou?"] = compare["Real"].astype(str) == compare["Previsto"].astype(str)
                     m1, m2 = st.columns(2)
-                    m1.metric("Rows compared", f"{len(compare):,}")
-                    m2.metric("Accuracy on supplied rows", f"{compare['Correct?'].mean() * 100:.2f}%")
+                    m1.metric("Linhas comparadas", f"{len(compare):,}")
+                    m2.metric("Acurácia nas linhas informadas", f"{compare['Acertou?'].mean() * 100:.2f}%")
                 st.dataframe(compare, width="stretch", hide_index=True)
 
         # Search/filter/sort tools
         st.divider()
-        section_heading("6. Explore results")
+        section_heading("6. Explorar resultados")
 
         search_col, filter_col, sort_col = st.columns([1.2, 1, 1])
         with search_col:
             search_text = st.text_input(
-                "Search result values",
-                placeholder="Search across columns...",
+                "Buscar nos resultados",
+                placeholder="Buscar em todas as colunas...",
                 key="page7_result_search",
             )
         with filter_col:
             prediction_options = sorted(prediction_series.astype(str).unique().tolist())
             selected_predictions = st.multiselect(
-                "Filter prediction values",
+                "Filtrar valores previstos",
                 options=prediction_options,
                 default=prediction_options,
                 key="page7_prediction_filter",
             )
         with sort_col:
             sort_column = st.selectbox(
-                "Sort results by",
+                "Ordenar resultados por",
                 options=list(result.columns),
                 key="page7_sort_column",
             )
 
         sort_ascending = st.checkbox(
-            "Sort ascending",
+            "Ordem crescente",
             value=True,
             key="page7_sort_ascending",
         )
 
         filtered_result = result[
-            result["Prediction"].astype(str).isin(selected_predictions)
+            result["Predição"].astype(str).isin(selected_predictions)
         ].copy()
 
         if search_text.strip():
@@ -487,62 +489,62 @@ if stored_result is not None and metadata is not None:
                 by=sort_column, ascending=sort_ascending, kind="stable"
             )
         except (TypeError, ValueError):
-            st.info("Some values in this column cannot be sorted together.")
+            st.info("Alguns valores desta coluna não podem ser ordenados juntos.")
 
-        st.caption(f"Showing {len(filtered_result):,} of {len(result):,} records.")
+        st.caption(f"Exibindo {len(filtered_result):,} de {len(result):,} registros.")
         st.dataframe(filtered_result, width="stretch", hide_index=True)
 
         # Charts
         st.divider()
-        section_heading("7. Prediction visualizations")
+        section_heading("7. Visualizações das predições")
         chart_tab1, chart_tab2, chart_tab3 = st.tabs(
-            ["Distribution", "Counts", "Feature relationship"]
+            ["Distribuição", "Contagens", "Relação com variáveis"]
         )
 
         if filtered_result.empty:
-            st.info("No results match the current search and filters.")
+            st.info("Nenhum resultado corresponde à busca e aos filtros atuais.")
         else:
             with chart_tab1:
                 try:
                     if is_numeric:
                         plot_values = pd.to_numeric(
-                            filtered_result["Prediction"], errors="coerce"
+                            filtered_result["Predição"], errors="coerce"
                         ).dropna()
                         if not plot_values.empty:
                             fig = px.histogram(
                                 x=plot_values,
                                 nbins=30,
-                                title="Distribution of predicted values",
-                                labels={"x": "Prediction", "y": "Records"},
+                                title="Distribuição dos valores previstos",
+                                labels={"x": "Predição", "y": "Registros"},
                             )
                             st.plotly_chart(fig, width="stretch")
                         else:
-                            st.info("No numeric predictions are available to plot.")
+                            st.info("Não há predições numéricas para plotar.")
                     else:
-                        counts = filtered_result["Prediction"].astype(str).value_counts().rename_axis("Class").reset_index(name="Records")
+                        counts = filtered_result["Predição"].astype(str).value_counts().rename_axis("Classe").reset_index(name="Registros")
                         fig = px.pie(
-                            counts, names="Class", values="Records",
-                            title="Predicted class share", hole=0.35
+                            counts, names="Classe", values="Registros",
+                            title="Participação das classes previstas", hole=0.35
                         )
                         st.plotly_chart(fig, width="stretch")
                 except Exception as exc:
-                    st.info(f"Could not create the distribution chart: {exc}")
+                    st.info(f"Não foi possível criar o gráfico de distribuição: {exc}")
 
             with chart_tab2:
                 try:
                     if is_numeric:
                         counts = pd.to_numeric(
-                            filtered_result["Prediction"], errors="coerce"
-                        ).dropna().value_counts().sort_index().rename_axis("Prediction").reset_index(name="Records")
+                            filtered_result["Predição"], errors="coerce"
+                        ).dropna().value_counts().sort_index().rename_axis("Predição").reset_index(name="Registros")
                     else:
-                        counts = filtered_result["Prediction"].astype(str).value_counts().rename_axis("Prediction").reset_index(name="Records")
+                        counts = filtered_result["Predição"].astype(str).value_counts().rename_axis("Predição").reset_index(name="Registros")
                     fig = px.bar(
-                        counts, x="Prediction", y="Records",
-                        title="Prediction counts"
+                        counts, x="Predição", y="Registros",
+                        title="Contagem de predições"
                     )
                     st.plotly_chart(fig, width="stretch")
                 except Exception as exc:
-                    st.info(f"Could not create the counts chart: {exc}")
+                    st.info(f"Não foi possível criar o gráfico de contagens: {exc}")
 
             with chart_tab3:
                 candidate_features = [
@@ -552,37 +554,37 @@ if stored_result is not None and metadata is not None:
                 ]
                 if candidate_features and is_numeric:
                     x_feature = st.selectbox(
-                        "Numeric feature for relationship chart",
+                        "Variável numérica para o gráfico de relação",
                         options=candidate_features,
                         key="page7_relationship_feature",
                     )
-                    relationship = filtered_result[[x_feature, "Prediction"]].copy()
-                    relationship["Prediction"] = pd.to_numeric(
-                        relationship["Prediction"], errors="coerce"
+                    relationship = filtered_result[[x_feature, "Predição"]].copy()
+                    relationship["Predição"] = pd.to_numeric(
+                        relationship["Predição"], errors="coerce"
                     )
                     relationship = relationship.dropna()
                     if not relationship.empty:
                         fig = px.scatter(
-                            relationship, x=x_feature, y="Prediction",
-                            title=f"{x_feature} vs predicted value",
+                            relationship, x=x_feature, y="Predição",
+                            title=f"{x_feature} vs valor previsto",
                             trendline=None,
                         )
                         st.plotly_chart(fig, width="stretch")
                     else:
-                        st.info("No usable numeric values for this relationship.")
+                        st.info("Não há valores numéricos utilizáveis para esta relação.")
                 else:
                     st.info(
-                        "A feature relationship chart is available when the "
-                        "result includes a numeric input feature and numeric predictions."
+                        "O gráfico de relação fica disponível quando o resultado inclui "
+                        "uma variável de entrada numérica e predições numéricas."
                     )
 
         # Export
         st.divider()
-        section_heading("8. Export results")
+        section_heading("8. Exportar resultados")
         export_all, export_filtered = st.columns(2)
         with export_all:
             st.download_button(
-                "Download all predictions",
+                "Baixar todas as predições",
                 data=safe_csv_bytes(result),
                 file_name="NexDecision_All_Predictions.csv",
                 mime="text/csv",
@@ -591,7 +593,7 @@ if stored_result is not None and metadata is not None:
             )
         with export_filtered:
             st.download_button(
-                "Download filtered results",
+                "Baixar resultados filtrados",
                 data=safe_csv_bytes(filtered_result),
                 file_name="NexDecision_Filtered_Predictions.csv",
                 mime="text/csv",
@@ -599,7 +601,7 @@ if stored_result is not None and metadata is not None:
                 key="page7_download_filtered",
             )
 
-        with st.expander("Advanced CSV exporter"):
+        with st.expander("Exportador CSV avançado"):
             try:
                 exporter = PredictionExporter()
                 export_filename = exporter.export_csv(
@@ -607,20 +609,20 @@ if stored_result is not None and metadata is not None:
                 )
                 with open(export_filename, "rb") as export_file:
                     st.download_button(
-                        "Download via Prediction Exporter",
+                        "Baixar pelo Prediction Exporter",
                         data=export_file.read(),
                         file_name="Predictions.csv",
                         mime="text/csv",
                         key="page7_exporter_download",
                     )
             except Exception as exc:
-                st.caption(f"Optional exporter unavailable: {exc}")
+                st.caption(f"Exportador opcional indisponível: {exc}")
 
         # History
         st.divider()
-        section_heading("9. Prediction history")
+        section_heading("9. Histórico de predições")
         if st.button(
-            "Save this run to prediction history",
+            "Salvar esta execução no histórico de predições",
             key="page7_save_history",
         ):
             try:
@@ -628,9 +630,9 @@ if stored_result is not None and metadata is not None:
                 database.save_prediction(
                     metadata["model"], metadata["dataset"], metadata["rows"]
                 )
-                st.success("Prediction run saved to history.")
+                st.success("Execução de predição salva no histórico.")
             except Exception as exc:
-                st.warning(f"Could not save history; results remain available. Details: {exc}")
+                st.warning(f"Não foi possível salvar o histórico; os resultados continuam disponíveis. Detalhes: {exc}")
 
         try:
             history = Database().get_predictions()
@@ -641,20 +643,21 @@ if stored_result is not None and metadata is not None:
                     hide_index=True,
                 )
         except Exception:
-            st.caption("Saved prediction history is currently unavailable.")
+            st.caption("O histórico de predições salvo está indisponível no momento.")
 
-        with st.expander("Prediction run information"):
-            st.write(f"**Model:** {metadata['model']}")
+        with st.expander("Informações da execução de predição"):
+            st.write(f"**Modelo:** {metadata['model']}")
             st.write(f"**Dataset:** {metadata['dataset']}")
-            st.write(f"**Rows processed:** {metadata['rows']:,}")
-            st.write(f"**Feature count:** {metadata['columns']:,}")
-            st.write(f"**Run time:** {metadata['timestamp']}")
-            st.write(f"**Problem type:** {metadata['problem_type']}")
+            st.write(f"**Linhas processadas:** {metadata['rows']:,}")
+            st.write(f"**Qtd. de variáveis:** {metadata['columns']:,}")
+            st.write(f"**Horário da execução:** {metadata['timestamp']}")
+            st.write(f"**Tipo de problema:** {metadata['problem_type']}")
 
         ai_insight(
-            "Predictions are model estimates, not guarantees. Check data quality, "
-            "feature compatibility, and—where possible—compare outputs with "
-            "known outcomes before making real-world decisions."
+            "Predições são estimativas do modelo, não garantias. Verifique a "
+            "qualidade dos dados e a compatibilidade das variáveis e, quando "
+            "possível, compare os resultados com desfechos conhecidos antes de "
+            "tomar decisões reais."
         )
 
 page_footer()
@@ -668,7 +671,7 @@ nav_previous, nav_spacer, nav_next = st.columns([1, 2, 1])
 
 with nav_previous:
     if st.button(
-        "⬅️ Previous: Business Forecasting",
+        "⬅️ Anterior: Previsão de Negócios",
         key="page7_previous_navigation",
         use_container_width=True,
     ):
@@ -676,7 +679,7 @@ with nav_previous:
 
 with nav_next:
     if st.button(
-        "Next:➡️",
+        "Próximo ➡️",
         key="page7_next_navigation",
         use_container_width=True,
     ):

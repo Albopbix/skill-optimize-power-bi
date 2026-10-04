@@ -5,57 +5,57 @@ class ModelRecommender:
         recommendations = []
 
         recommendations.append(
-            f"🏆 Best Model Selected: {model_name}"
+            f"🏆 Melhor modelo selecionado: {model_name}"
         )
 
         recommendations.append(
-            f"Problem Type: {problem_type.title()}"
+            f"Tipo de problema: {problem_type.title()}"
         )
 
         recommendations.append(
-            f"Model Score: {round(score,2)}%"
+            f"Score do modelo: {round(score,2)}%"
         )
 
         if score >= 95:
 
             recommendations.append(
-                "Excellent performance. Ready for deployment."
+                "Desempenho excelente. Pronto para produção."
             )
 
         elif score >= 90:
 
             recommendations.append(
-                "Very good performance. Minor tuning may improve results."
+                "Desempenho muito bom. Ajustes finos podem melhorar os resultados."
             )
 
         elif score >= 80:
 
             recommendations.append(
-                "Good model. Consider feature engineering and hyperparameter tuning."
+                "Bom modelo. Considere engenharia de variáveis e ajuste de hiperparâmetros."
             )
 
         elif score >= 70:
 
             recommendations.append(
-                "Model performance is acceptable. More training data is recommended."
+                "Desempenho aceitável. Recomenda-se mais dados de treino."
             )
 
         else:
 
             recommendations.append(
-                "Model accuracy is low. Improve data quality before deployment."
+                "Acurácia baixa. Melhore a qualidade dos dados antes de colocar em produção."
             )
 
         recommendations.append(
-            "Perform cross-validation before production deployment."
+            "Faça validação cruzada antes de colocar em produção."
         )
 
         recommendations.append(
-            "Monitor model performance continuously after deployment."
+            "Monitore o desempenho do modelo continuamente após a implantação."
         )
 
         recommendations.append(
-            "Retrain periodically as new data becomes available."
+            "Retreine periodicamente conforme novos dados forem chegando."
         )
 
         return recommendations

@@ -13,25 +13,25 @@ class VisualizationRecommender:
 
         if len(numeric) >= 2:
             recommendations.append(
-                "📊 Correlation Heatmap"
+                "📊 Mapa de Calor de Correlação"
             )
 
             recommendations.append(
-                "📈 Scatter Plot"
+                "📈 Gráfico de Dispersão"
             )
 
             recommendations.append(
-                "📉 Histogram"
+                "📉 Histograma"
             )
 
         if len(categorical) >= 1:
 
             recommendations.append(
-                "🥧 Pie Chart"
+                "🥧 Gráfico de Pizza"
             )
 
             recommendations.append(
-                "📊 Category Distribution"
+                "📊 Distribuição por Categoria"
             )
 
         for col in self.df.columns:
@@ -44,7 +44,7 @@ class VisualizationRecommender:
             ):
 
                 recommendations.append(
-                    "📅 Time Series Analysis"
+                    "📅 Análise de Séries Temporais"
                 )
 
             if (
@@ -55,11 +55,11 @@ class VisualizationRecommender:
             ):
 
                 recommendations.append(
-                    "🌍 Geographic Dashboard"
+                    "🌍 Dashboard Geográfico"
                 )
 
         recommendations.append(
-            "📌 KPI Dashboard"
+            "📌 Dashboard de KPIs"
         )
 
         return list(dict.fromkeys(recommendations))

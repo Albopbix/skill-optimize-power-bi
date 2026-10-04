@@ -12,7 +12,7 @@ from src.ui.layout import page_header, ai_insight, page_footer
 # ==========================================================
 
 st.set_page_config(
-    page_title="Interactive Dashboard",
+    page_title="Dashboard Interativo",
     page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -53,9 +53,9 @@ st.markdown(
 # ==========================================================
 
 page_header(
-    "📊 Interactive Dashboard",
-    "Explore business data through interactive visualizations, "
-    "discover patterns, and investigate data quality."
+    "📊 Dashboard Interativo",
+    "Explore os dados do negócio com visualizações interativas, "
+    "descubra padrões e investigue a qualidade dos dados."
 )
 
 
@@ -64,17 +64,17 @@ page_header(
 # ==========================================================
 
 if "dataset" not in st.session_state:
-    st.warning("Upload a dataset first.")
+    st.warning("Envie um dataset primeiro.")
     st.stop()
 
 original_df = st.session_state["dataset"]
 
 if not isinstance(original_df, pd.DataFrame):
-    st.error("The uploaded dataset is not a valid DataFrame.")
+    st.error("O dataset enviado não é um DataFrame válido.")
     st.stop()
 
 if original_df.empty:
-    st.warning("The uploaded dataset is empty.")
+    st.warning("O dataset enviado está vazio.")
     st.stop()
 
 # Preserve the original uploaded data.
@@ -85,10 +85,10 @@ MAX_ROWS = 5000
 
 if len(df) > MAX_ROWS:
     st.info(
-        f"The dataset contains {len(df):,} rows. "
-        f"Charts will use a reproducible sample of {MAX_ROWS:,} rows "
-        "for performance. Data exploration and CSV export retain "
-        "the full filtered dataset."
+        f"O dataset tem {len(df):,} linhas. Os gráficos usarão uma "
+        f"amostra reproduzível de {MAX_ROWS:,} linhas por desempenho. "
+        "A exploração dos dados e a exportação em CSV mantêm o "
+        "dataset filtrado completo."
     )
 
     # Use the same sample for charts and analysis.
@@ -139,13 +139,13 @@ for col in df.select_dtypes(
 # SIDEBAR FILTERS
 # ==========================================================
 
-st.sidebar.title("🎛️ Dashboard Controls")
-st.sidebar.caption("Filters apply to the full dataset.")
+st.sidebar.title("🎛️ Controles do Dashboard")
+st.sidebar.caption("Os filtros se aplicam ao dataset completo.")
 
 filtered_df = df.copy()
 
 with st.sidebar.expander(
-    "🔎 Category Filters",
+    "🔎 Filtros por Categoria",
     expanded=True
 ):
     filter_cols = [
@@ -171,7 +171,7 @@ with st.sidebar.expander(
             ]
 
 
-with st.sidebar.expander("📏 Numeric Filters"):
+with st.sidebar.expander("📏 Filtros Numéricos"):
     for col in numeric_cols:
         series = pd.to_numeric(
             filtered_df[col],
@@ -203,8 +203,9 @@ with st.sidebar.expander("📏 Numeric Filters"):
 
 if filtered_df.empty:
     st.warning(
-        "No records match your filters. "
-        "Adjust the sidebar selections."
+        "Nenhum registro corresponde aos "
+        "filtros. Ajuste as seleções na "
+        "barra lateral."
     )
     st.stop()
 
@@ -213,32 +214,32 @@ if filtered_df.empty:
 # DATASET OVERVIEW
 # ==========================================================
 
-st.subheader("📌 Dataset Overview")
+st.subheader("📌 Visão Geral do Dataset")
 
 k1, k2, k3, k4 = st.columns(4)
 
 k1.metric(
-    "Filtered Records",
+    "Registros Filtrados",
     f"{len(filtered_df):,}"
 )
 
 k2.metric(
-    "Total Columns",
+    "Total de Colunas",
     f"{len(filtered_df.columns):,}"
 )
 
 k3.metric(
-    "Missing Cells",
+    "Células Ausentes",
     f"{int(filtered_df.isna().sum().sum()):,}"
 )
 
 k4.metric(
-    "Duplicate Rows",
+    "Linhas Duplicadas",
     f"{int(filtered_df.duplicated().sum()):,}"
 )
 
 st.caption(
-    f"Showing {len(filtered_df):,} of {len(df):,} original records."
+    f"Exibindo {len(filtered_df):,} de {len(df):,} registros originais."
 )
 
 st.divider()
@@ -250,10 +251,10 @@ st.divider()
 
 overview_tab, builder_tab, explorer_tab, quality_tab = st.tabs(
     [
-        "📈 Overview",
-        "🛠️ Chart Builder",
-        "🗂️ Data Explorer",
-        "🧪 Data Quality",
+        "📈 Visão Geral",
+        "🛠️ Construtor de Gráficos",
+        "🗂️ Explorador de Dados",
+        "🧪 Qualidade dos Dados",
     ]
 )
 
@@ -264,7 +265,7 @@ overview_tab, builder_tab, explorer_tab, quality_tab = st.tabs(
 
 with overview_tab:
 
-    st.subheader("Distribution Analysis")
+    st.subheader("Análise de Distribuição")
 
     left, right = st.columns(2)
 
@@ -275,7 +276,7 @@ with overview_tab:
     with left:
         if numeric_cols:
             hist_col = st.selectbox(
-                "Numeric column",
+                "Coluna numérica",
                 numeric_cols,
                 key="overview_hist_column",
             )
@@ -285,7 +286,7 @@ with overview_tab:
                 x=hist_col,
                 nbins=30,
                 marginal="box",
-                title=f"Distribution of {hist_col}",
+                title=f"Distribuição de {hist_col}",
                 template="plotly_white",
             )
 
@@ -300,7 +301,7 @@ with overview_tab:
             )
         else:
             st.info(
-                "No numeric columns available for a histogram."
+                "Não há colunas numéricas disponíveis para um histograma."
             )
 
     # ------------------------------------------------------
@@ -310,27 +311,27 @@ with overview_tab:
     with right:
         if categorical_cols:
             pie_col = st.selectbox(
-                "Category column",
+                "Coluna categórica",
                 categorical_cols,
                 key="overview_pie_column",
             )
 
             counts = (
                 filtered_df[pie_col]
-                .fillna("(Missing)")
+                .fillna("(Ausente)")
                 .astype(str)
                 .value_counts()
                 .head(10)
-                .rename_axis("Category")
-                .reset_index(name="Count")
+                .rename_axis("Categoria")
+                .reset_index(name="Contagem")
             )
 
             fig = px.pie(
                 counts,
-                names="Category",
-                values="Count",
+                names="Categoria",
+                values="Contagem",
                 hole=0.45,
-                title=f"Top Categories: {pie_col}",
+                title=f"Principais Categorias: {pie_col}",
                 template="plotly_white",
             )
 
@@ -342,7 +343,7 @@ with overview_tab:
             )
         else:
             st.info(
-                "No categorical columns available for a pie chart."
+                "Não há colunas categóricas disponíveis para um gráfico de pizza."
             )
 
     # ------------------------------------------------------
@@ -350,14 +351,14 @@ with overview_tab:
     # ------------------------------------------------------
 
     st.divider()
-    st.subheader("Relationship Analysis")
+    st.subheader("Análise de Relação")
 
     if len(numeric_cols) >= 2:
         c1, c2, c3 = st.columns(3)
 
         with c1:
             scatter_x = st.selectbox(
-                "X-axis",
+                "Eixo X",
                 numeric_cols,
                 index=0,
                 key="overview_scatter_x",
@@ -369,7 +370,7 @@ with overview_tab:
             )
 
             scatter_y = st.selectbox(
-                "Y-axis",
+                "Eixo Y",
                 numeric_cols,
                 index=y_index,
                 key="overview_scatter_y",
@@ -377,8 +378,8 @@ with overview_tab:
 
         with c3:
             scatter_color = st.selectbox(
-                "Color by",
-                ["None"] + categorical_cols,
+                "Colorir por",
+                ["Nenhum"] + categorical_cols,
                 key="overview_scatter_color",
             )
 
@@ -396,7 +397,7 @@ with overview_tab:
             y=scatter_y,
             color=(
                 scatter_color
-                if scatter_color != "None"
+                if scatter_color != "Nenhum"
                 else None
             ),
             hover_data=[scatter_x, scatter_y],
@@ -413,8 +414,8 @@ with overview_tab:
 
     else:
         st.info(
-            "At least two numeric columns are required "
-            "for a scatter plot."
+            "São necessárias pelo menos duas colunas "
+            "numéricas para um gráfico de dispersão."
         )
 
     # ------------------------------------------------------
@@ -422,11 +423,11 @@ with overview_tab:
     # ------------------------------------------------------
 
     st.divider()
-    st.subheader("Correlation Heatmap")
+    st.subheader("Mapa de Calor de Correlação")
 
     if len(numeric_cols) >= 2:
         heatmap_cols = st.multiselect(
-            "Choose numeric features",
+            "Escolha as variáveis numéricas",
             numeric_cols,
             default=numeric_cols[:min(10, len(numeric_cols))],
             key="overview_heatmap_cols",
@@ -442,7 +443,7 @@ with overview_tab:
                 zmin=-1,
                 zmax=1,
                 aspect="auto",
-                title="Feature Correlation Matrix",
+                title="Matriz de Correlação das Variáveis",
             )
 
             fig.update_layout(
@@ -466,18 +467,17 @@ with overview_tab:
                 coefficient = upper_triangle.loc[pair]
 
                 st.info(
-                    f"Strongest absolute correlation: "
-                    f"{pair[0]} and {pair[1]} "
-                    f"(r = {coefficient:.3f}). "
-                    "Correlation does not imply causation."
+                    "Correlação absoluta mais forte: "
+                    f"{pair[0]} e {pair[1]} (r = {coefficient:.3f}). "
+                    "Correlação não implica causalidade."
                 )
         else:
             st.info(
-                "Select at least two columns for correlation analysis."
+                "Selecione pelo menos duas colunas para a análise de correlação."
             )
     else:
         st.info(
-            "Correlation analysis requires at least two numeric columns."
+            "A análise de correlação exige pelo menos duas colunas numéricas."
         )
 
 
@@ -487,19 +487,19 @@ with overview_tab:
 
 with builder_tab:
 
-    st.subheader("🛠️ Custom Chart Builder")
+    st.subheader("🛠️ Construtor de Gráficos Personalizados")
 
     chart_type = st.selectbox(
-        "Choose visualization",
+        "Escolha a visualização",
         [
-            "Scatter Plot",
-            "Line Chart",
-            "Bar Chart",
-            "Histogram",
+            "Gráfico de Dispersão",
+            "Gráfico de Linhas",
+            "Gráfico de Barras",
+            "Histograma",
             "Box Plot",
-            "Violin Plot",
-            "Pie Chart",
-            "Correlation Heatmap",
+            "Gráfico de Violino",
+            "Gráfico de Pizza",
+            "Mapa de Calor de Correlação",
         ],
         key="builder_chart_type",
     )
@@ -508,17 +508,17 @@ with builder_tab:
     # HISTOGRAM
     # ------------------------------------------------------
 
-    if chart_type == "Histogram":
+    if chart_type == "Histograma":
 
         if numeric_cols:
             x_col = st.selectbox(
-                "Numeric column",
+                "Coluna numérica",
                 numeric_cols,
                 key="builder_hist_x",
             )
 
             bins = st.slider(
-                "Number of bins",
+                "Número de faixas",
                 min_value=5,
                 max_value=100,
                 value=30,
@@ -538,23 +538,23 @@ with builder_tab:
                 use_container_width=True,
             )
         else:
-            st.info("A histogram requires a numeric column.")
+            st.info("O histograma exige uma coluna numérica.")
 
     # ------------------------------------------------------
     # PIE CHART
     # ------------------------------------------------------
 
-    elif chart_type == "Pie Chart":
+    elif chart_type == "Gráfico de Pizza":
 
         if categorical_cols:
             x_col = st.selectbox(
-                "Category column",
+                "Coluna categórica",
                 categorical_cols,
                 key="builder_pie_x",
             )
 
             top_n = st.slider(
-                "Maximum categories",
+                "Máximo de categorias",
                 min_value=3,
                 max_value=20,
                 value=10,
@@ -563,18 +563,18 @@ with builder_tab:
 
             counts = (
                 filtered_df[x_col]
-                .fillna("(Missing)")
+                .fillna("(Ausente)")
                 .astype(str)
                 .value_counts()
                 .head(top_n)
-                .rename_axis("Category")
-                .reset_index(name="Count")
+                .rename_axis("Categoria")
+                .reset_index(name="Contagem")
             )
 
             fig = px.pie(
                 counts,
-                names="Category",
-                values="Count",
+                names="Categoria",
+                values="Contagem",
                 hole=0.4,
                 template="plotly_white",
             )
@@ -584,17 +584,17 @@ with builder_tab:
                 use_container_width=True,
             )
         else:
-            st.info("A pie chart requires a categorical column.")
+            st.info("O gráfico de pizza exige uma coluna categórica.")
 
     # ------------------------------------------------------
     # CORRELATION HEATMAP
     # ------------------------------------------------------
 
-    elif chart_type == "Correlation Heatmap":
+    elif chart_type == "Mapa de Calor de Correlação":
 
         if len(numeric_cols) >= 2:
             selected_cols = st.multiselect(
-                "Numeric features",
+                "Variáveis numéricas",
                 numeric_cols,
                 default=numeric_cols[:min(10, len(numeric_cols))],
                 key="builder_heatmap_cols",
@@ -616,9 +616,9 @@ with builder_tab:
                     use_container_width=True,
                 )
             else:
-                st.info("Select at least two numeric columns.")
+                st.info("Selecione pelo menos duas colunas numéricas.")
         else:
-            st.info("At least two numeric columns are required.")
+            st.info("São necessárias pelo menos duas colunas numéricas.")
 
     # ------------------------------------------------------
     # SCATTER, LINE, BAR, BOX, VIOLIN
@@ -636,28 +636,28 @@ with builder_tab:
 
         if not x_options or not numeric_cols:
             st.info(
-                "This chart requires suitable X-axis and numeric columns."
+                "Este gráfico exige colunas adequadas para o eixo X e numéricas."
             )
         else:
             c1, c2 = st.columns(2)
 
             with c1:
                 x_col = st.selectbox(
-                    "X-axis",
+                    "Eixo X",
                     x_options,
                     key="builder_x",
                 )
 
             with c2:
                 y_col = st.selectbox(
-                    "Y-axis",
+                    "Eixo Y",
                     numeric_cols,
                     key="builder_y",
                 )
 
             color_col = st.selectbox(
-                "Group by / Color",
-                ["None"] + categorical_cols,
+                "Agrupar / Colorir por",
+                ["Nenhum"] + categorical_cols,
                 key="builder_color",
             )
 
@@ -671,11 +671,11 @@ with builder_tab:
 
             color_arg = (
                 color_col
-                if color_col != "None"
+                if color_col != "Nenhum"
                 else None
             )
 
-            if chart_type == "Scatter Plot":
+            if chart_type == "Gráfico de Dispersão":
 
                 fig = px.scatter(
                     plot_df,
@@ -685,7 +685,7 @@ with builder_tab:
                     template="plotly_white",
                 )
 
-            elif chart_type == "Line Chart":
+            elif chart_type == "Gráfico de Linhas":
 
                 fig = px.line(
                     plot_df,
@@ -695,36 +695,36 @@ with builder_tab:
                     template="plotly_white",
                 )
 
-            elif chart_type == "Bar Chart":
+            elif chart_type == "Gráfico de Barras":
 
                 aggregation = st.selectbox(
-                    "Aggregation",
-                    ["Sum", "Mean", "Median", "Count"],
+                    "Agregação",
+                    ["Soma", "Média", "Mediana", "Contagem"],
                     key="builder_bar_aggregation",
                 )
 
-                if aggregation == "Count":
+                if aggregation == "Contagem":
                     plot_df = (
                         plot_df.groupby(
                             x_col,
                             dropna=False,
                         )[y_col]
                         .count()
-                        .reset_index(name="Count")
+                        .reset_index(name="Contagem")
                     )
 
                     fig = px.bar(
                         plot_df,
                         x=x_col,
-                        y="Count",
+                        y="Contagem",
                         template="plotly_white",
                     )
 
                 else:
                     agg_func = {
-                        "Sum": "sum",
-                        "Mean": "mean",
-                        "Median": "median",
+                        "Soma": "sum",
+                        "Média": "mean",
+                        "Mediana": "median",
                     }[aggregation]
 
                     plot_df = (
@@ -778,14 +778,14 @@ with builder_tab:
 
 with explorer_tab:
 
-    st.subheader("🗂️ Data Explorer")
+    st.subheader("🗂️ Explorador de Dados")
 
     st.caption(
-        "Inspect filtered records and download the selected data."
+        "Inspecione os registros filtrados e baixe os dados selecionados."
     )
 
     selected_columns = st.multiselect(
-        "Columns to display",
+        "Colunas a exibir",
         options=filtered_df.columns.tolist(),
         default=filtered_df.columns.tolist()[
             :min(10, len(filtered_df.columns))
@@ -800,9 +800,9 @@ with explorer_tab:
             height=420,
         )
     else:
-        st.info("Select at least one column.")
+        st.info("Selecione pelo menos uma coluna.")
 
-    st.markdown("#### Statistical Summary")
+    st.markdown("#### Resumo Estatístico")
 
     summary = filtered_df.describe(
         include="all"
@@ -814,7 +814,7 @@ with explorer_tab:
     )
 
     st.download_button(
-        label="⬇️ Download Filtered Dataset (CSV)",
+        label="⬇️ Baixar dataset filtrado (CSV)",
         data=filtered_df.to_csv(
             index=False
         ).encode("utf-8"),
@@ -830,28 +830,28 @@ with explorer_tab:
 
 with quality_tab:
 
-    st.subheader("🧪 Data Quality Report")
+    st.subheader("🧪 Relatório de Qualidade dos Dados")
 
     missing_report = pd.DataFrame({
-        "Column": filtered_df.columns,
-        "Missing Values": (
+        "Coluna": filtered_df.columns,
+        "Valores Ausentes": (
             filtered_df.isna().sum().values
         ),
-        "Missing %": (
+        "% Ausentes": (
             filtered_df.isna().mean().values * 100
         ).round(2),
-        "Unique Values": (
+        "Valores Únicos": (
             filtered_df.nunique(dropna=True).values
         ),
-        "Data Type": (
+        "Tipo de Dado": (
             filtered_df.dtypes.astype(str).values
         ),
     }).sort_values(
-        "Missing %",
+        "% Ausentes",
         ascending=False,
     )
 
-    st.markdown("#### Missing Values by Column")
+    st.markdown("#### Valores Ausentes por Coluna")
 
     st.dataframe(
         missing_report,
@@ -859,16 +859,16 @@ with quality_tab:
     )
 
     missing_only = missing_report[
-        missing_report["Missing Values"] > 0
+        missing_report["Valores Ausentes"] > 0
     ]
 
     if not missing_only.empty:
 
         fig = px.bar(
             missing_only,
-            x="Column",
-            y="Missing %",
-            title="Missing Data Percentage",
+            x="Coluna",
+            y="% Ausentes",
+            title="Percentual de Dados Ausentes",
             template="plotly_white",
         )
 
@@ -878,20 +878,20 @@ with quality_tab:
         )
 
     else:
-        st.success("No missing values found in the filtered data.")
+        st.success("Nenhum valor ausente nos dados filtrados.")
 
     # ------------------------------------------------------
     # DUPLICATE ROWS
     # ------------------------------------------------------
 
-    st.markdown("#### Duplicate Records")
+    st.markdown("#### Registros Duplicados")
 
     duplicate_count = int(
         filtered_df.duplicated().sum()
     )
 
     st.metric(
-        "Duplicate Rows",
+        "Linhas Duplicadas",
         f"{duplicate_count:,}",
     )
 
@@ -899,7 +899,7 @@ with quality_tab:
     # OUTLIER DETECTION
     # ------------------------------------------------------
 
-    st.markdown("#### Potential Numeric Outliers")
+    st.markdown("#### Possíveis Outliers Numéricos")
 
     outlier_rows = []
 
@@ -925,10 +925,10 @@ with quality_tab:
         )
 
         outlier_rows.append({
-            "Column": col,
-            "Potential Outliers": count,
-            "Lower Bound": round(float(lower), 3),
-            "Upper Bound": round(float(upper), 3),
+            "Coluna": col,
+            "Possíveis Outliers": count,
+            "Limite Inferior": round(float(lower), 3),
+            "Limite Superior": round(float(upper), 3),
         })
 
     if outlier_rows:
@@ -939,18 +939,19 @@ with quality_tab:
         )
 
         st.caption(
-            "Outliers use the 1.5 × IQR rule. "
-            "Flagged values are not necessarily errors."
+            "Os outliers usam a regra de 1,5 × IQR. "
+            "Valores sinalizados não são necessariamente "
+            "erros."
         )
 
     else:
-        st.info("No numeric columns available for outlier analysis.")
+        st.info("Não há colunas numéricas disponíveis para a análise de outliers.")
 
     # ------------------------------------------------------
     # AUTOMATED DATA SUMMARY
     # ------------------------------------------------------
 
-    st.markdown("#### Automated Summary")
+    st.markdown("#### Resumo Automático")
 
     total_cells = (
         len(filtered_df) * len(filtered_df.columns)
@@ -965,12 +966,12 @@ with quality_tab:
         if total_cells else 0
     )
 
-    st.write(f"**Records analyzed:** {len(filtered_df):,}")
-    st.write(f"**Numeric columns:** {len(numeric_cols)}")
-    st.write(f"**Categorical columns:** {len(categorical_cols)}")
-    st.write(f"**Missing cells:** {missing_cells:,}")
-    st.write(f"**Missing-cell rate:** {missing_pct:.2f}%")
-    st.write(f"**Duplicate rows:** {duplicate_count:,}")
+    st.write(f"**Registros analisados:** {len(filtered_df):,}")
+    st.write(f"**Colunas numéricas:** {len(numeric_cols)}")
+    st.write(f"**Colunas categóricas:** {len(categorical_cols)}")
+    st.write(f"**Células ausentes:** {missing_cells:,}")
+    st.write(f"**Taxa de células ausentes:** {missing_pct:.2f}%")
+    st.write(f"**Linhas duplicadas:** {duplicate_count:,}")
 
     if len(numeric_cols) >= 2:
 
@@ -989,16 +990,15 @@ with quality_tab:
             value = pairs.loc[pair]
 
             st.write(
-                f"**Strongest absolute correlation:** "
-                f"{pair[0]} vs {pair[1]} "
-                f"(r = {value:.3f})"
+                "**Correlação absoluta mais forte:** "
+                f"{pair[0]} vs {pair[1]} (r = {value:.3f})"
             )
 
     ai_insight(
-        "Explore distributions, correlations, missing values, "
-        "duplicates, and potential outliers to understand your data. "
-        "Treat statistical patterns as evidence for investigation, "
-        "not proof of causation."
+        "Explore distribuições, correlações, valores ausentes, duplicados "
+        "e possíveis outliers para entender seus dados. Trate padrões "
+        "estatísticos como indícios a investigar, não como prova "
+        "de causalidade."
     )
 
 # ==========================================================
@@ -1022,10 +1022,10 @@ st.markdown(
 )
 
 nav_items = [
-    ("Overview", "📈 Overview"),
-    ("Chart Builder", "🛠️ Chart Builder"),
-    ("Data Explorer", "🗂️ Data Explorer"),
-    ("Data Quality", "🧪 Data Quality"),
+    ("Overview", "📈 Visão Geral"),
+    ("Chart Builder", "🛠️ Construtor de Gráficos"),
+    ("Data Explorer", "🗂️ Explorador de Dados"),
+    ("Data Quality", "🧪 Qualidade dos Dados"),
 ]
 
 nav_cols = st.columns(4)
@@ -1057,7 +1057,7 @@ nav_previous, nav_spacer, nav_next = st.columns([1, 2, 1])
 
 with nav_previous:
     if st.button(
-        "⬅️ Previous: Prediction",
+        "⬅️ Anterior: Predição",
         key="page7_previous_navigation",
         use_container_width=True,
     ):
@@ -1065,7 +1065,7 @@ with nav_previous:
 
 with nav_next:
     if st.button(
-        "Next: 11_AI_Chat.py➡️",
+        "Próximo: Chat com IA ➡️",
         key="page7_next_navigation",
         use_container_width=True,
     ):

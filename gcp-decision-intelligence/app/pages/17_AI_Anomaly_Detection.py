@@ -12,20 +12,20 @@ from src.ui.layout import page_header, ai_insight, page_footer
 # --------------------------------------------------
 
 st.set_page_config(
-    page_title="AI Anomaly Detection | NexDecision AI",
+    page_title="Detecção de Anomalias com IA | NexDecision AI",
     page_icon="🚨",
     layout="wide"
 )
 
 page_header(
-    "🚨 AI Anomaly Detection",
-    "Discover unusual patterns, investigate suspicious records, "
-    "and export findings for further analysis."
+    "🚨 Detecção de Anomalias com IA",
+    "Descubra padrões incomuns, investigue registros suspeitos "
+    "e exporte os achados para análises adicionais."
 )
 
 st.caption(
-    "Identify records that differ from the patterns in your dataset. "
-    "An anomaly is a signal to investigate, not proof of fraud or an error."
+    "Identifique registros que fogem dos padrões do seu dataset. Uma anomalia "
+    "é um sinal para investigar, não prova de fraude ou erro."
 )
 
 st.markdown("---")
@@ -61,11 +61,11 @@ st.markdown(
 
 if "dataset" not in st.session_state:
     st.warning(
-        "⚠️ No dataset found. Upload a dataset before running "
-        "anomaly detection."
+        "⚠️ Nenhum dataset encontrado. Envie um dataset antes "
+        "de executar a detecção de anomalias."
     )
 
-    if st.button("🏠 Go to Home"):
+    if st.button("🏠 Ir para o Início"):
         st.switch_page("pages/0_Home.py")
 
     st.stop()
@@ -74,37 +74,37 @@ df = st.session_state["dataset"]
 
 if not isinstance(df, pd.DataFrame) or df.empty:
     st.error(
-        "The current dataset is empty or invalid. "
-        "Upload a non-empty dataset and try again."
+        "O dataset atual está vazio ou é inválido. "
+        "Envie um dataset com dados e tente novamente."
     )
     st.stop()
 
-st.success("✅ Dataset loaded successfully")
+st.success("✅ Dataset carregado com sucesso")
 
 
 # --------------------------------------------------
 # DATASET OVERVIEW
 # --------------------------------------------------
 
-st.subheader("📊 Dataset Overview")
+st.subheader("📊 Visão Geral do Dataset")
 
 c1, c2, c3, c4 = st.columns(4)
 
 with c1:
-    st.metric("📄 Total Rows", f"{len(df):,}")
+    st.metric("📄 Total de Linhas", f"{len(df):,}")
 
 with c2:
-    st.metric("📊 Total Columns", f"{len(df.columns):,}")
+    st.metric("📊 Total de Colunas", f"{len(df.columns):,}")
 
 with c3:
     st.metric(
-        "⚠️ Missing Values",
+        "⚠️ Valores Ausentes",
         f"{int(df.isna().sum().sum()):,}"
     )
 
 with c4:
     st.metric(
-        "🔁 Duplicate Rows",
+        "🔁 Linhas Duplicadas",
         f"{int(df.duplicated().sum()):,}"
     )
 
@@ -113,7 +113,7 @@ numeric_columns = df.select_dtypes(
 ).columns.tolist()
 
 st.caption(
-    f"Numeric features available: {len(numeric_columns)}"
+    f"Variáveis numéricas disponíveis: {len(numeric_columns)}"
 )
 
 st.markdown("---")
@@ -123,24 +123,23 @@ st.markdown("---")
 # RUN ANOMALY DETECTION
 # --------------------------------------------------
 
-st.subheader("🔍 Detection Engine")
+st.subheader("🔍 Motor de Detecção")
 
 st.markdown(
-    '<p class="section-description">'
-    'Run the existing anomaly detector against the current dataset.'
-    '</p>',
+    '<p class="section-description">Execute o detector de anomalias '
+    'no dataset atual.</p>',
     unsafe_allow_html=True
 )
 
 run_detection = st.button(
-    "🚀 Run Anomaly Detection",
+    "🚀 Executar detecção de anomalias",
     type="primary",
     use_container_width=False
 )
 
 if run_detection:
     try:
-        with st.spinner("Analysing data for unusual patterns..."):
+        with st.spinner("Analisando os dados em busca de padrões incomuns..."):
             detector = AnomalyDetector()
             result = detector.detect(df.copy())
 
@@ -150,8 +149,8 @@ if run_detection:
                 None
             )
             st.error(
-                "The detector could not produce a result. "
-                "Check that your dataset contains usable numeric columns."
+                "O detector não conseguiu gerar um resultado. Verifique "
+                "se o dataset tem colunas numéricas utilizáveis."
             )
 
         elif not isinstance(result, pd.DataFrame):
@@ -160,30 +159,30 @@ if run_detection:
                 None
             )
             st.error(
-                "The detector returned an unexpected result format. "
-                "Expected a pandas DataFrame."
+                "O detector retornou um formato inesperado. Era "
+                "esperado um DataFrame pandas."
             )
 
-        elif "Anomaly" not in result.columns:
+        elif "Anomalia" not in result.columns:
             st.session_state.pop(
                 "anomaly_detection_result",
                 None
             )
             st.error(
-                "The detector output does not contain the required "
-                "'Anomaly' column. Check anomaly_detector.py."
+                "A saída do detector não contém a coluna obrigatória "
+                "'Anomalia'. Verifique o anomaly_detector.py."
             )
 
         elif result.empty:
             st.session_state["anomaly_detection_result"] = result
-            st.info("The detector returned no records.")
+            st.info("O detector não retornou registros.")
 
         else:
             st.session_state["anomaly_detection_result"] = result
-            st.success("✅ Anomaly detection completed.")
+            st.success("✅ Detecção de anomalias concluída.")
 
     except Exception as error:
-        st.error(f"Anomaly detection failed: {error}")
+        st.error(f"Falha na detecção de anomalias: {error}")
 
 
 # --------------------------------------------------
@@ -192,20 +191,20 @@ if run_detection:
 
 if "anomaly_detection_result" not in st.session_state:
     st.info(
-        "Select **Run Anomaly Detection** to analyse your dataset."
+        "Selecione **Executar detecção de anomalias** para analisar seu dataset."
     )
     st.stop()
 
 result = st.session_state["anomaly_detection_result"].copy()
 
 if result.empty:
-    st.info("No records were returned by the detector.")
+    st.info("O detector não retornou registros.")
     st.stop()
 
-if "Anomaly" not in result.columns:
+if "Anomalia" not in result.columns:
     st.error(
-        "The saved detection result is missing the Anomaly column. "
-        "Run detection again."
+        "O resultado salvo não tem a coluna Anomalia. Execute "
+        "a detecção novamente."
     )
     st.stop()
 
@@ -214,23 +213,23 @@ if "Anomaly" not in result.columns:
 # NORMALISE RESULT LABELS
 # --------------------------------------------------
 
-result["Anomaly"] = (
-    result["Anomaly"]
+result["Anomalia"] = (
+    result["Anomalia"]
     .astype(str)
     .str.strip()
     .str.title()
 )
 
 anomaly_df = result[
-    result["Anomaly"] == "Anomaly"
+    result["Anomalia"] == "Anomalia"
 ].copy()
 
 normal_df = result[
-    result["Anomaly"] == "Normal"
+    result["Anomalia"] == "Normal"
 ].copy()
 
 other_df = result[
-    ~result["Anomaly"].isin(["Anomaly", "Normal"])
+    ~result["Anomalia"].isin(["Anomalia", "Normal"])
 ].copy()
 
 total = len(result)
@@ -250,35 +249,36 @@ percentage = (
 # --------------------------------------------------
 
 st.markdown("---")
-st.subheader("📈 Detection Summary")
+st.subheader("📈 Resumo da Detecção")
 
 k1, k2, k3, k4 = st.columns(4)
 
 with k1:
-    st.metric("Total Analysed", f"{total:,}")
+    st.metric("Total Analisado", f"{total:,}")
 
 with k2:
-    st.metric("Normal Records", f"{normal:,}")
+    st.metric("Registros Normais", f"{normal:,}")
 
 with k3:
     st.metric(
-        "Anomalies Detected",
+        "Anomalias Detectadas",
         f"{anomalies:,}",
-        delta=f"{percentage}% of records",
+        delta=f"{percentage}% dos registros",
         delta_color="inverse"
     )
 
 with k4:
-    st.metric("Other Labels", f"{other:,}")
+    st.metric("Outros Rótulos", f"{other:,}")
 
 st.progress(
     min(max(percentage / 100, 0.0), 1.0),
-    text=f"Anomaly share: {percentage}%"
+    text=f"Proporção de anomalias: {percentage}%"
 )
 
 st.caption(
-    "The anomaly percentage is the share of records labelled "
-    "'Anomaly' by the detector. It is not a fraud probability."
+    "O percentual de anomalias é a proporção de registros "
+    "rotulados como 'Anomalia' pelo detector. Não é uma probabilidade "
+    "de fraude."
 )
 
 
@@ -287,29 +287,29 @@ st.caption(
 # --------------------------------------------------
 
 st.markdown("---")
-st.subheader("🔎 Explore Detection Results")
+st.subheader("🔎 Explorar Resultados da Detecção")
 
 filter_col, search_col = st.columns([1, 2])
 
 with filter_col:
     label_options = sorted(
-        result["Anomaly"].dropna().unique().tolist()
+        result["Anomalia"].dropna().unique().tolist()
     )
 
     selected_labels = st.multiselect(
-        "Record classification",
+        "Classificação do registro",
         options=label_options,
         default=label_options
     )
 
 with search_col:
     record_search = st.text_input(
-        "Search result records",
-        placeholder="Search across the available result values..."
+        "Buscar nos resultados",
+        placeholder="Buscar em todos os valores do resultado..."
     )
 
 filtered_result = result[
-    result["Anomaly"].isin(selected_labels)
+    result["Anomalia"].isin(selected_labels)
 ].copy()
 
 if record_search.strip():
@@ -326,7 +326,7 @@ if record_search.strip():
     filtered_result = filtered_result[row_matches]
 
 st.caption(
-    f"Displaying {len(filtered_result):,} of {len(result):,} records."
+    f"Exibindo {len(filtered_result):,} de {len(result):,} registros."
 )
 
 
@@ -334,7 +334,7 @@ st.caption(
 # RESULT TABLE
 # --------------------------------------------------
 
-st.subheader("📋 Detection Results")
+st.subheader("📋 Resultados da Detecção")
 
 st.dataframe(
     filtered_result,
@@ -349,20 +349,20 @@ st.dataframe(
 # --------------------------------------------------
 
 st.markdown("---")
-st.subheader("🚨 Anomaly Investigation")
+st.subheader("🚨 Investigação de Anomalias")
 
 if anomaly_df.empty:
     st.success(
-        "No records were labelled as anomalies in this run."
+        "Nenhum registro foi rotulado como anomalia nesta execução."
     )
 
 else:
     st.write(
-        f"Found **{len(anomaly_df):,}** records for further review."
+        f"Foram encontrados **{len(anomaly_df):,}** registros para revisão."
     )
 
     with st.expander(
-        "View detected anomaly records",
+        "Ver registros de anomalias detectados",
         expanded=True
     ):
         st.dataframe(
@@ -381,7 +381,7 @@ else:
 
         if available_features:
             selected_feature = st.selectbox(
-                "Inspect an anomaly feature",
+                "Inspecionar uma variável das anomalias",
                 options=available_features
             )
 
@@ -392,13 +392,13 @@ else:
 
             if not feature_values.empty:
                 st.metric(
-                    f"Average {selected_feature} in anomalies",
+                    f"Média de {selected_feature} nas anomalias",
                     f"{feature_values.mean():,.3f}"
                 )
 
                 st.caption(
-                    "This statistic describes flagged records only; "
-                    "compare it with normal records before drawing conclusions."
+                    "Esta estatística descreve apenas os registros sinalizados; "
+                    "compare-a com os registros normais antes de tirar conclusões."
                 )
 
 
@@ -407,24 +407,24 @@ else:
 # --------------------------------------------------
 
 st.markdown("---")
-st.subheader("📊 Anomaly Analytics")
+st.subheader("📊 Análise das Anomalias")
 
 chart_left, chart_right = st.columns(2)
 
 with chart_left:
-    st.markdown("#### Normal vs Anomaly")
+    st.markdown("#### Normal vs Anomalia")
 
     distribution = (
-        result["Anomaly"]
+        result["Anomalia"]
         .value_counts()
-        .rename_axis("Classification")
-        .reset_index(name="Records")
+        .rename_axis("Classificação")
+        .reset_index(name="Registros")
     )
 
     pie_fig = px.pie(
         distribution,
-        names="Classification",
-        values="Records",
+        names="Classificação",
+        values="Registros",
         hole=0.48
     )
 
@@ -438,18 +438,18 @@ with chart_left:
     )
 
 with chart_right:
-    st.markdown("#### Classification Counts")
+    st.markdown("#### Contagem por Classificação")
 
     bar_fig = px.bar(
         distribution,
-        x="Classification",
-        y="Records",
-        text="Records"
+        x="Classificação",
+        y="Registros",
+        text="Registros"
     )
 
     bar_fig.update_layout(
-        xaxis_title="Classification",
-        yaxis_title="Number of Records",
+        xaxis_title="Classificação",
+        yaxis_title="Número de Registros",
         showlegend=False,
         margin=dict(l=10, r=10, t=25, b=10)
     )
@@ -469,7 +469,7 @@ with chart_right:
 # --------------------------------------------------
 
 st.markdown("---")
-st.subheader("📉 Numeric Feature Comparison")
+st.subheader("📉 Comparação de Variáveis Numéricas")
 
 shared_numeric = [
     column
@@ -477,10 +477,10 @@ shared_numeric = [
     if column in result.columns
 ]
 
-if shared_numeric and result["Anomaly"].nunique() > 1:
+if shared_numeric and result["Anomalia"].nunique() > 1:
 
     selected_numeric = st.selectbox(
-        "Choose a numeric feature",
+        "Escolha uma variável numérica",
         options=shared_numeric,
         key="anomaly_feature_comparison"
     )
@@ -500,15 +500,15 @@ if shared_numeric and result["Anomaly"].nunique() > 1:
 
         box_fig = px.box(
             comparison_df,
-            x="Anomaly",
+            x="Anomalia",
             y=selected_numeric,
-            color="Anomaly",
+            color="Anomalia",
             points="outliers",
-            title=f"{selected_numeric}: Normal vs Anomaly"
+            title=f"{selected_numeric}: Normal vs Anomalia"
         )
 
         box_fig.update_layout(
-            xaxis_title="Detector classification",
+            xaxis_title="Classificação do detector",
             yaxis_title=selected_numeric
         )
 
@@ -518,14 +518,15 @@ if shared_numeric and result["Anomaly"].nunique() > 1:
         )
 
         st.caption(
-            "This chart compares feature values by detector label. "
-            "It does not establish the cause of an anomaly."
+            "Este gráfico compara os valores das variáveis por "
+            "rótulo do detector. Ele não estabelece a causa de "
+            "uma anomalia."
         )
 
 else:
     st.info(
-        "Feature comparison requires numeric columns in the detection "
-        "results and at least two classification groups."
+        "A comparação de variáveis exige colunas numéricas nos resultados "
+        "da detecção e pelo menos dois grupos de classificação."
     )
 
 
@@ -534,13 +535,13 @@ else:
 # --------------------------------------------------
 
 st.markdown("---")
-st.subheader("📥 Export Detection Reports")
+st.subheader("📥 Exportar Relatórios de Detecção")
 
 export_all_col, export_anomaly_col = st.columns(2)
 
 with export_all_col:
     st.download_button(
-        "📄 Download Full Detection Results",
+        "📄 Baixar resultados completos da detecção",
         data=result.to_csv(index=False).encode("utf-8"),
         file_name="nexdecision_full_detection_report.csv",
         mime="text/csv",
@@ -549,7 +550,7 @@ with export_all_col:
 
 with export_anomaly_col:
     st.download_button(
-        "🚨 Download Anomaly-Only Report",
+        "🚨 Baixar relatório só com anomalias",
         data=anomaly_df.to_csv(index=False).encode("utf-8"),
         file_name="nexdecision_anomaly_report.csv",
         mime="text/csv",
@@ -562,41 +563,42 @@ with export_anomaly_col:
 # --------------------------------------------------
 
 st.markdown("---")
-st.subheader("🤖 Interpretation & Next Steps")
+st.subheader("🤖 Interpretação e Próximos Passos")
 
 if anomalies == 0:
     st.info(
-        "The detector did not label any records as anomalies. "
-        "This does not guarantee that every record is correct or normal."
+        "O detector não rotulou nenhum registro como anomalia. Isso "
+        "não garante que todos os registros estejam corretos ou normais."
     )
 
 elif percentage < 5:
     st.info(
-        f"{percentage}% of records were flagged. Start by reviewing "
-        "the flagged rows, checking data quality, and comparing their "
-        "feature values with normal records."
+        f"{percentage}% dos registros foram sinalizados. Comece revisando "
+        "as linhas sinalizadas, verificando a qualidade dos dados "
+        "e comparando suas variáveis com os registros normais."
     )
 
 elif percentage < 15:
     st.warning(
-        f"{percentage}% of records were flagged. Investigate recurring "
-        "patterns, unusual values, and possible changes in data collection "
-        "or business operations."
+        f"{percentage}% dos registros foram sinalizados. Investigue padrões "
+        "recorrentes, valores incomuns e possíveis mudanças na coleta "
+        "de dados ou nas operações do negócio."
     )
 
 else:
     st.warning(
-        f"{percentage}% of records were flagged. Review the detector's "
-        "output and dataset characteristics before treating this as an "
-        "operational issue. A high anomaly rate may also reflect the "
-        "data distribution or detector settings."
+        f"{percentage}% dos registros foram sinalizados. Revise a saída "
+        "do detector e as características do dataset antes de tratar "
+        "isso como um problema operacional. Uma taxa alta de anomalias "
+        "também pode refletir a distribuição dos dados ou as configurações "
+        "do detector."
     )
 
 ai_insight(
-    "Anomaly detection highlights records that differ from learned or "
-    "configured patterns. Investigate flagged records using business "
-    "context before making operational decisions. Validate the detector "
-    "against labelled examples when possible."
+    "A detecção de anomalias destaca registros que diferem dos padrões "
+    "aprendidos ou configurados. Investigue os registros sinalizados "
+    "com o contexto do negócio antes de tomar decisões operacionais. "
+    "Quando possível, valide o detector com exemplos rotulados."
 )
 
 
@@ -605,27 +607,27 @@ ai_insight(
 # --------------------------------------------------
 
 st.markdown("---")
-st.subheader("🧭 Continue Exploring NexDecision AI")
+st.subheader("🧭 Continue Explorando o NexDecision AI")
 
 prev_col, home_col, next_col = st.columns(3)
 
 with prev_col:
     if st.button(
-        "⬅️ Prediction History",
+        "⬅️ Histórico de Predições",
         use_container_width=True
     ):
         st.switch_page("pages/14_Prediction_History.py")
 
 with home_col:
     if st.button(
-        "🏠 Home",
+        "🏠 Início",
         use_container_width=True
     ):
         st.switch_page("pages/0_Home.py")
 
 with next_col:
     if st.button(
-        "➡️ Executive Report",
+        "➡️ Relatório Executivo",
         use_container_width=True
     ):
         st.switch_page("pages/18_Executive_Report.py")

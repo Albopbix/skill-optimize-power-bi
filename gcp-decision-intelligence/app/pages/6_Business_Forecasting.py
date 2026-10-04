@@ -12,7 +12,7 @@ from src.ui.layout import page_header, ai_insight, page_footer
 
 
 st.set_page_config(
-    page_title="AI Business Forecasting",
+    page_title="Previsão de Negócios com IA",
     page_icon="📈",
     layout="wide",
 )
@@ -83,21 +83,22 @@ st.markdown(
 
 
 page_header(
-    "📈 AI Business Forecasting",
-    "Forecast business metrics, validate model performance, "
-    "compare scenarios, and support evidence-based planning.",
+    "📈 Previsão de Negócios com IA",
+    "Projete métricas do negócio, valide o desempenho dos "
+    "modelos, compare cenários e apoie um planejamento "
+    "baseado em evidências.",
 )
 
 st.markdown(
     """
     <div class="forecast-hero">
         <div class="forecast-title">
-            🔮 Business Forecast Intelligence Center
+            🔮 Central de Inteligência de Previsões
         </div>
         <div class="forecast-subtitle">
-            Explore historical performance, compare forecasting
-            models, test them against held-out observations, and
-            export future projections for business planning.
+            Explore o desempenho histórico, compare modelos
+            de previsão, teste-os com observações reservadas e
+            exporte projeções futuras para o planejamento do negócio.
         </div>
     </div>
     """,
@@ -109,15 +110,15 @@ st.markdown(
 # DATASET VALIDATION
 # ---------------------------------------------------------
 if "dataset" not in st.session_state:
-    st.warning("Please upload a dataset before forecasting.")
-    st.info("Open Upload Dataset and load your business data.")
+    st.warning("Envie um dataset antes de gerar previsões.")
+    st.info("Abra Enviar Dataset e carregue os dados do seu negócio.")
     st.stop()
 
 df = st.session_state["dataset"]
-filename = st.session_state.get("filename", "Uploaded Dataset")
+filename = st.session_state.get("filename", "Dataset enviado")
 
 if not isinstance(df, pd.DataFrame) or df.empty:
-    st.error("The uploaded dataset is empty or invalid.")
+    st.error("O dataset enviado está vazio ou é inválido.")
     st.stop()
 
 numeric_columns = [
@@ -127,17 +128,17 @@ numeric_columns = [
 ]
 
 if not numeric_columns:
-    st.error("No numeric columns are available for forecasting.")
+    st.error("Não há colunas numéricas disponíveis para previsão.")
     st.stop()
 
-st.success(f"Active dataset: {filename}")
+st.success(f"Dataset ativo: {filename}")
 
 
 # ---------------------------------------------------------
 # CONFIGURATION
 # ---------------------------------------------------------
 st.markdown(
-    '<div class="forecast-section">⚙️ Forecast Configuration</div>',
+    '<div class="forecast-section">⚙️ Configuração da Previsão</div>',
     unsafe_allow_html=True,
 )
 
@@ -145,15 +146,15 @@ cfg1, cfg2, cfg3 = st.columns([2, 1, 1])
 
 with cfg1:
     target = st.selectbox(
-        "Business metric",
+        "Métrica de negócio",
         numeric_columns,
         key="forecast_target",
-        help="Choose sales, revenue, demand, profit, or another numeric metric.",
+        help="Escolha vendas, receita, demanda, lucro ou outra métrica numérica.",
     )
 
 with cfg2:
     periods = st.slider(
-        "Future periods",
+        "Períodos futuros",
         min_value=5,
         max_value=100,
         value=30,
@@ -163,18 +164,18 @@ with cfg2:
 
 with cfg3:
     selected_model = st.selectbox(
-        "Forecasting model",
+        "Modelo de previsão",
         ForecastEngine.AVAILABLE_MODELS,
         key="forecast_model",
     )
 
 test_fraction = st.slider(
-    "Historical validation fraction",
+    "Fração de validação histórica",
     min_value=0.10,
     max_value=0.40,
     value=0.20,
     step=0.05,
-    help="The latest portion of historical observations is held out for validation.",
+    help="A parte mais recente das observações históricas é reservada para validação.",
 )
 
 raw_history = pd.to_numeric(df[target], errors="coerce")
@@ -187,7 +188,7 @@ history = pd.Series(
 ).reset_index(drop=True)
 
 if len(history) < 5:
-    st.error("At least five valid numeric observations are required.")
+    st.error("São necessárias pelo menos cinco observações numéricas válidas.")
     st.stop()
 
 latest_value = float(history.iloc[-1])
@@ -226,14 +227,14 @@ config_signature = (
 
 m1, m2, m3, m4 = st.columns(4)
 
-m1.metric("Valid observations", f"{len(history):,}")
-m2.metric("Latest value", f"{latest_value:,.2f}")
-m3.metric("Recent average", f"{recent_mean:,.2f}")
-m4.metric("Forecast horizon", f"{periods} periods")
+m1.metric("Observações válidas", f"{len(history):,}")
+m2.metric("Último valor", f"{latest_value:,.2f}")
+m3.metric("Média recente", f"{recent_mean:,.2f}")
+m4.metric("Horizonte da previsão", f"{periods} períodos")
 
 st.caption(
-    "Forecast periods follow row order. They are not automatically "
-    "interpreted as days, weeks, or months."
+    "Os períodos da previsão seguem a ordem das linhas. Eles não "
+    "são interpretados automaticamente como dias, semanas ou meses."
 )
 
 
@@ -241,18 +242,18 @@ st.caption(
 # MODEL VALIDATION
 # ---------------------------------------------------------
 st.markdown(
-    '<div class="forecast-section">🧪 Historical Model Validation</div>',
+    '<div class="forecast-section">🧪 Validação Histórica do Modelo</div>',
     unsafe_allow_html=True,
 )
 
 st.write(
-    "Validation trains on earlier observations and tests on later "
-    "observations. This provides a more realistic time-ordered test "
-    "than randomly shuffling a time series."
+    "A validação treina com as observações mais antigas e testa "
+    "com as mais recentes. Isso gera um teste ordenado no tempo "
+    "mais realista do que embaralhar a série temporal."
 )
 
 run_evaluation = st.button(
-    "🧪 Evaluate Selected Model",
+    "🧪 Avaliar o modelo selecionado",
     width="stretch",
 )
 
@@ -260,7 +261,7 @@ if run_evaluation:
     try:
         engine = ForecastEngine()
 
-        with st.spinner("Evaluating model on held-out observations..."):
+        with st.spinner("Avaliando o modelo nas observações reservadas..."):
             evaluation = engine.evaluate(
                 df,
                 target,
@@ -272,13 +273,13 @@ if run_evaluation:
         predicted = np.asarray(evaluation["predicted"], dtype=float)
 
         evaluation_df = pd.DataFrame({
-            "Observation": np.arange(
+            "Observação": np.arange(
                 len(history) - len(actual) + 1,
                 len(history) + 1,
             ),
-            "Actual": actual,
-            "Predicted": predicted,
-            "Absolute Error": np.abs(actual - predicted),
+            "Real": actual,
+            "Previsto": predicted,
+            "Erro Absoluto": np.abs(actual - predicted),
         })
 
         st.session_state["business_forecast_evaluation"] = {
@@ -292,10 +293,10 @@ if run_evaluation:
             },
             "evaluation_df": evaluation_df,
         }
-        st.success("Historical validation completed.")
+        st.success("Validação histórica concluída.")
 
     except Exception as exc:
-        st.error(f"Model evaluation failed: {exc}")
+        st.error(f"Falha na avaliação do modelo: {exc}")
 
 evaluation_result = st.session_state.get(
     "business_forecast_evaluation"
@@ -319,27 +320,27 @@ if (
     )
 
     st.caption(
-        f"Training observations: {metrics['train_observations']:,} · "
-        f"Validation observations: {metrics['test_observations']:,}"
+        f"Observações de treino: {metrics['train_observations']:,} "
+        f"· Observações de validação: {metrics['test_observations']:,}"
     )
 
     fig_eval = go.Figure()
     fig_eval.add_trace(go.Scatter(
-        x=evaluation_df["Observation"],
-        y=evaluation_df["Actual"],
+        x=evaluation_df["Observação"],
+        y=evaluation_df["Real"],
         mode="lines+markers",
-        name="Actual",
+        name="Real",
     ))
     fig_eval.add_trace(go.Scatter(
-        x=evaluation_df["Observation"],
-        y=evaluation_df["Predicted"],
+        x=evaluation_df["Observação"],
+        y=evaluation_df["Previsto"],
         mode="lines+markers",
-        name="Predicted",
+        name="Previsto",
         line=dict(dash="dash"),
     ))
     fig_eval.update_layout(
-        title="Actual vs Predicted — Holdout Validation",
-        xaxis_title="Observation",
+        title="Real vs Previsto — Validação com Holdout",
+        xaxis_title="Observação",
         yaxis_title=target,
         height=400,
         hovermode="x unified",
@@ -352,7 +353,7 @@ if (
     )
 
     st.download_button(
-        "📥 Download Validation Results",
+        "📥 Baixar resultados da validação",
         data=evaluation_df.to_csv(index=False).encode("utf-8"),
         file_name="forecast_validation.csv",
         mime="text/csv",
@@ -360,8 +361,8 @@ if (
     )
 elif run_evaluation is False:
     st.info(
-        "Run validation to inspect historical errors before relying "
-        "on the future forecast."
+        "Execute a validação para examinar os erros históricos "
+        "antes de confiar na previsão futura."
     )
 
 
@@ -370,12 +371,12 @@ elif run_evaluation is False:
 # ---------------------------------------------------------
 st.divider()
 st.markdown(
-    '<div class="forecast-section">🚀 Generate Future Forecast</div>',
+    '<div class="forecast-section">🚀 Gerar Previsão Futura</div>',
     unsafe_allow_html=True,
 )
 
 generate = st.button(
-    "🚀 Generate Business Forecast",
+    "🚀 Gerar previsão de negócio",
     type="primary",
     width="stretch",
 )
@@ -386,7 +387,7 @@ if generate:
     try:
         engine = ForecastEngine()
 
-        with st.spinner("Generating future predictions..."):
+        with st.spinner("Gerando predições futuras..."):
             raw_prediction = engine.forecast(
                 df,
                 target,
@@ -401,16 +402,16 @@ if generate:
 
         if len(predictions) != periods:
             raise ValueError(
-                f"Expected {periods} predictions, "
-                f"received {len(predictions)}."
+                f"Eram esperadas {periods} predições, "
+                f"mas foram recebidas {len(predictions)}."
             )
 
         if not np.isfinite(predictions).all():
-            raise ValueError("The forecast contains invalid numeric values.")
+            raise ValueError("A previsão contém valores numéricos inválidos.")
 
         forecast_df = pd.DataFrame({
-            "Period": np.arange(1, periods + 1),
-            "Forecast": predictions,
+            "Período": np.arange(1, periods + 1),
+            "Previsão": predictions,
         })
 
         elapsed = time.perf_counter() - start_time
@@ -426,13 +427,14 @@ if generate:
             "generated_at": time.strftime("%Y-%m-%d %H:%M:%S"),
         }
 
-        st.success("Forecast generated successfully.")
+        st.success("Previsão gerada com sucesso.")
 
     except Exception as exc:
-        st.error(f"Forecast generation failed: {exc}")
+        st.error(f"Falha ao gerar a previsão: {exc}")
         st.info(
-            "Check the target column and the forecasting engine. "
-            "If the problem continues, share the full error message."
+            "Verifique a coluna-alvo e o motor de previsão. Se "
+            "o problema continuar, compartilhe a mensagem de erro "
+            "completa."
         )
 
 
@@ -460,16 +462,16 @@ if result is not None and result["signature"] == config_signature:
     )
 
     trend = (
-        "Broadly stable"
+        "Praticamente estável"
         if np.isclose(absolute_change, 0, atol=1e-9)
-        else "Increasing"
+        else "Crescente"
         if absolute_change > 0
-        else "Decreasing"
+        else "Decrescente"
     )
 
     st.divider()
     st.markdown(
-        '<div class="forecast-section">📊 Forecast Decision Summary</div>',
+        '<div class="forecast-section">📊 Resumo da Previsão para Decisão</div>',
         unsafe_allow_html=True,
     )
 
@@ -487,24 +489,24 @@ if result is not None and result["signature"] == config_signature:
     k1, k2, k3, k4 = st.columns(4)
 
     with k1:
-        forecast_card("Final forecast", f"{final_forecast:,.2f}")
+        forecast_card("Previsão final", f"{final_forecast:,.2f}")
     with k2:
-        forecast_card("Expected direction", trend)
+        forecast_card("Direção esperada", trend)
     with k3:
         forecast_card(
-            "Change vs latest",
+            "Variação vs último valor",
             f"{percentage_change:+.2f}%"
             if percentage_change is not None
-            else "N/A — zero baseline",
+            else "N/D — base zero",
         )
     with k4:
-        forecast_card("Forecast average", f"{forecast_mean:,.2f}")
+        forecast_card("Média da previsão", f"{forecast_mean:,.2f}")
 
-    st.caption(f"Model used: {result['model']}")
+    st.caption(f"Modelo usado: {result['model']}")
 
     # Historical versus forecast chart
     st.markdown(
-        '<div class="forecast-section">📈 Historical vs Forecast</div>',
+        '<div class="forecast-section">📈 Histórico vs Previsão</div>',
         unsafe_allow_html=True,
     )
 
@@ -522,7 +524,7 @@ if result is not None and result["signature"] == config_signature:
         x=historical_chart.index,
         y=historical_chart.values,
         mode="lines",
-        name="Historical",
+        name="Histórico",
     ))
 
     forecast_x = np.arange(
@@ -534,19 +536,19 @@ if result is not None and result["signature"] == config_signature:
         x=np.concatenate(([len(history) - 1], forecast_x)),
         y=np.concatenate(([latest_value], predictions)),
         mode="lines+markers",
-        name="Forecast",
+        name="Previsão",
         line=dict(dash="dash", width=3),
     ))
 
     fig.add_vline(
         x=len(history) - 1,
         line_dash="dot",
-        annotation_text="Forecast starts",
+        annotation_text="Início da previsão",
     )
 
     fig.update_layout(
-        title=f"{target}: Historical Performance and Forecast",
-        xaxis_title="Observation / future period",
+        title=f"{target}: Desempenho Histórico e Previsão",
+        xaxis_title="Observação / período futuro",
         yaxis_title=target,
         height=470,
         hovermode="x unified",
@@ -561,32 +563,32 @@ if result is not None and result["signature"] == config_signature:
 
     # Forecast statistics
     st.markdown(
-        '<div class="forecast-section">📉 Forecast Statistics</div>',
+        '<div class="forecast-section">📉 Estatísticas da Previsão</div>',
         unsafe_allow_html=True,
     )
 
     s1, s2, s3, s4 = st.columns(4)
-    s1.metric("Minimum", f"{forecast_min:,.2f}")
-    s2.metric("Maximum", f"{forecast_max:,.2f}")
-    s3.metric("Standard deviation", f"{forecast_std:,.2f}")
-    s4.metric("First forecast", f"{first_forecast:,.2f}")
+    s1.metric("Mínimo", f"{forecast_min:,.2f}")
+    s2.metric("Máximo", f"{forecast_max:,.2f}")
+    s3.metric("Desvio padrão", f"{forecast_std:,.2f}")
+    s4.metric("Primeira previsão", f"{first_forecast:,.2f}")
 
     st.caption(
-        "Forecast standard deviation describes variation between "
-        "forecast values; it is not a confidence interval."
+        "O desvio padrão da previsão descreve a variação entre "
+        "os valores previstos; não é um intervalo de confiança."
     )
 
     # Historical context
     st.markdown(
-        '<div class="forecast-section">🧭 Historical Context</div>',
+        '<div class="forecast-section">🧭 Contexto Histórico</div>',
         unsafe_allow_html=True,
     )
 
     h1, h2, h3 = st.columns(3)
-    h1.metric("Historical average", f"{historical_mean:,.2f}")
-    h2.metric("Recent average", f"{recent_mean:,.2f}")
+    h1.metric("Média histórica", f"{historical_mean:,.2f}")
+    h2.metric("Média recente", f"{recent_mean:,.2f}")
     h3.metric(
-        "Historical variability (CV)",
+        "Variabilidade histórica (CV)",
         f"{historical_cv:.2f}%"
         if historical_cv is not None
         else "N/A",
@@ -599,23 +601,23 @@ if result is not None and result["signature"] == config_signature:
         ) * 100
 
         st.info(
-            f"Recent average is {recent_difference:+.2f}% relative "
-            "to the historical average."
+            f"A média recente está {recent_difference:+.2f}% em "
+            "relação à média histórica."
         )
 
     # Scenario analysis: transparent arithmetic scenarios.
     st.markdown(
-        '<div class="forecast-section">🧭 Business Scenario Analysis</div>',
+        '<div class="forecast-section">🧭 Análise de Cenários de Negócio</div>',
         unsafe_allow_html=True,
     )
 
     st.write(
-        "Explore simple adjustments to the forecast. These are "
-        "illustrative scenarios, not separately trained predictions."
+        "Explore ajustes simples na previsão. São cenários ilustrativos, "
+        "não predições treinadas separadamente."
     )
 
     adjustment = st.slider(
-        "Scenario adjustment (%)",
+        "Ajuste do cenário (%)",
         min_value=-30,
         max_value=30,
         value=0,
@@ -626,33 +628,33 @@ if result is not None and result["signature"] == config_signature:
     scenario_values = predictions * (1 + adjustment / 100)
 
     scenario_df = forecast_df.copy()
-    scenario_df["Scenario"] = scenario_values
+    scenario_df["Cenário"] = scenario_values
 
     sc1, sc2, sc3 = st.columns(3)
-    sc1.metric("Base final forecast", f"{final_forecast:,.2f}")
-    sc2.metric("Scenario final value", f"{scenario_values[-1]:,.2f}")
+    sc1.metric("Previsão final base", f"{final_forecast:,.2f}")
+    sc2.metric("Valor final do cenário", f"{scenario_values[-1]:,.2f}")
     sc3.metric(
-        "Scenario adjustment",
+        "Ajuste do cenário",
         f"{adjustment:+d}%",
     )
 
     fig_scenario = go.Figure()
     fig_scenario.add_trace(go.Scatter(
-        x=forecast_df["Period"],
+        x=forecast_df["Período"],
         y=predictions,
         mode="lines+markers",
-        name="Base forecast",
+        name="Previsão base",
     ))
     fig_scenario.add_trace(go.Scatter(
-        x=forecast_df["Period"],
+        x=forecast_df["Período"],
         y=scenario_values,
         mode="lines+markers",
-        name="Adjusted scenario",
+        name="Cenário ajustado",
         line=dict(dash="dash"),
     ))
     fig_scenario.update_layout(
-        title="Base Forecast vs Illustrative Scenario",
-        xaxis_title="Future period",
+        title="Previsão Base vs Cenário Ilustrativo",
+        xaxis_title="Período futuro",
         yaxis_title=target,
         height=390,
         margin=dict(l=20, r=20, t=55, b=20),
@@ -665,14 +667,14 @@ if result is not None and result["signature"] == config_signature:
 
     # Forecast results and downloads
     st.markdown(
-        '<div class="forecast-section">📋 Forecast Results</div>',
+        '<div class="forecast-section">📋 Resultados da Previsão</div>',
         unsafe_allow_html=True,
     )
 
     st.dataframe(
         scenario_df.style.format({
-            "Forecast": "{:,.2f}",
-            "Scenario": "{:,.2f}",
+            "Previsão": "{:,.2f}",
+            "Cenário": "{:,.2f}",
         }),
         width="stretch",
         hide_index=True,
@@ -682,7 +684,7 @@ if result is not None and result["signature"] == config_signature:
 
     with d1:
         st.download_button(
-            "📥 Download Forecast CSV",
+            "📥 Baixar CSV da previsão",
             data=forecast_df.to_csv(index=False).encode("utf-8"),
             file_name=f"{target.replace(' ', '_')}_forecast.csv",
             mime="text/csv",
@@ -691,7 +693,7 @@ if result is not None and result["signature"] == config_signature:
 
     with d2:
         st.download_button(
-            "📥 Download Scenario CSV",
+            "📥 Baixar CSV do cenário",
             data=scenario_df.to_csv(index=False).encode("utf-8"),
             file_name=f"{target.replace(' ', '_')}_scenario.csv",
             mime="text/csv",
@@ -699,51 +701,51 @@ if result is not None and result["signature"] == config_signature:
         )
 
     st.markdown(
-        '<div class="forecast-section">🤖 AI Forecast Interpretation</div>',
+        '<div class="forecast-section">🤖 Interpretação da Previsão pela IA</div>',
         unsafe_allow_html=True,
     )
 
     change_text = (
         f"{percentage_change:+.2f}%"
         if percentage_change is not None
-        else "not calculable from a zero baseline"
+        else "não calculável a partir de uma base zero"
     )
 
     st.markdown(
         f"""
         <div class="forecast-note">
-            <b>Forecast target:</b> {html.escape(str(target))}<br><br>
-            <b>Selected model:</b> {html.escape(str(result['model']))}<br><br>
-            <b>Forecast horizon:</b> {periods} observations<br><br>
-            <b>Latest historical value:</b> {latest_value:,.2f}<br><br>
-            <b>Final predicted value:</b> {final_forecast:,.2f}<br><br>
-            <b>Change versus latest observation:</b> {change_text}<br><br>
-            <b>Expected direction:</b> {trend}
+            <b>Alvo da previsão:</b> {html.escape(str(target))}<br><br>
+            <b>Modelo selecionado:</b> {html.escape(str(result['model']))}<br><br>
+            <b>Horizonte da previsão:</b> {periods} observações<br><br>
+            <b>Último valor histórico:</b> {latest_value:,.2f}<br><br>
+            <b>Valor final previsto:</b> {final_forecast:,.2f}<br><br>
+            <b>Variação em relação à última observação:</b> {change_text}<br><br>
+            <b>Direção esperada:</b> {trend}
         </div>
         """,
         unsafe_allow_html=True,
     )
 
     st.warning(
-        "Forecasts are estimates, not guarantees. Linear Regression "
-        "extrapolates a straight-line trend. Random Forest generally "
-        "does not extrapolate beyond learned target ranges reliably. "
-        "Validate against historical observations before using results "
-        "for important business decisions."
+        "Previsões são estimativas, não garantias. A Regressão Linear "
+        "extrapola uma tendência em linha reta. O Random Forest geralmente "
+        "não extrapola de forma confiável além dos valores aprendidos. "
+        "Valide com observações históricas antes de usar os resultados "
+        "em decisões importantes."
     )
 
     st.caption(
-        f"Generated at {result['generated_at']} · "
-        f"Computation time: {result['elapsed']:.2f} seconds"
+        f"Gerado em {result['generated_at']} · Tempo de "
+        f"cálculo: {result['elapsed']:.2f} segundos"
     )
 
 else:
     st.markdown(
         """
         <div class="forecast-note">
-            <b>Ready to forecast?</b><br><br>
-            Select a metric and forecasting model, run historical
-            validation, then generate a future forecast.
+            <b>Pronto para prever?</b><br><br>
+            Selecione uma métrica e um modelo de previsão, execute a
+            validação histórica e depois gere uma previsão futura.
         </div>
         """,
         unsafe_allow_html=True,
@@ -754,9 +756,10 @@ else:
 # SHARED INSIGHTS AND NAVIGATION
 # ---------------------------------------------------------
 ai_insight(
-    "Compare forecasts with actual outcomes regularly. Review "
-    "validation errors, business context, seasonality and external "
-    "factors before making decisions based on model predictions."
+    "Compare as previsões com os resultados reais regularmente. "
+    "Revise os erros de validação, o contexto do negócio, a sazonalidade "
+    "e os fatores externos antes de tomar decisões baseadas nas "
+    "predições dos modelos."
 )
 
 st.divider()
@@ -764,11 +767,11 @@ st.divider()
 nav_left, nav_right = st.columns(2)
 
 with nav_left:
-    if st.button("← Previous: AutoML", width="stretch"):
+    if st.button("← Anterior: AutoML", width="stretch"):
         st.switch_page("pages/5_AutoML.py")
 
 with nav_right:
-    if st.button("Next: Prediction →", width="stretch"):
+    if st.button("Próximo: Predição →", width="stretch"):
         st.switch_page("pages/7_Prediction.py")
 
 page_footer()

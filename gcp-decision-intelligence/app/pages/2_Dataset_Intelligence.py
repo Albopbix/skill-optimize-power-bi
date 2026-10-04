@@ -34,7 +34,7 @@ from src.dataset_intelligence.insight_engine import (
 # ============================================================
 
 st.set_page_config(
-    page_title="Dataset Intelligence | Nex Decision AI",
+    page_title="Inteligência do Dataset | Nex Decision AI",
     page_icon="🧠",
     layout="wide"
 )
@@ -198,8 +198,8 @@ st.markdown(
 # ============================================================
 
 page_header(
-    "🧠 Dataset Intelligence",
-    "Transform raw data into a structured intelligence profile before prediction, automation and business decision-making."
+    "🧠 Inteligência do Dataset",
+    "Transforme dados brutos em um perfil de inteligência estruturado antes de predições, automações e decisões de negócio."
 )
 
 
@@ -210,15 +210,15 @@ page_header(
 if "dataset" not in st.session_state:
 
     st.warning(
-        "📂 No dataset has been uploaded yet."
+        "📂 Nenhum dataset foi enviado ainda."
     )
 
     st.info(
-        "Go to **Upload Dataset** and upload a business dataset first."
+        "Vá em **Enviar Dataset** e envie um dataset de negócio primeiro."
     )
 
     if st.button(
-        "📂 Go to Upload Dataset",
+        "📂 Ir para Enviar Dataset",
         width="content"
     ):
         st.switch_page("pages/1_Upload_Dataset.py")
@@ -234,7 +234,7 @@ df = st.session_state["dataset"]
 
 filename = st.session_state.get(
     "filename",
-    "Uploaded Dataset"
+    "Dataset enviado"
 )
 
 
@@ -245,11 +245,11 @@ filename = st.session_state.get(
 if df is None or df.empty:
 
     st.error(
-        "❌ The dataset is empty or unavailable."
+        "❌ O dataset está vazio ou indisponível."
     )
 
     if st.button(
-        "📂 Return to Upload Dataset"
+        "📂 Voltar para Enviar Dataset"
     ):
         st.switch_page("pages/1_Upload_Dataset.py")
 
@@ -264,10 +264,10 @@ st.markdown(
     textwrap.dedent(
         f"""
         <div class="intel-hero">
-            <div class="intel-title">🔎 Intelligence Profile</div>
+            <div class="intel-title">🔎 Perfil de Inteligência</div>
             <div class="intel-subtitle">
-                Nex Decision AI is examining the structure, quality,
-                compatibility and business potential of your dataset.
+                O Nex Decision AI está examinando a estrutura, a qualidade,
+                a compatibilidade e o potencial de negócio do seu dataset.
             </div>
             <div class="file-badge">📄 {filename}</div>
         </div>
@@ -300,7 +300,7 @@ date_columns = len(
 
 
 st.markdown(
-    '<div class="section-title">📊 Dataset Health</div>',
+    '<div class="section-title">📊 Saúde do Dataset</div>',
     unsafe_allow_html=True
 )
 
@@ -312,7 +312,7 @@ with c1:
             f"""
             <div class="status-card">
                 <div class="status-icon">📄</div>
-                <div class="status-title">Records</div>
+                <div class="status-title">Registros</div>
                 <div class="status-value">{total_rows:,}</div>
             </div>
             """
@@ -326,7 +326,7 @@ with c2:
             f"""
             <div class="status-card">
                 <div class="status-icon">🗂️</div>
-                <div class="status-title">Features</div>
+                <div class="status-title">Variáveis</div>
                 <div class="status-value">{total_columns}</div>
             </div>
             """
@@ -340,7 +340,7 @@ with c3:
             f"""
             <div class="status-card">
                 <div class="status-icon">⚠️</div>
-                <div class="status-title">Missing Values</div>
+                <div class="status-title">Valores Ausentes</div>
                 <div class="status-value">{missing_values:,}</div>
             </div>
             """
@@ -354,7 +354,7 @@ with c4:
             f"""
             <div class="status-card">
                 <div class="status-icon">🔁</div>
-                <div class="status-title">Duplicate Rows</div>
+                <div class="status-title">Linhas Duplicadas</div>
                 <div class="status-value">{duplicate_rows:,}</div>
             </div>
             """
@@ -368,7 +368,7 @@ with c4:
 # ============================================================
 
 st.markdown(
-    '<div class="section-title">🧬 Dataset Profile</div>',
+    '<div class="section-title">🧬 Perfil do Dataset</div>',
     unsafe_allow_html=True
 )
 
@@ -380,11 +380,11 @@ with p1:
             f"""
             <div class="feature-card">
                 <div class="feature-icon">🔢</div>
-                <div class="feature-title">Numerical Features</div>
+                <div class="feature-title">Variáveis Numéricas</div>
                 <div class="feature-text">
-                    {numeric_columns} numerical columns detected.
-                    Suitable for statistical analysis, forecasting
-                    and machine learning.
+                    {numeric_columns} colunas numéricas detectadas.
+                    Adequadas para análise estatística, previsões
+                    e machine learning.
                 </div>
             </div>
             """
@@ -398,11 +398,11 @@ with p2:
             f"""
             <div class="feature-card">
                 <div class="feature-icon">🏷️</div>
-                <div class="feature-title">Categorical Features</div>
+                <div class="feature-title">Variáveis Categóricas</div>
                 <div class="feature-text">
-                    {categorical_columns} categorical columns detected.
-                    Useful for segmentation, classification and
-                    business grouping.
+                    {categorical_columns} colunas categóricas detectadas.
+                    Úteis para segmentação, classificação e
+                    agrupamentos de negócio.
                 </div>
             </div>
             """
@@ -416,10 +416,10 @@ with p3:
             f"""
             <div class="feature-card">
                 <div class="feature-icon">📅</div>
-                <div class="feature-title">Date Features</div>
+                <div class="feature-title">Variáveis de Data</div>
                 <div class="feature-text">
-                    {date_columns} date/time columns detected.
-                    Useful for trend analysis and forecasting.
+                    {date_columns} colunas de data/hora detectadas.
+                    Úteis para análise de tendências e previsões.
                 </div>
             </div>
             """
@@ -435,7 +435,7 @@ with p3:
 try:
 
     with st.spinner(
-        "🧠 Nex Decision AI is building your intelligence profile..."
+        "🧠 O Nex Decision AI está montando seu perfil de inteligência..."
     ):
 
         # --------------------------------------------------------
@@ -507,21 +507,21 @@ try:
         )
 
     st.success(
-        "✅ Dataset intelligence analysis completed."
+        "✅ Análise de inteligência do dataset concluída."
     )
 
 except Exception as e:
 
     st.error(
-        "❌ Nex Decision AI could not complete the dataset analysis."
+        "❌ O Nex Decision AI não conseguiu concluir a análise do dataset."
     )
 
     st.info(
-        "The dataset is still safely stored. "
-        "You can return to Upload Dataset and try another file."
+        "O dataset continua salvo. Você pode voltar em Enviar "
+        "Dataset e tentar outro arquivo."
     )
 
-    with st.expander("Technical details"):
+    with st.expander("Detalhes técnicos"):
         st.write(str(e))
 
     st.stop()
@@ -532,7 +532,7 @@ except Exception as e:
 # ============================================================
 
 st.markdown(
-    '<div class="section-title">🧠 AI Dataset Classification</div>',
+    '<div class="section-title">🧠 Classificação do Dataset por IA</div>',
     unsafe_allow_html=True
 )
 
@@ -540,6 +540,29 @@ st.markdown(
 # ------------------------------------------------------------
 # INTELLIGENCE FUNCTIONS
 # ------------------------------------------------------------
+
+REPORT_LABELS_PT = {
+    "Rows": "Linhas",
+    "Columns": "Colunas",
+    "Missing Values": "Valores Ausentes",
+    "Duplicate Rows": "Linhas Duplicadas",
+    "Column Names": "Nomes das Colunas",
+    "Quality Score": "Score de Qualidade",
+    "Grade": "Nota",
+    "Missing %": "% Ausentes",
+    "Duplicate %": "% Duplicados",
+}
+
+
+def translate_report_keys(report):
+
+    """Traduz as chaves dos relatórios dos motores apenas para exibição."""
+
+    return {
+        REPORT_LABELS_PT.get(key, key): value
+        for key, value in report.items()
+    }
+
 
 def detect_dataset_domain(df):
     """
@@ -553,7 +576,7 @@ def detect_dataset_domain(df):
     ]
 
     domain_rules = {
-        "Customer Analytics": [
+        "Análise de Clientes": [
             "customer",
             "client",
             "churn",
@@ -563,7 +586,7 @@ def detect_dataset_domain(df):
             "customer id"
         ],
 
-        "Sales & Retail": [
+        "Vendas e Varejo": [
             "sales",
             "revenue",
             "product",
@@ -574,7 +597,7 @@ def detect_dataset_domain(df):
             "discount"
         ],
 
-        "Finance": [
+        "Finanças": [
             "loan",
             "credit",
             "transaction",
@@ -584,7 +607,7 @@ def detect_dataset_domain(df):
             "financial"
         ],
 
-        "Human Resources": [
+        "Recursos Humanos": [
             "employee",
             "salary",
             "department",
@@ -594,7 +617,7 @@ def detect_dataset_domain(df):
             "hire"
         ],
 
-        "Healthcare": [
+        "Saúde": [
             "patient",
             "diagnosis",
             "disease",
@@ -614,7 +637,7 @@ def detect_dataset_domain(df):
             "engagement"
         ],
 
-        "Education": [
+        "Educação": [
             "student",
             "marks",
             "grade",
@@ -624,7 +647,7 @@ def detect_dataset_domain(df):
             "college"
         ],
 
-        "Operations": [
+        "Operações": [
             "inventory",
             "supply",
             "warehouse",
@@ -652,7 +675,7 @@ def detect_dataset_domain(df):
 
     if not scores or max(scores.values()) == 0:
 
-        return "General Business Dataset", 0
+        return "Dataset de Negócio Geral", 0
 
     best_domain = max(
         scores,
@@ -706,7 +729,7 @@ def detect_ml_use_cases(df):
         if unique_ratio > 0.05:
 
             use_cases.append(
-                "📈 Regression / Numeric Prediction"
+                "📈 Regressão / Predição Numérica"
             )
             break
 
@@ -718,7 +741,7 @@ def detect_ml_use_cases(df):
         if 2 <= unique_count <= 20:
 
             use_cases.append(
-                "🏷️ Classification"
+                "🏷️ Classificação"
             )
             break
 
@@ -726,27 +749,27 @@ def detect_ml_use_cases(df):
     if date_cols and numeric_cols:
 
         use_cases.append(
-            "⏳ Time-Series Forecasting"
+            "⏳ Previsão de Séries Temporais"
         )
 
     # Clustering
     if len(numeric_cols) >= 3:
 
         use_cases.append(
-            "🎯 Customer / Entity Segmentation"
+            "🎯 Segmentação de Clientes / Entidades"
         )
 
     # Anomaly detection
     if len(numeric_cols) >= 2:
 
         use_cases.append(
-            "🚨 Anomaly Detection"
+            "🚨 Detecção de Anomalias"
         )
 
     if not use_cases:
 
         use_cases.append(
-            "📊 Descriptive Business Analytics"
+            "📊 Analytics Descritivo de Negócio"
         )
 
     return list(dict.fromkeys(use_cases))
@@ -794,7 +817,7 @@ def find_target_candidates(df):
                 candidates.append(
                     (
                         col,
-                        "Classification target"
+                        "Alvo de classificação"
                     )
                 )
 
@@ -808,7 +831,7 @@ def find_target_candidates(df):
                 candidates.append(
                     (
                         col,
-                        "Regression target"
+                        "Alvo de regressão"
                     )
                 )
 
@@ -948,19 +971,19 @@ def detect_risks(df):
     if missing_ratio > 0.20:
 
         risks.append(
-            "High missing-data ratio detected."
+            "Alta proporção de dados ausentes detectada."
         )
 
     elif missing_ratio > 0.05:
 
         risks.append(
-            "Moderate missing-data ratio detected."
+            "Proporção moderada de dados ausentes detectada."
         )
 
     if duplicate_count > 0:
 
         risks.append(
-            f"{duplicate_count:,} duplicate rows detected."
+            f"{duplicate_count:,} linhas duplicadas detectadas."
         )
 
     for col in df.columns:
@@ -975,7 +998,7 @@ def detect_risks(df):
         ):
 
             risks.append(
-                f"Constant column detected: {col}"
+                f"Coluna constante detectada: {col}"
             )
 
         if (
@@ -989,7 +1012,7 @@ def detect_risks(df):
         ):
 
             risks.append(
-                f"Potential identifier column: {col}"
+                f"Possível coluna identificadora: {col}"
             )
 
     return risks[:8]
@@ -1031,13 +1054,13 @@ with c1:
             f"""
             <div class="quality-card">
                 <div class="quality-label">
-                    AI DATASET TYPE
+                    TIPO DE DATASET (IA)
                 </div>
                 <div class="quality-score">
                     {dataset_type}
                 </div>
                 <div class="quality-label">
-                    Engine confidence: {confidence}%
+                    Confiança do motor: {confidence}%
                 </div>
             </div>
             """
@@ -1052,13 +1075,13 @@ with c2:
             f"""
             <div class="quality-card">
                 <div class="quality-label">
-                    BUSINESS DOMAIN
+                    SETOR DE NEGÓCIO
                 </div>
                 <div class="quality-score">
                     {domain}
                 </div>
                 <div class="quality-label">
-                    Pattern confidence: {domain_confidence}%
+                    Confiança do padrão: {domain_confidence}%
                 </div>
             </div>
             """
@@ -1073,13 +1096,13 @@ with c3:
             f"""
             <div class="quality-card">
                 <div class="quality-label">
-                    ML READINESS
+                    PRONTIDÃO PARA ML
                 </div>
                 <div class="quality-score">
                     {ml_readiness}/100
                 </div>
                 <div class="quality-label">
-                    Based on structure and data quality
+                    Com base na estrutura e na qualidade dos dados
                 </div>
             </div>
             """
@@ -1093,16 +1116,16 @@ with c3:
 # ============================================================
 
 st.markdown(
-    '<div class="section-title">⚙️ Dataset Complexity</div>',
+    '<div class="section-title">⚙️ Complexidade do Dataset</div>',
     unsafe_allow_html=True
 )
 
-complexity_label = "Low"
+complexity_label = "Baixa"
 
 if complexity_score >= 70:
-    complexity_label = "High"
+    complexity_label = "Alta"
 elif complexity_score >= 40:
-    complexity_label = "Moderate"
+    complexity_label = "Moderada"
 
 
 st.progress(
@@ -1110,8 +1133,8 @@ st.progress(
 )
 
 st.caption(
-    f"Complexity score: {complexity_score}/100 — "
-    f"{complexity_label} complexity"
+    f"Score de complexidade: {complexity_score}/100 "
+    f"— complexidade {complexity_label}"
 )
 
 
@@ -1120,7 +1143,7 @@ st.caption(
 # ============================================================
 
 st.markdown(
-    '<div class="section-title">🚀 Detected AI Opportunities</div>',
+    '<div class="section-title">🚀 Oportunidades de IA Detectadas</div>',
     unsafe_allow_html=True
 )
 
@@ -1143,8 +1166,8 @@ for index, use_case in enumerate(
                         {use_case}
                     </div>
                     <div class="feature-text">
-                        Potential analytical workflow detected
-                        from your dataset structure.
+                        Possível fluxo analítico detectado
+                        a partir da estrutura do seu dataset.
                     </div>
                 </div>
                 """
@@ -1158,21 +1181,21 @@ for index, use_case in enumerate(
 # ============================================================
 
 st.markdown(
-    '<div class="section-title">🎯 Target Column Intelligence</div>',
+    '<div class="section-title">🎯 Inteligência de Coluna-Alvo</div>',
     unsafe_allow_html=True
 )
 
 if target_candidates:
 
     st.write(
-        "Potential prediction targets detected:"
+        "Possíveis alvos de predição detectados:"
     )
 
     target_data = pd.DataFrame(
         target_candidates,
         columns=[
-            "Column",
-            "Potential Role"
+            "Coluna",
+            "Papel provável"
         ]
     )
 
@@ -1185,9 +1208,9 @@ if target_candidates:
 else:
 
     st.info(
-        "No obvious prediction target was detected. "
-        "The dataset may be better suited for "
-        "clustering, descriptive analytics or forecasting."
+        "Nenhum alvo de predição óbvio foi detectado. "
+        "O dataset pode ser mais adequado para clusterização, "
+        "analytics descritivo ou previsões."
     )
 
 
@@ -1196,7 +1219,7 @@ else:
 # ============================================================
 
 st.markdown(
-    '<div class="section-title">🛡️ Dataset Risk Detection</div>',
+    '<div class="section-title">🛡️ Detecção de Riscos do Dataset</div>',
     unsafe_allow_html=True
 )
 
@@ -1211,7 +1234,7 @@ if risks:
 else:
 
     st.success(
-        "✅ No major structural risks detected."
+        "✅ Nenhum risco estrutural relevante detectado."
     )
 
 
@@ -1220,24 +1243,24 @@ else:
 # ============================================================
 
 st.markdown(
-    '<div class="section-title">🔎 Why Nex Decision AI Classified It This Way</div>',
+    '<div class="section-title">🔎 Por que o Nex Decision AI classificou assim</div>',
     unsafe_allow_html=True
 )
 
 st.info(
     f"""
-    **Dataset classification:** {dataset_type}
+    **Classificação do dataset:** {dataset_type}
 
-    **Detected business domain:** {domain}
+    **Setor de negócio detectado:** {domain}
 
-    **Potential AI workflows:** {", ".join(ml_use_cases)}
+    **Possíveis fluxos de IA:** {", ".join(ml_use_cases)}
 
-    **Prediction targets detected:** {len(target_candidates)}
+    **Alvos de predição detectados:** {len(target_candidates)}
 
-    **ML readiness:** {ml_readiness}/100
+    **Prontidão para ML:** {ml_readiness}/100
 
-    The classification combines the existing Dataset Intelligence
-    engine with structural, column-type and naming-pattern analysis.
+    A classificação combina o motor de Inteligência do Dataset
+    com análise de estrutura, tipos de coluna e padrões de nomes.
     """
 )
 
@@ -1247,20 +1270,20 @@ st.info(
 # ============================================================
 
 st.markdown(
-    '<div class="section-title">🔗 Platform Compatibility</div>',
+    '<div class="section-title">🔗 Compatibilidade com a Plataforma</div>',
     unsafe_allow_html=True
 )
 
 if str(compatibility).lower() == "compatible":
 
     st.success(
-        "✅ Dataset is compatible with Nex Decision AI."
+        "✅ O dataset é compatível com o Nex Decision AI."
     )
 
 else:
 
     st.warning(
-        f"⚠️ {compatibility}"
+        "⚠️ O dataset não é totalmente compatível com o Nex Decision AI."
     )
 
 st.info(reason)
@@ -1270,17 +1293,17 @@ st.info(reason)
 # ============================================================
 
 st.markdown(
-    '<div class="section-title">🔍 Dataset Analysis</div>',
+    '<div class="section-title">🔍 Análise do Dataset</div>',
     unsafe_allow_html=True
 )
 
 with st.expander(
-    "View detailed dataset analysis",
+    "Ver análise detalhada do dataset",
     expanded=False
 ):
 
     if isinstance(report, dict):
-        st.json(report)
+        st.json(translate_report_keys(report))
     else:
         st.write(report)
 
@@ -1290,16 +1313,16 @@ with st.expander(
 # ============================================================
 
 st.markdown(
-    '<div class="section-title">🗂️ Column Intelligence</div>',
+    '<div class="section-title">🗂️ Inteligência de Colunas</div>',
     unsafe_allow_html=True
 )
 
 st.caption(
-    "Nex Decision AI maps your columns to reusable business concepts."
+    "O Nex Decision AI mapeia suas colunas para conceitos de negócio reutilizáveis."
 )
 
 with st.expander(
-    "View detected column mapping",
+    "Ver mapeamento de colunas detectado",
     expanded=True
 ):
 
@@ -1332,7 +1355,7 @@ with st.expander(
 # ============================================================
 
 st.markdown(
-    '<div class="section-title">📈 Data Quality Intelligence</div>',
+    '<div class="section-title">📈 Inteligência de Qualidade dos Dados</div>',
     unsafe_allow_html=True
 )
 
@@ -1340,18 +1363,18 @@ try:
 
     quality_score = quality_report.get(
         "Quality Score",
-        "Unknown"
+        "Desconhecido"
     )
 
     grade = quality_report.get(
         "Grade",
-        "Unknown"
+        "Desconhecido"
     )
 
 except Exception:
 
-    quality_score = "Unknown"
-    grade = "Unknown"
+    quality_score = "Desconhecido"
+    grade = "Desconhecido"
 
 
 q1, q2 = st.columns(2)
@@ -1363,7 +1386,7 @@ with q1:
             f"""
             <div class="quality-card">
                 <div class="quality-label">
-                    OVERALL QUALITY SCORE
+                    SCORE GERAL DE QUALIDADE
                 </div>
                 <div class="quality-score">
                     {quality_score}
@@ -1381,7 +1404,7 @@ with q2:
             f"""
             <div class="quality-card">
                 <div class="quality-label">
-                    DATA QUALITY GRADE
+                    NOTA DE QUALIDADE DOS DADOS
                 </div>
                 <div class="quality-score">
                     {grade}
@@ -1394,11 +1417,11 @@ with q2:
 
 
 with st.expander(
-    "📋 View complete quality report"
+    "📋 Ver relatório de qualidade completo"
 ):
 
     if isinstance(quality_report, dict):
-        st.json(quality_report)
+        st.json(translate_report_keys(quality_report))
     else:
         st.write(quality_report)
 
@@ -1408,7 +1431,7 @@ with st.expander(
 # ============================================================
 
 st.markdown(
-    '<div class="section-title">🤖 Recommended AI Solutions</div>',
+    '<div class="section-title">🤖 Soluções de IA Recomendadas</div>',
     unsafe_allow_html=True
 )
 
@@ -1430,7 +1453,7 @@ if recommendations:
 else:
 
     st.info(
-        "No specific AI recommendations were generated."
+        "Nenhuma recomendação de IA específica foi gerada."
     )
 
 
@@ -1439,7 +1462,7 @@ else:
 # ============================================================
 
 st.markdown(
-    '<div class="section-title">💡 AI Business Insights</div>',
+    '<div class="section-title">💡 Insights de Negócio da IA</div>',
     unsafe_allow_html=True
 )
 
@@ -1461,7 +1484,7 @@ if insights:
 else:
 
     st.info(
-        "No additional business insights were generated."
+        "Nenhum insight de negócio adicional foi gerado."
     )
 
 
@@ -1470,12 +1493,12 @@ else:
 # ============================================================
 
 st.markdown(
-    '<div class="section-title">📋 Data Preview</div>',
+    '<div class="section-title">📋 Prévia dos Dados</div>',
     unsafe_allow_html=True
 )
 
 with st.expander(
-    "View first 20 records"
+    "Ver os 20 primeiros registros"
 ):
 
     st.dataframe(
@@ -1490,9 +1513,9 @@ with st.expander(
 # ============================================================
 
 ai_insight(
-    "A strong decision starts with understanding the data. "
-    "Nex Decision AI has profiled your dataset before moving "
-    "into prediction, automation and business decision workflows."
+    "Uma boa decisão começa pelo entendimento dos dados. O Nex "
+    "Decision AI traçou o perfil do seu dataset antes de seguir "
+    "para os fluxos de predição, automação e decisão de negócio."
 )
 
 
@@ -1509,7 +1532,7 @@ prev_col, center_col, next_col = st.columns(
 with prev_col:
 
     if st.button(
-        "⬅️ Previous",
+        "⬅️ Anterior",
         width="stretch"
     ):
         st.switch_page(
@@ -1519,14 +1542,14 @@ with prev_col:
 with center_col:
 
     st.markdown(
-        '<div class="nav-note">Step 2 of the intelligence workflow</div>',
+        '<div class="nav-note">Etapa 2 do fluxo de inteligência</div>',
         unsafe_allow_html=True
     )
 
 with next_col:
 
     if st.button(
-        "Next ➡️",
+        "Próximo ➡️",
         width="stretch"
     ):
         st.switch_page(

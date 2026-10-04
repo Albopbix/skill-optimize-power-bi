@@ -12,19 +12,19 @@ from src.ui.layout import page_header, ai_insight, page_footer
 # ----------------------------------------------------
 
 st.set_page_config(
-    page_title="Prediction History | NexDecision AI",
+    page_title="Histórico de Predições | NexDecision AI",
     page_icon="📜",
     layout="wide"
 )
 
 page_header(
-    "📜 Prediction History",
-    "Track, analyse, filter and export historical prediction activity."
+    "📜 Histórico de Predições",
+    "Acompanhe, analise, filtre e exporte a atividade histórica de predições."
 )
 
 st.caption(
-    "Monitor prediction jobs, model usage, dataset activity "
-    "and prediction workload over time."
+    "Monitore execuções de predição, uso de modelos, atividade "
+    "de datasets e volume de predições ao longo do tempo."
 )
 
 st.markdown("---")
@@ -69,10 +69,10 @@ def load_prediction_history():
 
     columns = [
         "ID",
-        "Model",
-        "Filename",
-        "Rows",
-        "Prediction Time"
+        "Modelo",
+        "Arquivo",
+        "Linhas",
+        "Data da Predição"
     ]
 
     return pd.DataFrame(records, columns=columns)
@@ -81,14 +81,14 @@ def load_prediction_history():
 try:
     history_df = load_prediction_history()
 except Exception as error:
-    st.error(f"Unable to load prediction history: {error}")
+    st.error(f"Não foi possível carregar o histórico de predições: {error}")
     history_df = pd.DataFrame(
         columns=[
             "ID",
-            "Model",
-            "Filename",
-            "Rows",
-            "Prediction Time"
+            "Modelo",
+            "Arquivo",
+            "Linhas",
+            "Data da Predição"
         ]
     )
 
@@ -99,25 +99,25 @@ except Exception as error:
 
 if not history_df.empty:
 
-    history_df["Rows"] = pd.to_numeric(
-        history_df["Rows"],
+    history_df["Linhas"] = pd.to_numeric(
+        history_df["Linhas"],
         errors="coerce"
     )
 
-    history_df["Prediction Time"] = pd.to_datetime(
-        history_df["Prediction Time"],
+    history_df["Data da Predição"] = pd.to_datetime(
+        history_df["Data da Predição"],
         errors="coerce"
     )
 
-    history_df["Model"] = (
-        history_df["Model"]
-        .fillna("Unknown")
+    history_df["Modelo"] = (
+        history_df["Modelo"]
+        .fillna("Desconhecido")
         .astype(str)
     )
 
-    history_df["Filename"] = (
-        history_df["Filename"]
-        .fillna("Unknown")
+    history_df["Arquivo"] = (
+        history_df["Arquivo"]
+        .fillna("Desconhecido")
         .astype(str)
     )
 
@@ -126,38 +126,38 @@ if not history_df.empty:
 # SIDEBAR FILTERS
 # ----------------------------------------------------
 
-st.sidebar.header("🔎 Prediction Filters")
+st.sidebar.header("🔎 Filtros de Predição")
 
 if not history_df.empty:
 
     model_options = sorted(
-        history_df["Model"].unique().tolist()
+        history_df["Modelo"].unique().tolist()
     )
 
     file_options = sorted(
-        history_df["Filename"].unique().tolist()
+        history_df["Arquivo"].unique().tolist()
     )
 
     selected_models = st.sidebar.multiselect(
-        "Filter by model",
+        "Filtrar por modelo",
         options=model_options,
         default=model_options
     )
 
     selected_files = st.sidebar.multiselect(
-        "Filter by dataset",
+        "Filtrar por dataset",
         options=file_options,
         default=file_options
     )
 
     search_text = st.sidebar.text_input(
-        "Search records",
-        placeholder="Search model, filename or ID..."
+        "Buscar registros",
+        placeholder="Buscar modelo, arquivo ou ID..."
     )
 
     valid_dates = history_df[
-        history_df["Prediction Time"].notna()
-    ]["Prediction Time"]
+        history_df["Data da Predição"].notna()
+    ]["Data da Predição"]
 
     if not valid_dates.empty:
 
@@ -165,7 +165,7 @@ if not history_df.empty:
         max_date = valid_dates.max().date()
 
         date_range = st.sidebar.date_input(
-            "Prediction date range",
+            "Período das predições",
             value=(min_date, max_date),
             min_value=min_date,
             max_value=max_date
@@ -174,7 +174,7 @@ if not history_df.empty:
     else:
         date_range = None
 
-    rows_values = history_df["Rows"].dropna()
+    rows_values = history_df["Linhas"].dropna()
 
     if not rows_values.empty:
 
@@ -183,7 +183,7 @@ if not history_df.empty:
 
         if min_rows < max_rows:
             selected_rows = st.sidebar.slider(
-                "Dataset row count",
+                "Qtd. de linhas do dataset",
                 min_value=min_rows,
                 max_value=max_rows,
                 value=(min_rows, max_rows)
@@ -195,14 +195,14 @@ if not history_df.empty:
         selected_rows = None
 
     if st.sidebar.button(
-        "🔄 Refresh prediction history",
+        "🔄 Atualizar histórico de predições",
         use_container_width=True
     ):
         load_prediction_history.clear()
         st.rerun()
 
     st.sidebar.caption(
-        "Filters apply to the records and charts on this page."
+        "Os filtros se aplicam aos registros e gráficos desta página."
     )
 
 else:
@@ -223,8 +223,8 @@ filtered_df = history_df.copy()
 if not history_df.empty:
 
     filtered_df = filtered_df[
-        filtered_df["Model"].isin(selected_models)
-        & filtered_df["Filename"].isin(selected_files)
+        filtered_df["Modelo"].isin(selected_models)
+        & filtered_df["Arquivo"].isin(selected_files)
     ]
 
     if search_text.strip():
@@ -232,10 +232,10 @@ if not history_df.empty:
         search = search_text.strip().lower()
 
         searchable = (
-            filtered_df["Model"].str.lower().str.contains(
+            filtered_df["Modelo"].str.lower().str.contains(
                 search, na=False
             )
-            | filtered_df["Filename"].str.lower().str.contains(
+            | filtered_df["Arquivo"].str.lower().str.contains(
                 search, na=False
             )
             | filtered_df["ID"].astype(str).str.contains(
@@ -249,7 +249,7 @@ if not history_df.empty:
 
         start_date, end_date = date_range
 
-        prediction_dates = filtered_df["Prediction Time"].dt.date
+        prediction_dates = filtered_df["Data da Predição"].dt.date
 
         filtered_df = filtered_df[
             prediction_dates.isna()
@@ -262,10 +262,10 @@ if not history_df.empty:
     if selected_rows is not None:
 
         filtered_df = filtered_df[
-            filtered_df["Rows"].isna()
+            filtered_df["Linhas"].isna()
             | (
-                (filtered_df["Rows"] >= selected_rows[0])
-                & (filtered_df["Rows"] <= selected_rows[1])
+                (filtered_df["Linhas"] >= selected_rows[0])
+                & (filtered_df["Linhas"] <= selected_rows[1])
             )
         ]
 
@@ -274,47 +274,47 @@ if not history_df.empty:
 # KPI SUMMARY
 # ----------------------------------------------------
 
-st.subheader("📈 Prediction Overview")
+st.subheader("📈 Visão Geral das Predições")
 
 k1, k2, k3, k4 = st.columns(4)
 
 total_predictions = len(filtered_df)
 
-models_used = filtered_df["Model"].nunique()
+models_used = filtered_df["Modelo"].nunique()
 
-datasets_used = filtered_df["Filename"].nunique()
+datasets_used = filtered_df["Arquivo"].nunique()
 
-total_rows = filtered_df["Rows"].sum()
+total_rows = filtered_df["Linhas"].sum()
 
 with k1:
     st.metric(
-        "Total Predictions",
+        "Total de Predições",
         f"{total_predictions:,}"
     )
 
 with k2:
     st.metric(
-        "Models Used",
+        "Modelos Usados",
         f"{models_used:,}"
     )
 
 with k3:
     st.metric(
-        "Datasets Used",
+        "Datasets Usados",
         f"{datasets_used:,}"
     )
 
 with k4:
     st.metric(
-        "Total Rows Processed",
+        "Total de Linhas Processadas",
         f"{int(total_rows):,}"
         if pd.notna(total_rows)
         else "N/A"
     )
 
 st.caption(
-    f"Showing {total_predictions:,} of "
-    f"{len(history_df):,} stored prediction records."
+    f"Exibindo {total_predictions:,} de {len(history_df):,} "
+    "registros de predição armazenados."
 )
 
 st.markdown("---")
@@ -328,13 +328,15 @@ if filtered_df.empty:
 
     if history_df.empty:
         st.info(
-            "No prediction history is available yet. "
-            "Run a prediction from the Prediction page first."
+            "Ainda não há histórico de predições. Execute "
+            "uma predição na página Estúdio de Predição "
+            "primeiro."
         )
     else:
         st.warning(
-            "No records match the selected filters. "
-            "Adjust the filters in the sidebar."
+            "Nenhum registro corresponde aos filtros "
+            "selecionados. Ajuste os filtros na "
+            "barra lateral."
         )
 
 
@@ -344,55 +346,54 @@ if filtered_df.empty:
 
 else:
 
-    st.subheader("📋 Prediction Records")
+    st.subheader("📋 Registros de Predição")
 
     search_col, sort_col = st.columns([2, 1])
 
     with search_col:
         st.markdown(
-            '<p class="section-description">'
-            'Review historical prediction jobs and their metadata.'
-            '</p>',
+            '<p class="section-description">Revise as execuções '
+            'históricas de predição e seus metadados.</p>',
             unsafe_allow_html=True
         )
 
     with sort_col:
         sort_order = st.selectbox(
-            "Sort records",
+            "Ordenar registros",
             [
-                "Newest first",
-                "Oldest first",
-                "Largest dataset first",
-                "Smallest dataset first"
+                "Mais recentes primeiro",
+                "Mais antigos primeiro",
+                "Maior dataset primeiro",
+                "Menor dataset primeiro"
             ]
         )
 
     display_df = filtered_df.copy()
 
-    if sort_order == "Newest first":
+    if sort_order == "Mais recentes primeiro":
         display_df = display_df.sort_values(
-            "Prediction Time",
+            "Data da Predição",
             ascending=False,
             na_position="last"
         )
 
-    elif sort_order == "Oldest first":
+    elif sort_order == "Mais antigos primeiro":
         display_df = display_df.sort_values(
-            "Prediction Time",
+            "Data da Predição",
             ascending=True,
             na_position="last"
         )
 
-    elif sort_order == "Largest dataset first":
+    elif sort_order == "Maior dataset primeiro":
         display_df = display_df.sort_values(
-            "Rows",
+            "Linhas",
             ascending=False,
             na_position="last"
         )
 
     else:
         display_df = display_df.sort_values(
-            "Rows",
+            "Linhas",
             ascending=True,
             na_position="last"
         )
@@ -409,7 +410,7 @@ else:
     ).encode("utf-8")
 
     st.download_button(
-        "📥 Export Filtered History (CSV)",
+        "📥 Exportar histórico filtrado (CSV)",
         data=csv_data,
         file_name="nexdecision_prediction_history.csv",
         mime="text/csv",
@@ -423,33 +424,33 @@ else:
     # PREDICTION ANALYTICS
     # ------------------------------------------------
 
-    st.subheader("📊 Prediction Analytics")
+    st.subheader("📊 Análise das Predições")
 
     chart_left, chart_right = st.columns(2)
 
     model_count = (
-        filtered_df["Model"]
+        filtered_df["Modelo"]
         .value_counts()
-        .rename_axis("Model")
-        .reset_index(name="Predictions")
+        .rename_axis("Modelo")
+        .reset_index(name="Predições")
     )
 
     with chart_left:
 
-        st.markdown("#### Predictions by Model")
+        st.markdown("#### Predições por Modelo")
 
         model_fig = px.bar(
             model_count,
-            x="Model",
-            y="Predictions",
-            text="Predictions",
-            color="Predictions",
+            x="Modelo",
+            y="Predições",
+            text="Predições",
+            color="Predições",
             color_continuous_scale="Blues"
         )
 
         model_fig.update_layout(
-            xaxis_title="Model",
-            yaxis_title="Number of Predictions",
+            xaxis_title="Modelo",
+            yaxis_title="Número de Predições",
             showlegend=False,
             margin=dict(l=10, r=10, t=20, b=10)
         )
@@ -465,12 +466,12 @@ else:
 
     with chart_right:
 
-        st.markdown("#### Model Usage Distribution")
+        st.markdown("#### Distribuição de Uso dos Modelos")
 
         pie_fig = px.pie(
             model_count,
-            names="Model",
-            values="Predictions",
+            names="Modelo",
+            values="Predições",
             hole=0.48
         )
 
@@ -490,34 +491,34 @@ else:
 
     st.markdown("---")
 
-    st.subheader("🗂️ Dataset Activity")
+    st.subheader("🗂️ Atividade dos Datasets")
 
     dataset_count = (
-        filtered_df["Filename"]
+        filtered_df["Arquivo"]
         .value_counts()
         .rename_axis("Dataset")
-        .reset_index(name="Predictions")
+        .reset_index(name="Predições")
     )
 
     dataset_left, dataset_right = st.columns(2)
 
     with dataset_left:
 
-        st.markdown("#### Most Frequently Predicted Datasets")
+        st.markdown("#### Datasets com Mais Predições")
 
         dataset_fig = px.bar(
             dataset_count.head(10).sort_values(
-                "Predictions",
+                "Predições",
                 ascending=True
             ),
-            x="Predictions",
+            x="Predições",
             y="Dataset",
             orientation="h",
-            text="Predictions"
+            text="Predições"
         )
 
         dataset_fig.update_layout(
-            xaxis_title="Number of Predictions",
+            xaxis_title="Número de Predições",
             yaxis_title="Dataset",
             margin=dict(l=10, r=10, t=20, b=10)
         )
@@ -529,34 +530,34 @@ else:
 
     with dataset_right:
 
-        st.markdown("#### Prediction Activity Over Time")
+        st.markdown("#### Atividade de Predição ao Longo do Tempo")
 
         time_df = filtered_df.dropna(
-            subset=["Prediction Time"]
+            subset=["Data da Predição"]
         ).copy()
 
         if not time_df.empty:
 
-            time_df["Date"] = (
-                time_df["Prediction Time"].dt.date
+            time_df["Data"] = (
+                time_df["Data da Predição"].dt.date
             )
 
             daily_count = (
-                time_df.groupby("Date")
+                time_df.groupby("Data")
                 .size()
-                .reset_index(name="Predictions")
+                .reset_index(name="Predições")
             )
 
             timeline_fig = px.line(
                 daily_count,
-                x="Date",
-                y="Predictions",
+                x="Data",
+                y="Predições",
                 markers=True
             )
 
             timeline_fig.update_layout(
-                xaxis_title="Date",
-                yaxis_title="Number of Predictions",
+                xaxis_title="Data",
+                yaxis_title="Número de Predições",
                 margin=dict(l=10, r=10, t=20, b=10)
             )
 
@@ -567,8 +568,8 @@ else:
 
         else:
             st.info(
-                "Valid prediction timestamps are not available "
-                "for a timeline chart."
+                "Não há datas de predição válidas para o gráfico "
+                "de linha do tempo."
             )
 
 
@@ -578,21 +579,21 @@ else:
 
     st.markdown("---")
 
-    st.subheader("🔍 Inspect a Prediction Record")
+    st.subheader("🔍 Inspecionar um Registro de Predição")
 
     record_ids = filtered_df["ID"].tolist()
 
     model_names = (
         filtered_df.drop_duplicates("ID")
-        .set_index("ID")["Model"]
+        .set_index("ID")["Modelo"]
         .to_dict()
     )
 
     selected_id = st.selectbox(
-        "Select a prediction record",
+        "Selecione um registro de predição",
         options=record_ids,
         format_func=lambda record_id: (
-            f"{model_names.get(record_id, 'Unknown')} "
+            f"{model_names.get(record_id, 'Desconhecido')} "
             f"(ID: {record_id})"
         )
     )
@@ -604,29 +605,29 @@ else:
     d1, d2, d3 = st.columns(3)
 
     with d1:
-        st.markdown("**Model**")
-        st.write(selected_record["Model"])
+        st.markdown("**Modelo**")
+        st.write(selected_record["Modelo"])
 
     with d2:
         st.markdown("**Dataset**")
-        st.write(selected_record["Filename"])
+        st.write(selected_record["Arquivo"])
 
     with d3:
-        st.markdown("**Rows Processed**")
+        st.markdown("**Linhas Processadas**")
         st.write(
-            int(selected_record["Rows"])
-            if pd.notna(selected_record["Rows"])
-            else "Unknown"
+            int(selected_record["Linhas"])
+            if pd.notna(selected_record["Linhas"])
+            else "Desconhecido"
         )
 
-    st.markdown("**Prediction Time**")
+    st.markdown("**Data da Predição**")
     st.write(
-        str(selected_record["Prediction Time"])
-        if pd.notna(selected_record["Prediction Time"])
-        else "Not recorded"
+        str(selected_record["Data da Predição"])
+        if pd.notna(selected_record["Data da Predição"])
+        else "Não registrado"
     )
 
-    with st.expander("View complete record"):
+    with st.expander("Ver registro completo"):
         st.json(
             {
                 key: (
@@ -646,10 +647,11 @@ else:
 st.markdown("---")
 
 ai_insight(
-    "Prediction History provides an audit trail of prediction jobs. "
-    "Use the model and dataset charts to understand usage patterns. "
-    "This history describes recorded activity; it does not by itself "
-    "measure prediction accuracy or business impact."
+    "O Histórico de Predições oferece uma trilha de auditoria das "
+    "execuções de predição. Use os gráficos de modelos e datasets "
+    "para entender os padrões de uso. Este histórico descreve a "
+    "atividade registrada; ele não mede, por si só, a acurácia das "
+    "predições nem o impacto no negócio."
 )
 
 
@@ -659,27 +661,27 @@ ai_insight(
 
 st.markdown("---")
 
-st.subheader("🧭 Continue Exploring NexDecision AI")
+st.subheader("🧭 Continue Explorando o NexDecision AI")
 
 prev_col, home_col, next_col = st.columns(3)
 
 with prev_col:
     if st.button(
-        "⬅️ Model History",
+        "⬅️ Histórico de Modelos",
         use_container_width=True
     ):
         st.switch_page("pages/13_Model_History.py")
 
 with home_col:
     if st.button(
-        "🏠 Home",
+        "🏠 Início",
         use_container_width=True
     ):
         st.switch_page("pages/0_Home.py")
 
 with next_col:
     if st.button(
-        "➡️ AI Anomaly Detection",
+        "➡️ Detecção de Anomalias com IA",
         use_container_width=True
     ):
         st.switch_page("pages/17_AI_Anomaly_Detection.py")

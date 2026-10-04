@@ -10,7 +10,7 @@ from src.ui.layout import page_header, ai_insight, page_footer
 # ============================================================
 
 st.set_page_config(
-    page_title="Upload Dataset | Nex Decision AI",
+    page_title="Enviar Dataset | Nex Decision AI",
     page_icon="📂",
     layout="wide"
 )
@@ -235,12 +235,12 @@ st.markdown(
     textwrap.dedent("""
     <div class="upload-hero">
         <div class="upload-title">
-            📂 Bring Your Business Data Into Nex Decision AI
+            📂 Traga os dados do seu negócio para o Nex Decision AI
         </div>
         <div class="upload-subtitle">
-            Upload structured business data and prepare it for
-            data intelligence, machine learning, forecasting,
-            anomaly detection and decision analysis.
+            Envie dados estruturados do negócio e prepare-os para
+            inteligência de dados, machine learning, previsões,
+            detecção de anomalias e análise de decisão.
         </div>
     </div>
     """),
@@ -253,30 +253,30 @@ st.markdown(
 # ============================================================
 
 st.markdown(
-    '<div class="section-title">🚀 What Nex Decision AI Will Analyze</div>',
+    '<div class="section-title">🚀 O que o Nex Decision AI vai analisar</div>',
     unsafe_allow_html=True
 )
 
 analysis_features = [
     (
         "📊",
-        "Dataset Statistics",
-        "Rows, columns and essential dataset measurements."
+        "Estatísticas do Dataset",
+        "Linhas, colunas e medidas essenciais do dataset."
     ),
     (
         "🔎",
-        "Data Structure",
-        "Identify numeric, categorical and date-based fields."
+        "Estrutura dos Dados",
+        "Identifique campos numéricos, categóricos e de data."
     ),
     (
         "🧹",
-        "Data Quality",
-        "Detect missing values and duplicate records."
+        "Qualidade dos Dados",
+        "Detecte valores ausentes e registros duplicados."
     ),
     (
         "🤖",
-        "AI Opportunities",
-        "Prepare the dataset for machine-learning analysis."
+        "Oportunidades de IA",
+        "Prepare o dataset para análises de machine learning."
     ),
 ]
 
@@ -313,7 +313,7 @@ st.markdown("---")
 # ============================================================
 
 st.markdown(
-    '<div class="section-title">📁 Supported Data Formats</div>',
+    '<div class="section-title">📁 Formatos Suportados</div>',
     unsafe_allow_html=True
 )
 
@@ -338,12 +338,12 @@ st.markdown(
 # ============================================================
 
 st.markdown(
-    '<div class="section-title">📤 Choose Your Dataset</div>',
+    '<div class="section-title">📤 Escolha seu Dataset</div>',
     unsafe_allow_html=True
 )
 
 uploaded_file = st.file_uploader(
-    "Upload your dataset",
+    "Envie seu dataset",
     type=[
         "csv",
         "xlsx",
@@ -354,8 +354,8 @@ uploaded_file = st.file_uploader(
         "txt"
     ],
     help=(
-        "Supported formats: CSV, Excel, JSON, TSV, "
-        "Parquet and TXT."
+        "Formatos suportados: CSV, Excel, JSON, "
+        "TSV, Parquet e TXT."
     )
 )
 
@@ -369,7 +369,7 @@ if uploaded_file is not None:
     try:
 
         with st.spinner(
-            "Reading and validating your dataset..."
+            "Lendo e validando seu dataset..."
         ):
 
             file_bytes = uploaded_file.getvalue()
@@ -387,9 +387,9 @@ if uploaded_file is not None:
         if df is None:
 
             st.error(
-                "❌ We couldn't read this file. "
-                "Please check that the file is valid and "
-                "uses a supported tabular format."
+                "❌ Não foi possível ler este arquivo. "
+                "Verifique se o arquivo é válido e usa "
+                "um formato tabular suportado."
             )
 
             st.stop()
@@ -398,8 +398,8 @@ if uploaded_file is not None:
         if df.empty:
 
             st.warning(
-                "⚠️ The uploaded dataset is empty. "
-                "Please upload a dataset containing records."
+                "⚠️ O dataset enviado está vazio. Envie "
+                "um dataset com registros."
             )
 
             st.stop()
@@ -419,7 +419,7 @@ if uploaded_file is not None:
         # ====================================================
 
         st.success(
-            f"✅ Dataset '{uploaded_file.name}' uploaded successfully."
+            f"✅ Dataset '{uploaded_file.name}' enviado com sucesso."
         )
 
 
@@ -444,11 +444,11 @@ if uploaded_file is not None:
                         📁 {uploaded_file.name}
                     </div>
                     <div class="status-text">
-                        Format: {extension}
+                        Formato: {extension}
                         &nbsp; • &nbsp;
-                        Size: {file_size_mb:.2f} MB
+                        Tamanho: {file_size_mb:.2f} MB
                         &nbsp; • &nbsp;
-                        Status: Ready for analysis
+                        Status: Pronto para análise
                     </div>
                 </div>
                 """
@@ -462,7 +462,7 @@ if uploaded_file is not None:
         # ====================================================
 
         st.markdown(
-            '<div class="section-title">📊 Dataset Overview</div>',
+            '<div class="section-title">📊 Visão Geral do Dataset</div>',
             unsafe_allow_html=True
         )
 
@@ -479,28 +479,28 @@ if uploaded_file is not None:
         with c1:
 
             st.metric(
-                "📄 Rows",
+                "📄 Linhas",
                 f"{len(df):,}"
             )
 
         with c2:
 
             st.metric(
-                "📊 Columns",
+                "📊 Colunas",
                 f"{len(df.columns):,}"
             )
 
         with c3:
 
             st.metric(
-                "⚠️ Missing Values",
+                "⚠️ Valores Ausentes",
                 f"{missing_values:,}"
             )
 
         with c4:
 
             st.metric(
-                "🔁 Duplicate Rows",
+                "🔁 Linhas Duplicadas",
                 f"{duplicate_rows:,}"
             )
 
@@ -513,12 +513,12 @@ if uploaded_file is not None:
         # ====================================================
 
         st.markdown(
-            '<div class="section-title">📋 Dataset Preview</div>',
+            '<div class="section-title">📋 Prévia do Dataset</div>',
             unsafe_allow_html=True
         )
 
         st.caption(
-            "Showing the first 10 records to verify that the dataset was loaded correctly."
+            "Exibindo os 10 primeiros registros para confirmar que o dataset foi carregado corretamente."
         )
 
         st.dataframe(
@@ -536,7 +536,7 @@ if uploaded_file is not None:
         # ====================================================
 
         st.markdown(
-            '<div class="section-title">🔎 Dataset Structure</div>',
+            '<div class="section-title">🔎 Estrutura do Dataset</div>',
             unsafe_allow_html=True
         )
 
@@ -563,21 +563,21 @@ if uploaded_file is not None:
         with c1:
 
             st.metric(
-                "🔢 Numeric Columns",
+                "🔢 Colunas Numéricas",
                 numeric_columns
             )
 
         with c2:
 
             st.metric(
-                "🔤 Categorical Columns",
+                "🔤 Colunas Categóricas",
                 categorical_columns
             )
 
         with c3:
 
             st.metric(
-                "📅 Date Columns",
+                "📅 Colunas de Data",
                 datetime_columns
             )
 
@@ -587,20 +587,20 @@ if uploaded_file is not None:
         # ====================================================
 
         with st.expander(
-            "📋 View Detailed Dataset Information"
+            "📋 Ver informações detalhadas do dataset"
         ):
 
-            st.write("### Column Names")
+            st.write("### Nomes das Colunas")
 
             st.write(
                 list(df.columns)
             )
 
-            st.write("### Data Types")
+            st.write("### Tipos de Dados")
 
             datatype_df = pd.DataFrame({
-                "Column": df.columns,
-                "Data Type": [
+                "Coluna": df.columns,
+                "Tipo de Dado": [
                     str(dtype)
                     for dtype in df.dtypes
                 ]
@@ -618,7 +618,7 @@ if uploaded_file is not None:
         # ====================================================
 
         st.markdown(
-            '<div class="section-title">🧹 Data Quality Snapshot</div>',
+            '<div class="section-title">🧹 Retrato da Qualidade dos Dados</div>',
             unsafe_allow_html=True
         )
 
@@ -629,13 +629,13 @@ if uploaded_file is not None:
             if missing_values == 0:
 
                 st.success(
-                    "✅ No missing values detected"
+                    "✅ Nenhum valor ausente detectado"
                 )
 
             else:
 
                 st.warning(
-                    f"⚠️ {missing_values:,} missing values detected"
+                    f"⚠️ {missing_values:,} valores ausentes detectados"
                 )
 
 
@@ -644,20 +644,20 @@ if uploaded_file is not None:
             if duplicate_rows == 0:
 
                 st.success(
-                    "✅ No duplicate rows detected"
+                    "✅ Nenhuma linha duplicada detectada"
                 )
 
             else:
 
                 st.warning(
-                    f"⚠️ {duplicate_rows:,} duplicate rows detected"
+                    f"⚠️ {duplicate_rows:,} linhas duplicadas detectadas"
                 )
 
 
         with quality_columns[2]:
 
             st.success(
-                "✅ Dataset structure detected"
+                "✅ Estrutura do dataset detectada"
             )
 
 
@@ -669,12 +669,12 @@ if uploaded_file is not None:
             textwrap.dedent("""
             <div class="status-card">
                 <div class="status-title">
-                    🚀 Dataset Ready
+                    🚀 Dataset Pronto
                 </div>
                 <div class="status-text">
-                    Your dataset is now available to Nex Decision AI.
-                    Continue to Dataset Intelligence to discover
-                    patterns, data-quality issues and analytical opportunities.
+                    Seu dataset já está disponível no Nex Decision AI.
+                    Continue em Inteligência do Dataset para descobrir
+                    padrões, problemas de qualidade e oportunidades analíticas.
                 </div>
             </div>
             """),
@@ -685,18 +685,18 @@ if uploaded_file is not None:
     except Exception as error:
 
         st.error(
-            "❌ We couldn't process this dataset."
+            "❌ Não foi possível processar este dataset."
         )
 
         st.info(
             """
-            Please check that:
+            Verifique se:
 
-            • The file is a valid supported format  
-            • The file is not corrupted  
-            • The dataset contains tabular data  
+            • O arquivo está em um formato suportado  
+            • O arquivo não está corrompido  
+            • O dataset contém dados tabulares  
 
-            Then try uploading it again.
+            Depois, tente enviar novamente.
             """
         )
 
@@ -706,7 +706,7 @@ if uploaded_file is not None:
 # ============================================================
 
 ai_insight(
-    "Clean and well-structured business data helps Nex Decision AI generate more reliable insights and predictions."
+    "Dados de negócio limpos e bem estruturados ajudam o Nex Decision AI a gerar insights e predições mais confiáveis."
 )
 
 
@@ -717,7 +717,7 @@ ai_insight(
 st.markdown("---")
 
 st.markdown(
-    '<div class="section-title">🧭 Continue Your Analysis</div>',
+    '<div class="section-title">🧭 Continue sua Análise</div>',
     unsafe_allow_html=True
 )
 
@@ -726,7 +726,7 @@ n1, n2 = st.columns(2)
 with n1:
 
     if st.button(
-        "← Previous · Home",
+        "← Anterior · Início",
         width="stretch"
     ):
 
@@ -738,7 +738,7 @@ with n1:
 with n2:
 
     if st.button(
-        "Next · Dataset Intelligence →",
+        "Próximo · Inteligência do Dataset →",
         width="stretch"
     ):
 

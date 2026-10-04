@@ -8,34 +8,34 @@ class RecommendationEngine:
 
         recommendations = {
 
-            "E-Commerce Dataset": [
-                "Customer Churn Prediction",
-                "Customer Segmentation",
-                "Product Recommendation System",
-                "Sales Forecasting",
-                "Customer Lifetime Value Prediction"
+            "Dataset de E-commerce": [
+                "Predição de churn de clientes",
+                "Segmentação de clientes",
+                "Sistema de recomendação de produtos",
+                "Previsão de vendas",
+                "Predição de Lifetime Value (LTV) dos clientes"
             ],
 
-            "Healthcare Dataset": [
-                "Disease Prediction",
-                "Patient Readmission Prediction",
-                "Hospital Resource Optimization",
-                "Medical Risk Analysis"
+            "Dataset de Saúde": [
+                "Predição de doenças",
+                "Predição de readmissão de pacientes",
+                "Otimização de recursos hospitalares",
+                "Análise de risco médico"
             ],
 
-            "Traffic Dataset": [
-                "Traffic Congestion Prediction",
-                "Accident Hotspot Detection",
-                "Route Optimization"
+            "Dataset de Trânsito": [
+                "Predição de congestionamentos",
+                "Detecção de pontos críticos de acidentes",
+                "Otimização de rotas"
             ],
 
-            "Unknown Dataset": [
-                "Dataset requires further analysis before AI recommendations can be generated."
+            "Dataset Desconhecido": [
+                "O dataset precisa de mais análise antes que recomendações de IA possam ser geradas."
             ]
         }
 
         return recommendations.get(
             self.dataset_type,
-            recommendations["Unknown Dataset"]
+            recommendations["Dataset Desconhecido"]
         )
 

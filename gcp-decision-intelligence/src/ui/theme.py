@@ -3,7 +3,7 @@ import streamlit as st
 
 def sidebar():
 
-    st.sidebar.title("🤖 AI Decision Intelligence")
+    st.sidebar.title("🤖 Inteligência de Decisão com IA")
 
     st.sidebar.markdown("---")
 
@@ -11,25 +11,25 @@ def sidebar():
     # DATASET STATUS
     # ==========================================
 
-    st.sidebar.subheader("📂 Dataset Status")
+    st.sidebar.subheader("📂 Status do Dataset")
 
     if "dataset" in st.session_state:
 
         df = st.session_state["dataset"]
 
-        st.sidebar.success("Dataset Loaded")
+        st.sidebar.success("Dataset carregado")
 
-        st.sidebar.metric("Rows", f"{len(df):,}")
+        st.sidebar.metric("Linhas", f"{len(df):,}")
 
-        st.sidebar.metric("Columns", len(df.columns))
+        st.sidebar.metric("Colunas", len(df.columns))
 
         missing = int(df.isnull().sum().sum())
 
         duplicates = int(df.duplicated().sum())
 
-        st.sidebar.metric("Missing", missing)
+        st.sidebar.metric("Ausentes", missing)
 
-        st.sidebar.metric("Duplicates", duplicates)
+        st.sidebar.metric("Duplicados", duplicates)
 
         score = 100
 
@@ -39,11 +39,11 @@ def sidebar():
 
         score = max(score, 0)
 
-        st.sidebar.metric("Health Score", f"{score}/100")
+        st.sidebar.metric("Score de Saúde", f"{score}/100")
 
     else:
 
-        st.sidebar.warning("No Dataset Loaded")
+        st.sidebar.warning("Nenhum dataset carregado")
 
     st.sidebar.markdown("---")
 
@@ -51,15 +51,15 @@ def sidebar():
     # SYSTEM STATUS
     # ==========================================
 
-    st.sidebar.subheader("⚙️ System Status")
+    st.sidebar.subheader("⚙️ Status do Sistema")
 
-    st.sidebar.success("AI Engine Ready")
+    st.sidebar.success("Motor de IA pronto")
 
-    st.sidebar.success("AutoML Available")
+    st.sidebar.success("AutoML disponível")
 
-    st.sidebar.success("Forecast Ready")
+    st.sidebar.success("Previsão pronta")
 
-    st.sidebar.success("Reports Enabled")
+    st.sidebar.success("Relatórios habilitados")
 
     st.sidebar.markdown("---")
 
@@ -67,17 +67,17 @@ def sidebar():
     # QUICK HELP
     # ==========================================
 
-    st.sidebar.subheader("💡 Quick Start")
+    st.sidebar.subheader("💡 Início Rápido")
 
-    st.sidebar.write("1️⃣ Upload Dataset")
+    st.sidebar.write("1️⃣ Enviar dataset")
 
-    st.sidebar.write("2️⃣ Analyze Dataset")
+    st.sidebar.write("2️⃣ Analisar dataset")
 
-    st.sidebar.write("3️⃣ Train AutoML")
+    st.sidebar.write("3️⃣ Treinar AutoML")
 
-    st.sidebar.write("4️⃣ Predict")
+    st.sidebar.write("4️⃣ Prever")
 
-    st.sidebar.write("5️⃣ Generate Report")
+    st.sidebar.write("5️⃣ Gerar relatório")
 
     st.sidebar.markdown("---")
 
@@ -85,8 +85,8 @@ def sidebar():
     # FOOTER
     # ==========================================
 
-    st.sidebar.caption("AI-Driven Decision Intelligence")
+    st.sidebar.caption("Inteligência de Decisão com IA")
 
-    st.sidebar.caption("Enterprise Analytics Suite")
+    st.sidebar.caption("Suíte de Analytics Empresarial")
 
-    st.sidebar.caption("Version 2.0")
+    st.sidebar.caption("Versão 2.0")

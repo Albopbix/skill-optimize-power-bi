@@ -17,7 +17,7 @@ from src.llm import gemini_client
 # =========================================================
 
 st.set_page_config(
-    page_title="AI Business Copilot | Nex Decision AI",
+    page_title="Copiloto de Negócios IA | Nex Decision AI",
     page_icon="🤖",
     layout="wide"
 )
@@ -189,8 +189,8 @@ st.markdown(
 # =========================================================
 
 page_header(
-    "🤖 AI Business Copilot",
-    "Turn your dataset into business questions, insights, risks and actionable decisions."
+    "🤖 Copiloto de Negócios IA",
+    "Transforme seu dataset em perguntas de negócio, insights, riscos e decisões acionáveis."
 )
 
 
@@ -201,15 +201,15 @@ page_header(
 if "dataset" not in st.session_state:
 
     st.warning(
-        "📂 Please upload a dataset first."
+        "📂 Envie um dataset primeiro."
     )
 
     st.info(
-        "Go to **Upload Dataset** and upload your business dataset."
+        "Vá em **Enviar Dataset** e envie o dataset do seu negócio."
     )
 
     if st.button(
-        "📂 Go to Upload Dataset"
+        "📂 Ir para Enviar Dataset"
     ):
         st.switch_page(
             "pages/1_Upload_Dataset.py"
@@ -226,14 +226,14 @@ df = st.session_state["dataset"]
 
 filename = st.session_state.get(
     "filename",
-    "Uploaded Dataset"
+    "Dataset enviado"
 )
 
 
 if df is None or df.empty:
 
     st.error(
-        "❌ The current dataset is empty or unavailable."
+        "❌ O dataset atual está vazio ou indisponível."
     )
 
     st.stop()
@@ -248,15 +248,15 @@ st.markdown(
         f"""
         <div class="copilot-hero">
             <div class="copilot-title">
-                🧠 Decision Intelligence Center
+                🧠 Central de Inteligência de Decisão
             </div>
             <div class="copilot-subtitle">
-                Nex Decision AI connects your dataset with
-                business reasoning to identify risks,
-                opportunities and actionable decisions.
+                O Nex Decision AI conecta seu dataset ao
+                raciocínio de negócio para identificar riscos,
+                oportunidades e decisões acionáveis.
             </div>
             <div class="dataset-badge">
-                📄 Active Dataset: {filename}
+                📄 Dataset ativo: {filename}
             </div>
         </div>
         """
@@ -280,11 +280,11 @@ try:
 except Exception as e:
 
     st.error(
-        "⚠️ The AI Business Copilot could not analyze this dataset."
+        "⚠️ O Copiloto de Negócios IA não conseguiu analisar este dataset."
     )
 
     with st.expander(
-        "Technical details"
+        "Detalhes técnicos"
     ):
 
         st.write(str(e))
@@ -316,30 +316,30 @@ score = max(
 
 if score >= 90:
 
-    score_status = "Excellent"
+    score_status = "Excelente"
     score_message = (
-        "The dataset is in strong condition for decision workflows."
+        "O dataset está em ótimas condições para os fluxos de decisão."
     )
 
 elif score >= 75:
 
-    score_status = "Good"
+    score_status = "Bom"
     score_message = (
-        "The dataset is generally suitable for business analysis."
+        "O dataset é, em geral, adequado para análises de negócio."
     )
 
 elif score >= 60:
 
-    score_status = "Moderate"
+    score_status = "Moderado"
     score_message = (
-        "Some improvements may be required before advanced modeling."
+        "Algumas melhorias podem ser necessárias antes de modelagens avançadas."
     )
 
 else:
 
-    score_status = "Needs Attention"
+    score_status = "Requer atenção"
     score_message = (
-        "Important data issues should be addressed before major decisions."
+        "Problemas importantes nos dados devem ser resolvidos antes de decisões relevantes."
     )
 
 
@@ -348,7 +348,7 @@ else:
 # =========================================================
 
 st.markdown(
-    '<div class="section-title">🎯 Executive Decision Snapshot</div>',
+    '<div class="section-title">🎯 Retrato Executivo da Decisão</div>',
     unsafe_allow_html=True
 )
 
@@ -364,7 +364,7 @@ with c1:
                     {score:.0f}
                 </div>
                 <div class="score-label">
-                    BUSINESS HEALTH SCORE
+                    SCORE DE SAÚDE DO NEGÓCIO
                 </div>
                 <br>
                 <strong>{score_status}</strong>
@@ -382,7 +382,7 @@ with c2:
             <div class="decision-card">
                 <div class="decision-icon">🧠</div>
                 <div class="decision-title">
-                    AI Assessment
+                    Avaliação da IA
                 </div>
                 <div class="decision-text">
                     {score_message}
@@ -401,12 +401,12 @@ with c3:
             <div class="decision-card">
                 <div class="decision-icon">📌</div>
                 <div class="decision-title">
-                    Active Decision Context
+                    Contexto de Decisão Ativo
                 </div>
                 <div class="decision-text">
-                    Nex Decision AI is using
+                    O Nex Decision AI está usando
                     <strong>{filename}</strong>
-                    as the current business context.
+                    como contexto de negócio atual.
                 </div>
             </div>
             """
@@ -425,7 +425,7 @@ st.progress(
 # =========================================================
 
 st.markdown(
-    '<div class="section-title">🤖 AI Recommended Actions</div>',
+    '<div class="section-title">🤖 Ações Recomendadas pela IA</div>',
     unsafe_allow_html=True
 )
 
@@ -446,7 +446,7 @@ if recommendations:
             textwrap.dedent(
                 f"""
                 <div class="recommendation-card">
-                    💡 <strong>Recommendation</strong><br>
+                    💡 <strong>Recomendação</strong><br>
                     {recommendation}
                 </div>
                 """
@@ -457,7 +457,7 @@ if recommendations:
 else:
 
     st.info(
-        "No additional recommendations were generated."
+        "Nenhuma recomendação adicional foi gerada."
     )
 
 
@@ -466,7 +466,7 @@ else:
 # =========================================================
 
 st.markdown(
-    '<div class="section-title">⚡ Recommended Next Action</div>',
+    '<div class="section-title">⚡ Próxima Ação Recomendada</div>',
     unsafe_allow_html=True
 )
 
@@ -474,25 +474,25 @@ st.markdown(
 if score < 60:
 
     next_action = (
-        "Improve data quality before building predictive models."
+        "Melhore a qualidade dos dados antes de construir modelos preditivos."
     )
 
 elif score < 75:
 
     next_action = (
-        "Investigate missing values and duplicate records."
+        "Investigue os valores ausentes e os registros duplicados."
     )
 
 elif score < 90:
 
     next_action = (
-        "Move into AutoML or forecasting to discover predictive patterns."
+        "Siga para o AutoML ou para as previsões para descobrir padrões preditivos."
     )
 
 else:
 
     next_action = (
-        "Proceed to predictive modeling and business decision analysis."
+        "Avance para a modelagem preditiva e a análise de decisões de negócio."
     )
 
 
@@ -501,7 +501,7 @@ st.markdown(
         f"""
         <div class="action-card">
             <div class="action-title">
-                NEX DECISION AI RECOMMENDATION
+                RECOMENDAÇÃO DO NEX DECISION AI
             </div>
             <div class="action-text">
                 ⚡ {next_action}
@@ -518,7 +518,7 @@ st.markdown(
 # =========================================================
 
 st.markdown(
-    '<div class="section-title">🚨 Business Risk Signals</div>',
+    '<div class="section-title">🚨 Sinais de Risco para o Negócio</div>',
     unsafe_allow_html=True
 )
 
@@ -528,28 +528,28 @@ risks = []
 if summary.get("Missing", 0) > 0:
 
     risks.append(
-        "Missing values may reduce the reliability of downstream analysis."
+        "Valores ausentes podem reduzir a confiabilidade das análises seguintes."
     )
 
 
 if summary.get("Duplicates", 0) > 0:
 
     risks.append(
-        "Duplicate records may distort patterns and model training."
+        "Registros duplicados podem distorcer padrões e o treino de modelos."
     )
 
 
 if len(df) < 100:
 
     risks.append(
-        "The dataset contains relatively few records for reliable predictive modeling."
+        "O dataset tem relativamente poucos registros para uma modelagem preditiva confiável."
     )
 
 
 if len(df.columns) < 5:
 
     risks.append(
-        "The dataset has a limited number of available features."
+        "O dataset tem um número limitado de variáveis disponíveis."
     )
 
 
@@ -571,7 +571,7 @@ if risks:
 else:
 
     st.success(
-        "🟢 No major business risk signals detected."
+        "🟢 Nenhum sinal relevante de risco para o negócio detectado."
     )
 
 
@@ -580,35 +580,35 @@ else:
 # =========================================================
 
 st.markdown(
-    '<div class="section-title">🚀 AI Opportunity Areas</div>',
+    '<div class="section-title">🚀 Áreas de Oportunidade com IA</div>',
     unsafe_allow_html=True
 )
 
 
 opportunities = [
     (
-        "📈 Predictive Analytics",
-        "Use historical patterns to estimate future outcomes."
+        "📈 Analytics Preditivo",
+        "Use padrões históricos para estimar resultados futuros."
     ),
     (
-        "👥 Customer Intelligence",
-        "Identify customer behaviour and segmentation opportunities."
+        "👥 Inteligência de Clientes",
+        "Identifique comportamentos de clientes e oportunidades de segmentação."
     ),
     (
-        "⏳ Forecasting",
-        "Detect trends and estimate future business movement."
+        "⏳ Previsões",
+        "Detecte tendências e estime a evolução futura do negócio."
     ),
     (
-        "🚨 Anomaly Detection",
-        "Identify unusual records and potentially important exceptions."
+        "🚨 Detecção de Anomalias",
+        "Identifique registros incomuns e exceções potencialmente importantes."
     ),
     (
-        "📊 Executive Intelligence",
-        "Convert analytical results into decision-ready dashboards."
+        "📊 Inteligência Executiva",
+        "Converta resultados analíticos em painéis prontos para decisão."
     ),
     (
-        "⚙️ Automation",
-        "Reduce repetitive analysis and reporting work."
+        "⚙️ Automação",
+        "Reduza trabalho repetitivo de análise e relatórios."
     )
 ]
 
@@ -644,60 +644,60 @@ for index, (title, description) in enumerate(
 # =========================================================
 
 st.markdown(
-    '<div class="section-title">🎯 Business Question Center</div>',
+    '<div class="section-title">🎯 Central de Perguntas de Negócio</div>',
     unsafe_allow_html=True
 )
 
 st.caption(
-    "Ask questions in business language. "
-    "The Copilot will use the active dataset as context."
+    "Faça perguntas em linguagem de negócio. O Copiloto "
+    "usará o dataset ativo como contexto."
 )
 
 
 question_categories = {
 
-    "📊 Understand the Business": [
-        "Summarize the most important findings",
-        "What are the most important patterns?",
-        "What should an executive know about this dataset?"
+    "📊 Entender o Negócio": [
+        "Resuma as descobertas mais importantes",
+        "Quais são os padrões mais importantes?",
+        "O que um executivo precisa saber sobre este dataset?"
     ],
 
-    "🚨 Find Problems": [
-        "What are the biggest risks?",
-        "What problems exist in this dataset?",
-        "Which areas need immediate attention?"
+    "🚨 Encontrar Problemas": [
+        "Quais são os maiores riscos?",
+        "Quais problemas existem neste dataset?",
+        "Quais áreas precisam de atenção imediata?"
     ],
 
-    "🚀 Find Opportunities": [
-        "Where are the biggest opportunities?",
-        "What business improvements do you recommend?",
-        "How can this dataset create business value?"
+    "🚀 Encontrar Oportunidades": [
+        "Onde estão as maiores oportunidades?",
+        "Quais melhorias de negócio você recomenda?",
+        "Como este dataset pode gerar valor para o negócio?"
     ],
 
     "🤖 Machine Learning": [
-        "How ready is this dataset for machine learning?",
-        "What prediction problems can be solved?",
-        "Which machine learning approach should be considered?"
+        "Quão pronto este dataset está para machine learning?",
+        "Quais problemas de predição podem ser resolvidos?",
+        "Qual abordagem de machine learning deve ser considerada?"
     ]
 
 }
 
 
 category = st.selectbox(
-    "Choose a decision area",
+    "Escolha uma área de decisão",
     list(question_categories.keys())
 )
 
 
 selected_question = st.selectbox(
-    "Choose a business question",
+    "Escolha uma pergunta de negócio",
     [""] + question_categories[category]
 )
 
 
 custom_question = st.text_input(
-    "Or ask your own question",
-    placeholder="Example: Which areas of the business need attention?"
+    "Ou faça sua própria pergunta",
+    placeholder="Exemplo: Quais áreas do negócio precisam de atenção?"
 )
 
 
@@ -715,7 +715,7 @@ question = (
 if question:
 
     with st.spinner(
-        "🤖 Nex Decision AI is reasoning over your dataset..."
+        "🤖 O Nex Decision AI está analisando seu dataset..."
     ):
 
         try:
@@ -725,7 +725,7 @@ if question:
             )
 
             st.markdown(
-                '<div class="section-title">🧠 Copilot Decision</div>',
+                '<div class="section-title">🧠 Decisão do Copiloto</div>',
                 unsafe_allow_html=True
             )
 
@@ -773,24 +773,25 @@ if question:
 
             if copilot.last_engine == "gemini":
                 st.caption(
-                    f"🧠 Gemini (`{gemini_client.model_name()}`) on Vertex AI "
-                    "— based on the dataset profile; validate key numbers."
+                    f"🧠 Gemini (`{gemini_client.model_name()}`) no Vertex "
+                    "AI — baseado no perfil do dataset; valide os números-chave."
                 )
 
             elif copilot.last_error:
                 st.caption(
-                    "⚠️ Gemini unavailable, showing rule-based answer."
+                    "⚠️ Gemini indisponível; exibindo resposta do motor de regras."
                 )
 
         except Exception as e:
 
             st.warning(
-                "Nex Decision AI could not generate a response "
-                "for this question using the current dataset."
+                "O Nex Decision AI não conseguiu gerar uma "
+                "resposta para esta pergunta com o dataset "
+                "atual."
             )
 
             with st.expander(
-                "Technical details"
+                "Detalhes técnicos"
             ):
 
                 st.write(str(e))
@@ -801,10 +802,10 @@ if question:
 # =========================================================
 
 ai_insight(
-    "The Business Copilot converts dataset intelligence "
-    "into business-oriented questions, risks, opportunities "
-    "and recommended actions. Use it as the decision layer "
-    "before moving into predictive modeling."
+    "O Copiloto de Negócios converte a inteligência do "
+    "dataset em perguntas, riscos, oportunidades e ações "
+    "recomendadas orientadas ao negócio. Use-o como camada "
+    "de decisão antes de seguir para a modelagem preditiva."
 )
 
 
@@ -821,7 +822,7 @@ previous_col, center_col, next_col = st.columns(
 with previous_col:
 
     if st.button(
-        "⬅️ Previous",
+        "⬅️ Anterior",
         width="stretch"
     ):
 
@@ -832,14 +833,14 @@ with previous_col:
 with center_col:
 
     st.markdown(
-        '<div style="text-align:center;color:#64748b;font-size:12px;">Step 3 of the intelligence workflow</div>',
+        '<div style="text-align:center;color:#64748b;font-size:12px;">Etapa 3 do fluxo de inteligência</div>',
         unsafe_allow_html=True
     )
 
 with next_col:
 
     if st.button(
-        "Next ➡️",
+        "Próximo ➡️",
         width="stretch"
     ):
 

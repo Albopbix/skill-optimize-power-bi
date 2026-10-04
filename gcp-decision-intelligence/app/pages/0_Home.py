@@ -168,11 +168,11 @@ st.markdown(
     textwrap.dedent("""
     <div class="hero">
         <div class="hero-title">🤖 Nex Decision AI</div>
-        <div class="hero-subtitle">Enterprise Decision Intelligence Platform</div>
+        <div class="hero-subtitle">Plataforma Empresarial de Inteligência de Decisão</div>
         <div class="hero-description">
-            Transform raw business data into intelligent decisions using
+            Transforme dados brutos do negócio em decisões inteligentes com
             Machine Learning, Business Intelligence, 
-            Forecasting, Anomaly Detection and Executive Analytics.
+            Previsões, Detecção de Anomalias e Analytics Executivo.
         </div>
     </div>
     """),
@@ -185,7 +185,7 @@ st.markdown(
 # =====================================================
 
 st.markdown(
-    '<div class="section-title">🚀 Platform Status</div>',
+    '<div class="section-title">🚀 Status da Plataforma</div>',
     unsafe_allow_html=True
 )
 
@@ -199,19 +199,19 @@ with c1:
 
 with c2:
     st.metric(
-        "🤖 Models",
+        "🤖 Modelos",
         len(models)
     )
 
 with c3:
     st.metric(
-        "🔮 Predictions",
+        "🔮 Predições",
         len(predictions)
     )
 
 with c4:
     st.metric(
-        "⚡ Platform",
+        "⚡ Plataforma",
         "v2.2"
     )
 
@@ -223,7 +223,7 @@ st.markdown("---")
 # =====================================================
 
 st.markdown(
-    '<div class="section-title">⚡ Quick Actions</div>',
+    '<div class="section-title">⚡ Ações Rápidas</div>',
     unsafe_allow_html=True
 )
 
@@ -231,14 +231,14 @@ q1, q2, q3, q4 = st.columns(4)
 
 with q1:
     if st.button(
-        "📂 Upload Dataset",
+        "📂 Enviar Dataset",
         width="stretch"
     ):
         st.switch_page("pages/1_Upload_Dataset.py")
 
 with q2:
     if st.button(
-        "🔍 Dataset Intelligence",
+        "🔍 Inteligência do Dataset",
         width="stretch"
     ):
         st.switch_page("pages/2_Dataset_Intelligence.py")
@@ -252,7 +252,7 @@ with q3:
 
 with q4:
     if st.button(
-        "📊 Executive Dashboard",
+        "📊 Painel Executivo",
         width="stretch"
     ):
         st.switch_page("pages/4_Executive_Dashboard.py")
@@ -265,47 +265,47 @@ st.markdown("---")
 # =====================================================
 
 st.markdown(
-    '<div class="section-title">🧠 Intelligence Center</div>',
+    '<div class="section-title">🧠 Central de Inteligência</div>',
     unsafe_allow_html=True
 )
 
 features = [
     (
         "📂",
-        "Dataset Intelligence",
-        "Understand data quality, structure and patterns."
+        "Inteligência do Dataset",
+        "Entenda qualidade, estrutura e padrões dos dados."
     ),
     (
         "🤖",
-        "AI Business Copilot",
-        "Turn business questions into actionable insights."
+        "Copiloto de Negócios IA",
+        "Transforme perguntas de negócio em insights acionáveis."
     ),
     (
         "⚙️",
-        "AutoML Engine",
-        "Automatically compare machine learning models."
+        "Motor de AutoML",
+        "Compare modelos de machine learning automaticamente."
     ),
     (
         "🎯",
-        "Prediction Engine",
-        "Generate predictions using trained models."
+        "Motor de Predição",
+        "Gere predições com modelos treinados."
     ),
     
 
     (
         "📈",
-        "Business Forecasting",
-        "Identify future trends from historical data."
+        "Previsão de Negócios",
+        "Identifique tendências futuras a partir do histórico."
     ),
     (
         "🚨",
-        "Anomaly Detection",
-        "Identify unusual and potentially risky records."
+        "Detecção de Anomalias",
+        "Identifique registros incomuns e potencialmente arriscados."
     ),
     (
         "📄",
-        "Executive Reporting",
-        "Convert analysis into management-ready reports."
+        "Relatórios Executivos",
+        "Converta análises em relatórios prontos para a gestão."
     ),
 ]
 
@@ -343,21 +343,21 @@ st.markdown("---")
 # =====================================================
 
 st.markdown(
-    '<div class="section-title">🏢 Supported Business Domains</div>',
+    '<div class="section-title">🏢 Setores de Negócio Suportados</div>',
     unsafe_allow_html=True
 )
 
 domains = [
     "🛒 E-Commerce",
-    "🏥 Healthcare",
-    "🏦 Banking",
-    "💰 Finance",
-    "🏭 Manufacturing",
-    "🚚 Supply Chain",
-    "📡 Telecom",
-    "🎓 Education",
-    "👨‍💼 Human Resources",
-    "📈 Sales & Marketing",
+    "🏥 Saúde",
+    "🏦 Bancos",
+    "💰 Finanças",
+    "🏭 Indústria",
+    "🚚 Cadeia de Suprimentos",
+    "📡 Telecomunicações",
+    "🎓 Educação",
+    "👨‍💼 Recursos Humanos",
+    "📈 Vendas e Marketing",
 ]
 
 domain_columns = st.columns(5)
@@ -383,19 +383,19 @@ st.markdown("---")
 # =====================================================
 
 st.markdown(
-    '<div class="section-title">🧭 Decision Intelligence Workflow</div>',
+    '<div class="section-title">🧭 Fluxo de Inteligência de Decisão</div>',
     unsafe_allow_html=True
 )
 
 workflow = [
-    ("01", "📂", "Upload"),
-    ("02", "🔍", "Understand"),
-    ("03", "⚙️", "Train"),
-    ("04", "🎯", "Predict"),
-    ("05", "🧠", "Explain"),
-    ("06", "📈", "Forecast"),
-    ("07", "📊", "Decide"),
-    ("08", "📄", "Report"),
+    ("01", "📂", "Enviar"),
+    ("02", "🔍", "Entender"),
+    ("03", "⚙️", "Treinar"),
+    ("04", "🎯", "Prever"),
+    ("05", "🧠", "Explicar"),
+    ("06", "📈", "Projetar"),
+    ("07", "📊", "Decidir"),
+    ("08", "📄", "Reportar"),
 ]
 
 workflow_columns = st.columns(8)
@@ -431,45 +431,46 @@ st.markdown("---")
 # =====================================================
 
 st.markdown(
-    '<div class="section-title">🤖 AI Insight</div>',
+    '<div class="section-title">🤖 Insight da IA</div>',
     unsafe_allow_html=True
 )
 
 if len(uploads) == 0:
 
     insight = (
-        "Your workspace is ready. Upload a business dataset "
-        "to begin the decision-intelligence workflow."
+        "Seu ambiente está pronto. Envie um dataset de "
+        "negócio para iniciar o fluxo de inteligência de "
+        "decisão."
     )
 
 elif len(models) == 0:
 
     insight = (
-        "A dataset is available. The next major step is to "
-        "analyze the data and train a machine-learning model."
+        "Há um dataset disponível. O próximo passo é analisar "
+        "os dados e treinar um modelo de machine learning."
     )
 
 elif len(predictions) == 0:
 
     insight = (
-        "Your workspace contains trained models. "
-        "You can now generate predictions or explore "
-        "your model performance and analytics."
+        "Seu ambiente tem modelos treinados. Agora "
+        "você pode gerar predições ou explorar o "
+        "desempenho e as análises dos modelos."
     )
 
 else:
 
     insight = (
-        "Your decision-intelligence workspace is active. "
-        "Explore predictions, forecasting, anomaly detection "
-        "and executive analytics."
+        "Seu ambiente de inteligência de decisão está ativo. "
+        "Explore predições, previsões, detecção de anomalias "
+        "e analytics executivo."
     )
 
 st.markdown(
     textwrap.dedent(
         f"""
         <div class="ai-insight">
-            🤖 <strong>Platform Insight</strong><br><br>
+            🤖 <strong>Insight da Plataforma</strong><br><br>
             {insight}
         </div>
         """
@@ -485,7 +486,7 @@ st.markdown("---")
 # =====================================================
 
 st.markdown(
-    '<div class="section-title">🧭 Continue</div>',
+    '<div class="section-title">🧭 Continuar</div>',
     unsafe_allow_html=True
 )
 
@@ -494,7 +495,7 @@ n1, n2 = st.columns(2)
 with n1:
 
     if st.button(
-        "← Previous",
+        "← Anterior",
         disabled=True,
         width="stretch"
     ):
@@ -503,7 +504,7 @@ with n1:
 with n2:
 
     if st.button(
-        "Next → Dataset Upload",
+        "Próximo → Enviar Dataset",
         width="stretch"
     ):
         st.switch_page("pages/1_Upload_Dataset.py")
@@ -516,7 +517,7 @@ with n2:
 st.markdown(
     textwrap.dedent("""
     <div class="footer">
-        © 2026 S Jashwanth · Nex Decision AI · Version 2.2
+        © 2026 S Jashwanth · Nex Decision AI · Versão 2.2
     </div>
     """),
     unsafe_allow_html=True

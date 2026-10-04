@@ -18,7 +18,7 @@ class ForecastEngine:
     def _prepare_series(self, dataframe, target_column):
         if target_column not in dataframe.columns:
             raise ValueError(
-                f"Target column '{target_column}' was not found."
+                f"A coluna-alvo '{target_column}' não foi encontrada."
             )
 
         series = pd.to_numeric(
@@ -30,7 +30,7 @@ class ForecastEngine:
 
         if len(values) < 5:
             raise ValueError(
-                "At least 5 valid numeric observations are required."
+                "São necessárias pelo menos 5 observações numéricas válidas."
             )
 
         return values
@@ -47,7 +47,7 @@ class ForecastEngine:
                 n_jobs=-1,
             )
 
-        raise ValueError(f"Unsupported forecasting model: {model_name}")
+        raise ValueError(f"Modelo de previsão não suportado: {model_name}")
 
     def forecast(
         self,
@@ -58,7 +58,7 @@ class ForecastEngine:
     ):
         """Generate future predictions using the selected model."""
         if not isinstance(periods, (int, np.integer)) or periods < 1:
-            raise ValueError("Periods must be a positive integer.")
+            raise ValueError("O número de períodos deve ser um inteiro positivo.")
 
         y = self._prepare_series(dataframe, target_column)
         X = np.arange(len(y)).reshape(-1, 1)
@@ -75,10 +75,10 @@ class ForecastEngine:
         ).reshape(-1)
 
         if len(predictions) != periods:
-            raise ValueError("Unexpected number of forecast values.")
+            raise ValueError("Quantidade inesperada de valores previstos.")
 
         if not np.isfinite(predictions).all():
-            raise ValueError("Forecast contains invalid numeric values.")
+            raise ValueError("A previsão contém valores numéricos inválidos.")
 
         return predictions
 
@@ -93,7 +93,7 @@ class ForecastEngine:
         y = self._prepare_series(dataframe, target_column)
 
         if not 0 < test_size < 1:
-            raise ValueError("test_size must be between 0 and 1.")
+            raise ValueError("test_size deve estar entre 0 e 1.")
 
         split = int(len(y) * (1 - test_size))
         split = max(3, min(split, len(y) - 1))

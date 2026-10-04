@@ -29,7 +29,7 @@ from src.auth.auth import Auth
 # =========================================================
 
 st.set_page_config(
-    page_title="Nex Decision AI | Sign In",
+    page_title="Nex Decision AI | Entrar",
     page_icon="🤖",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -327,7 +327,7 @@ DEFAULTS = {
     "user_email": "",
     "login_time": "",
     "registered_at": "",
-    "auth_page": "Sign In",
+    "auth_page": "Entrar",
 }
 
 for key, value in DEFAULTS.items():
@@ -366,10 +366,9 @@ def render_brand():
         )
 
         st.markdown(
-            '<div class="brand-subtitle">'
-            'SMARTER DATA &nbsp; | &nbsp; BETTER DECISIONS'
-            '&nbsp; | &nbsp; BIGGER TOMORROW'
-            '</div>',
+            '<div class="brand-subtitle">DADOS MAIS INTELIGENTES '
+            '&nbsp; | &nbsp; DECISÕES MELHORES&nbsp; '
+            '| &nbsp; UM AMANHÃ MAIOR</div>',
             unsafe_allow_html=True,
         )
 
@@ -379,29 +378,24 @@ def render_brand():
 
 def render_hero():
     st.markdown(
-        '<div class="eyebrow">'
-        '✦ &nbsp; INTELLIGENCE FOR BETTER DECISIONS'
-        '</div>',
+        '<div class="eyebrow">✦ &nbsp; INTELIGÊNCIA '
+        'PARA DECISÕES MELHORES</div>',
         unsafe_allow_html=True,
     )
 
     st.markdown(
-        '<div class="hero-title">'
-        'Turn Your Data Into<br>'
-        '<span class="gradient-text">'
-        'Powerful Decisions.'
-        '</span>'
-        '</div>',
+        '<div class="hero-title">Transforme '
+        'seus dados em<br><span class="gradient-text">decisões '
+        'poderosas.</span></div>',
         unsafe_allow_html=True,
     )
 
     st.markdown(
-        '<div class="hero-description">'
-        'Discover patterns hidden in your business data. '
-        'Generate predictions, explore trends, understand '
-        'model outputs and transform analytical findings '
-        'into actionable business insights.'
-        '</div>',
+        '<div class="hero-description">Descubra padrões '
+        'escondidos nos dados do seu negócio. Gere predições, '
+        'explore tendências, entenda os resultados dos '
+        'modelos e transforme análises em insights de '
+        'negócio acionáveis.</div>',
         unsafe_allow_html=True,
     )
 
@@ -413,29 +407,29 @@ def render_features():
     features = [
         (
             "📊",
-            "Data Analysis",
-            "Explore datasets and discover patterns.",
+            "Análise de Dados",
+            "Explore datasets e descubra padrões.",
         ),
         (
             "🧠",
-            "AI Insights",
-            "Discover meaningful business insights.",
+            "Insights com IA",
+            "Descubra insights de negócio relevantes.",
         ),
         (
             "🎯",
-            "Predictions",
-            "Predict outcomes using machine learning.",
+            "Predições",
+            "Preveja resultados com machine learning.",
         ),
         (
             "📈",
-            "Forecasting",
-            "Explore future business trends.",
+            "Previsões",
+            "Explore tendências futuras do negócio.",
         ),
         
         (
             "📄",
-            "Reports",
-            "Present findings in business reports.",
+            "Relatórios",
+            "Apresente resultados em relatórios de negócio.",
         ),
     ]
 
@@ -461,37 +455,35 @@ def render_features():
 
 def render_login_form():
     st.markdown(
-        '<div class="login-title">Welcome Back 👋</div>',
+        '<div class="login-title">Bem-vindo de volta 👋</div>',
         unsafe_allow_html=True,
     )
 
     st.markdown(
-        '<div class="login-subtitle">'
-        'Sign in to access your dashboard, analytics, '
-        'predictions and AI tools.'
-        '</div>',
+        '<div class="login-subtitle">Entre para acessar '
+        'seu painel, análises, predições e ferramentas '
+        'de IA.</div>',
         unsafe_allow_html=True,
     )
 
     with st.form("signin_form"):
         username = st.text_input(
-            "Username",
-            placeholder="Enter your username",
+            "Usuário",
+            placeholder="Digite seu usuário",
         )
 
         password = st.text_input(
-            "Password",
-            placeholder="Enter your password",
+            "Senha",
+            placeholder="Digite sua senha",
             type="password",
         )
 
         st.caption(
-            "Use the username and password associated "
-            "with your account."
+            "Use o usuário e a senha da sua conta."
         )
 
         submitted = st.form_submit_button(
-            "🔑  Sign In to Nex Decision AI",
+            "🔑  Entrar no Nex Decision AI",
             type="primary",
             use_container_width=True,
         )
@@ -502,18 +494,18 @@ def render_login_form():
     username_clean = username.strip()
 
     if not username_clean:
-        st.warning("Please enter your username.")
+        st.warning("Informe seu usuário.")
         return
 
     if not password:
-        st.warning("Please enter your password.")
+        st.warning("Informe sua senha.")
         return
 
     try:
         user = database.get_user(username_clean)
 
         if user is None:
-            st.error("No account was found with that username.")
+            st.error("Nenhuma conta encontrada com esse usuário.")
             return
 
         # Existing database user record:
@@ -527,7 +519,7 @@ def render_login_form():
             password,
             stored_password,
         ):
-            st.error("Incorrect password. Please try again.")
+            st.error("Senha incorreta. Tente novamente.")
             return
 
         try:
@@ -546,7 +538,7 @@ def render_login_form():
         st.session_state.user_email = (
             profile[2]
             if len(profile) > 2 and profile[2]
-            else "Email not provided"
+            else "E-mail não informado"
         )
 
         st.session_state.login_time = datetime.now().strftime(
@@ -563,8 +555,8 @@ def render_login_form():
 
     except Exception:
         st.error(
-            "Unable to complete sign in. Check your database "
-            "connection and authentication configuration."
+            "Não foi possível entrar. Verifique a conexão "
+            "com o banco de dados e a configuração de autenticação."
         )
 
 # =========================================================
@@ -573,42 +565,41 @@ def render_login_form():
 
 def render_registration_form():
     st.markdown(
-        '<div class="login-title">Create Account ✨</div>',
+        '<div class="login-title">Criar conta ✨</div>',
         unsafe_allow_html=True,
     )
 
     st.markdown(
-        '<div class="login-subtitle">'
-        'Create your account to explore business intelligence.'
-        '</div>',
+        '<div class="login-subtitle">Crie sua conta para '
+        'explorar a inteligência de negócios.</div>',
         unsafe_allow_html=True,
     )
 
     with st.form("registration_form"):
         username = st.text_input(
-            "Username",
-            placeholder="Choose a username",
+            "Usuário",
+            placeholder="Escolha um nome de usuário",
         )
 
         email = st.text_input(
-            "Email address",
-            placeholder="Enter your email address",
+            "E-mail",
+            placeholder="Digite seu e-mail",
         )
 
         password = st.text_input(
-            "Password",
-            placeholder="Create a password",
+            "Senha",
+            placeholder="Crie uma senha",
             type="password",
         )
 
         confirm_password = st.text_input(
-            "Confirm password",
-            placeholder="Re-enter your password",
+            "Confirme a senha",
+            placeholder="Digite a senha novamente",
             type="password",
         )
 
         submitted = st.form_submit_button(
-            "✨  Create My Account",
+            "✨  Criar minha conta",
             type="primary",
             use_container_width=True,
         )
@@ -621,31 +612,31 @@ def render_registration_form():
     password_clean = password
 
     if not username_clean:
-        st.warning("Please enter a username.")
+        st.warning("Informe um nome de usuário.")
         return
 
     if not email_clean:
-        st.warning("Please enter your email address.")
+        st.warning("Informe seu e-mail.")
         return
 
     if (
         "@" not in email_clean
         or "." not in email_clean.rsplit("@", 1)[-1]
     ):
-        st.warning("Please enter a valid email address.")
+        st.warning("Informe um e-mail válido.")
         return
 
     if not password_clean:
-        st.warning("Please create a password.")
+        st.warning("Crie uma senha.")
         return
 
     if password_clean != confirm_password:
-        st.error("The passwords do not match.")
+        st.error("As senhas não coincidem.")
         return
 
     if len(password_clean) < 6:
         st.warning(
-            "Your password must contain at least 6 characters."
+            "A senha precisa ter pelo menos 6 caracteres."
         )
         return
 
@@ -653,7 +644,7 @@ def render_registration_form():
         existing_user = database.get_user(username_clean)
 
         if existing_user is not None:
-            st.error("That username is already registered.")
+            st.error("Esse nome de usuário já está cadastrado.")
             return
 
         # Use the existing email lookup when available.
@@ -671,7 +662,7 @@ def render_registration_form():
 
             if existing_email is not None:
                 st.error(
-                    "That email address is already registered."
+                    "Esse e-mail já está cadastrado."
                 )
                 return
 
@@ -683,16 +674,16 @@ def render_registration_form():
             email_clean,
         )
 
-        st.success("Your account has been created successfully!")
+        st.success("Conta criada com sucesso!")
 
         st.info(
-            "Select Sign In above to log in with your new account."
+            "Selecione «Entrar» acima para acessar com sua nova conta."
         )
 
     except Exception:
         st.error(
-            "Unable to create your account. Check your database "
-            "configuration and try again."
+            "Não foi possível criar sua conta. Verifique a "
+            "configuração do banco de dados e tente novamente."
         )
 
 # =========================================================
@@ -705,7 +696,7 @@ def logout():
     st.session_state.user_email = ""
     st.session_state.login_time = ""
     st.session_state.registered_at = ""
-    st.session_state.auth_page = "Sign In"
+    st.session_state.auth_page = "Entrar"
     st.rerun()
 
 # =========================================================
@@ -717,33 +708,33 @@ if st.session_state.logged_in:
 
     st.write("")
     st.success(
-        f"Welcome back, {st.session_state.username}!"
+        f"Bem-vindo de volta, {st.session_state.username}!"
     )
 
-    st.markdown("### Your Profile")
+    st.markdown("### Seu perfil")
 
     st.write(
-        f"**Username:** {st.session_state.username}"
+        f"**Usuário:** {st.session_state.username}"
     )
     st.write(
-        f"**Email:** {st.session_state.user_email}"
+        f"**E-mail:** {st.session_state.user_email}"
     )
     st.write(
-        f"**Login time:** {st.session_state.login_time}"
+        f"**Horário de login:** {st.session_state.login_time}"
     )
 
     if st.session_state.registered_at:
         st.write(
-            f"**Registered:** {st.session_state.registered_at}"
+            f"**Cadastrado em:** {st.session_state.registered_at}"
         )
 
     st.info(
-        "Continue to your existing application navigation "
-        "to access dashboards, analytics and reports."
+        "Continue pela navegação do aplicativo para acessar "
+        "painéis, análises e relatórios."
     )
 
     if st.button(
-        "🚪 Sign Out",
+        "🚪 Sair",
         type="primary",
         use_container_width=True,
     ):
@@ -771,11 +762,9 @@ with left:
     render_features()
 
     st.markdown(
-        '<div class="footer">'
-        '<strong>DATA TODAY. DECISIONS TOMORROW.</strong><br>'
-        'Explore your data. Understand the patterns. '
-        'Make informed decisions.'
-        '</div>',
+        '<div class="footer"><strong>DADOS HOJE. DECISÕES '
+        'AMANHÃ.</strong><br>Explore seus dados. Entenda '
+        'os padrões. Tome decisões informadas.</div>',
         unsafe_allow_html=True,
     )
 
@@ -791,15 +780,14 @@ with right:
         )
 
         st.markdown(
-            '<div class="login-subtitle">'
-            'AI-Powered Business Intelligence Platform'
-            '</div>',
+            '<div class="login-subtitle">Plataforma '
+            'de Business Intelligence com IA</div>',
             unsafe_allow_html=True,
         )
 
         st.radio(
-            "Account",
-            ["Sign In", "Create Account"],
+            "Conta",
+            ["Entrar", "Criar conta"],
             horizontal=True,
             key="auth_page",
             label_visibility="collapsed",
@@ -807,7 +795,7 @@ with right:
 
         st.divider()
 
-        if st.session_state.auth_page == "Sign In":
+        if st.session_state.auth_page == "Entrar":
             render_login_form()
         else:
             render_registration_form()
@@ -815,12 +803,11 @@ with right:
         st.divider()
 
         st.caption(
-            "🔒 Keep your account credentials private."
+            "🔒 Mantenha suas credenciais em sigilo."
         )
 
     st.markdown(
-        '<div class="footer" style="text-align:center;">'
-        'Nex Decision AI · Business Intelligence'
-        '</div>',
+        '<div class="footer" style="text-align:center;">Nex '
+        'Decision AI · Business Intelligence</div>',
         unsafe_allow_html=True,
     )
