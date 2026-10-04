@@ -1,0 +1,15 @@
+streamlit
+pandas
+numpy
+scikit-learn
+plotly
+matplotlib
+shap
+joblib
+reportlab
+openpyxl
+seaborn
+scipy
+bcrypt
+psycopg[binary]
+google-cloud-storage

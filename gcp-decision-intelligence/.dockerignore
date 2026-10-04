@@ -1,0 +1,12 @@
+.git
+.venv
+venv
+__pycache__
+*.pyc
+*.db
+saved_models/
+data/
+notebooks/
+screenshots/
+.streamlit/secrets.toml
+.env
